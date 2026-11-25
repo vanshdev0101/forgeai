@@ -14,6 +14,39 @@ EMBED_MODEL = os.environ.get("FORGE_EMBED_MODEL", "nomic-embed-text")
 USAGE = {"calls": 0, "prompt_tokens": 0, "completion_tokens": 0, "seconds": 0.0}
 
 
+class LLMError(RuntimeError):
+    """Ollama unreachable, timed out, or a model is missing. Message says how to fix it."""
+
+
+def _post(path, body, timeout):
+    try:
+        r = requests.post(f"{HOST}{path}", json=body, timeout=timeout)
+    except requests.ConnectionError:
+        raise LLMError(f"Ollama is not reachable at {HOST}. Start it with `ollama serve`.") from None
+    except requests.Timeout:
+        raise LLMError(f"Ollama timed out after {timeout}s on {path} (model {body.get('model')}).") from None
+    if r.status_code == 404:
+        raise LLMError(f"model {body.get('model')!r} is not installed. Run `ollama pull {body.get('model')}`.")
+    if not r.ok:
+        raise LLMError(f"Ollama {path} returned HTTP {r.status_code}: {r.text[:200]}")
+    return r.json()
+
+
+def preflight(models=None):
+    """Fail fast, with a fix-it message, if Ollama is down or a required model is missing."""
+    models = models or (GEN_MODEL, EMBED_MODEL)
+    try:
+        tags = requests.get(f"{HOST}/api/tags", timeout=10).json()
+    except (requests.RequestException, ValueError):
+        raise LLMError(f"Ollama is not reachable at {HOST}. Start it with `ollama serve`.") from None
+    have = {m["name"] for m in tags.get("models", [])}
+    have |= {n.removesuffix(":latest") for n in have}
+    missing = [m for m in models if m not in have]
+    if missing:
+        raise LLMError("missing models: " + ", ".join(missing) + ". Run: " +
+                       " && ".join(f"ollama pull {m}" for m in missing))
+
+
 def chat(messages, model=GEN_MODEL, json_mode=False, temperature=0.0, tools=None, timeout=600):
     """One non-streaming chat call. Returns Ollama's `message` dict.
 
@@ -31,9 +64,7 @@ def chat(messages, model=GEN_MODEL, json_mode=False, temperature=0.0, tools=None
         body["format"] = "json"
     if tools:
         body["tools"] = tools
-    r = requests.post(f"{HOST}/api/chat", json=body, timeout=timeout)
-    r.raise_for_status()
-    data = r.json()
+    data = _post("/api/chat", body, timeout)
     USAGE["calls"] += 1
     USAGE["prompt_tokens"] += data.get("prompt_eval_count", 0)
     USAGE["completion_tokens"] += data.get("eval_count", 0)
@@ -90,7 +121,5 @@ def embed(texts, kind="document", batch=64):
     out = []
     for i in range(0, len(texts), batch):
         chunk = [prefix + t for t in texts[i:i + batch]]
-        r = requests.post(f"{HOST}/api/embed", json={"model": EMBED_MODEL, "input": chunk}, timeout=600)
-        r.raise_for_status()
-        out.extend(r.json()["embeddings"])
+        out.extend(_post("/api/embed", {"model": EMBED_MODEL, "input": chunk}, 600)["embeddings"])
     return out

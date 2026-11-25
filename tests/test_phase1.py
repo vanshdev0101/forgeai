@@ -218,6 +218,57 @@ def test_bad_json_is_repaired_and_recorded():
     assert "bad_json" in res["violations"] and res["answer"] == "12 days", res
 
 
+def test_page_furniture_stripped():
+    pages = [f"ACME Corp - Confidential\nSection {i}: real content line {i} about leave.\n\nPage {i} of 4"
+             for i in range(1, 5)]
+    out = rag.strip_page_furniture("\f".join(pages) + "\f")
+    assert "Confidential" not in out and "Page 3 of 4" not in out, out
+    assert all(f"real content line {i}" in out for i in range(1, 5)), "content lost"
+    long_repeat = "This sentence is a long legitimate clause that appears in every single section of the policy text."
+    kept = rag.strip_page_furniture("\f".join(f"{long_repeat}\nunique {i}" for i in range(4)))
+    assert kept.count(long_repeat) == 4, "long repeated lines are content, not furniture"
+    assert rag.strip_page_furniture("one page only\nPage 1") == "one page only\nPage 1"
+    rows = "\f".join(f"Grade G{i} | 2{i} days\nGrade G{i + 4} | 3{i} days\n{i}" for i in range(1, 5))
+    out = rag.strip_page_furniture(rows)
+    assert all(f"Grade G{i} | 2{i} days" in out for i in range(1, 5)), "table rows differing by a number are content"
+    assert "\n1\n" not in f"\n{out}\n" and "\n3\n" not in f"\n{out}\n", "bare page numbers should go"
+
+
+def test_llm_errors_are_actionable():
+    old = llm.HOST
+    llm.HOST = "http://127.0.0.1:1"
+    try:
+        for fn in (lambda: llm.chat([{"role": "user", "content": "hi"}]), lambda: llm.embed(["x"]), llm.preflight):
+            try:
+                fn()
+                raise AssertionError("expected LLMError")
+            except llm.LLMError as e:
+                assert "ollama serve" in str(e), e
+    finally:
+        llm.HOST = old
+
+    class Tags:
+        def json(self):
+            return {"models": [{"name": "qwen3.5-4b-8k:latest"}]}
+    real_get = llm.requests.get
+    llm.requests.get = lambda *a, **k: Tags()
+    try:
+        llm.preflight(("qwen3.5-4b-8k", "nomic-embed-text"))
+        raise AssertionError("missing embed model not detected")
+    except llm.LLMError as e:
+        assert "ollama pull nomic-embed-text" in str(e) and "qwen" not in str(e).split("Run:")[0], e
+    finally:
+        llm.requests.get = real_get
+
+
+def test_runner_cli_exits_cleanly_without_ollama():
+    import subprocess
+    env = {**__import__("os").environ, "OLLAMA_HOST": "http://127.0.0.1:1"}
+    p = subprocess.run([sys.executable, "-m", "runtime.runner", str(SMOKE / "agent_def.json"), "--ask", "x"],
+                       cwd=ROOT, env=env, capture_output=True, text=True, timeout=60)
+    assert p.returncode == 2 and "Traceback" not in p.stderr and "ollama serve" in p.stderr, p.stderr
+
+
 def test_parse_json_variants():
     assert llm.parse_json('{"a": 1}') == {"a": 1}
     assert llm.parse_json('Sure!\n```json\n{"a": 2}\n```') == {"a": 2}

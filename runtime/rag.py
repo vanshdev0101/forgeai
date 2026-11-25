@@ -6,7 +6,9 @@ swap in FAISS if a corpus ever gets bigger than that.
 import csv
 import hashlib
 import json
+import re
 import subprocess
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -24,14 +26,35 @@ def read_doc(path):
     if ext in TEXT_EXT:
         return path.read_text(errors="replace")
     if ext == ".pdf":
-        return subprocess.run(["pdftotext", "-layout", str(path), "-"],
-                              capture_output=True, text=True, check=True).stdout
+        return strip_page_furniture(subprocess.run(["pdftotext", "-layout", str(path), "-"],
+                                                   capture_output=True, text=True, check=True).stdout)
     if ext == ".csv":
         with open(path, newline="", errors="replace") as f:
             rows = list(csv.DictReader(f))
         # Each row is self-describing so a single chunk can answer a lookup question.
         return "\n".join("; ".join(f"{k}: {v}" for k, v in row.items()) for row in rows)
     return None
+
+
+_PAGE_NO = re.compile(r"(\bpage\s*\d+(\s*(of|/)\s*\d+)?\b|^\d+(\s*(of|/)\s*\d+)?$)", re.I)
+
+
+def strip_page_furniture(text, max_words=12):
+    """Drop running headers/footers: short lines that recur on at least half the pages of a
+    form-feed-separated pdftotext dump. Pages are rejoined as paragraphs.
+
+    Lines must recur exactly; numbers are ignored only inside page-number patterns ("Page 3",
+    "3 of 12", a bare "3"), so table rows that differ by a number are never treated as furniture."""
+    pages = [p for p in text.split("\f") if p.strip()]
+    if len(pages) < 2:
+        return text
+
+    def norm(line):
+        return _PAGE_NO.sub("<page>", " ".join(line.split()))
+    counts = Counter(n for p in pages for n in {norm(l) for l in p.splitlines() if l.strip()})
+    limit = max(2, len(pages) / 2)
+    furniture = {n for n, c in counts.items() if c >= limit and len(n.split()) <= max_words}
+    return "\n\n".join("\n".join(l for l in p.splitlines() if norm(l) not in furniture) for p in pages)
 
 
 def load_folder(folder):

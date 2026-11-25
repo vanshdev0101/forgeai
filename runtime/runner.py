@@ -197,7 +197,16 @@ def main(argv=None):
     ap.add_argument("--ask", help="answer one question and print the trace as JSON")
     ap.add_argument("--debug", action="store_true", help="interactive mode: show retrieval and tool calls")
     a = ap.parse_args(argv)
-    agent = Agent.load(a.definition)
+    try:
+        llm.preflight()
+        agent = Agent.load(a.definition)
+        return _run(agent, a)
+    except (llm.LLMError, ValueError, FileNotFoundError) as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+
+
+def _run(agent, a):
 
     if a.ask:
         res = agent.answer(a.ask)

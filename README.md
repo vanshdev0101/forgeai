@@ -73,9 +73,18 @@ python tests/test_phase1.py    # offline: fake embeddings, stubbed LLM; no Ollam
 python tests/smoke_live.py     # live run against Ollama
 ```
 
-The offline suite was mutation-checked: each guard (tool gate, citation filter, CSV path confinement,
-deterministic refusal, tag mapping, call de-duplication, loop termination, tool-free stage 1, exponent
-cap) was broken in turn and the suite failed every time.
+The offline suite (18 tests) was mutation-checked: each of 17 guards (tool gate, citation filter, CSV
+path confinement, deterministic refusal, tag mapping, call de-duplication, loop termination, tool-free
+stage 1, PDF header/footer filter, actionable Ollama errors, exponent cap, ...) was broken in turn and
+the suite failed every time.
+
+## Robustness for unattended runs
+
+- `llm.preflight()` checks Ollama is up and the models are pulled before anything starts; failures
+  print one line with the fix (`ollama serve`, `ollama pull <model>`) and exit 2, no traceback.
+- PDFs: running headers/footers (short lines repeated exactly on at least half the pages, page numbers
+  normalised) are stripped before chunking, so they don't pollute retrieval or citations. Lines that
+  differ only by a number, such as table rows, are kept.
 
 ## Known limitations
 
