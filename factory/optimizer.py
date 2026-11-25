@@ -6,7 +6,8 @@ run evals -> classify every failure (retrieval_miss / prompt_defect / hallucinat
 - One change per iteration, so every score change is attributable to exactly one change.
 - retrieval_miss is fixed in code from measurements (where the expected passage ranked and scored);
   the other categories add one rule to a "Lessons from testing" section of the system prompt.
-- A change that lowers the pass count is reverted (and logged as reverted).
+- A change is kept only if the pass count strictly rises; otherwise it is reverted and logged. (Live: a
+  rule that fixed nothing was kept at 22 -> 22, then regenerated identically in the next iteration.)
 - Anti-leakage: a prompt rule may not contain any eval answer or any digit; otherwise the factory could
   "fix" failures by pasting the test answers into the prompt.
 """
@@ -106,6 +107,8 @@ def fix_prompt(definition, category, failing_results, cases):
         feedback = f"\n\n(Your previous rule was rejected because it {leak}. Write a general behaviour rule.)"
     if not rule:
         return None, {"note": "rule rejected twice by the anti-leakage check"}
+    if rule["rule"].strip() in definition["provenance"].get("lessons", []):
+        return None, {"note": f"the model proposed a rule already in the prompt: {rule['rule'].strip()!r}"}
     new = copy.deepcopy(definition)
     lessons = new["provenance"].setdefault("lessons", [])
     lessons.append(rule["rule"].strip())
@@ -189,7 +192,7 @@ def loop(definition, out_dir, index, cases, selftest, write):
         before = {r["id"]: r["passed"] for r in best_results}
         fixed = [r["id"] for r in new_results if r["passed"] and not before[r["id"]]]
         broke = [r["id"] for r in new_results if not r["passed"] and before[r["id"]]]
-        kept = new_card["passed"] >= sum(before.values())
+        kept = new_card["passed"] > sum(before.values())  # no-op changes only add prompt clutter
         entry = {"iteration": it, "category": category, "applied": True, "kept": kept, **info,
                  "targeted_cases": [r["id"] for r in failing if r["category"] == category],
                  "score_before": f"{sum(before.values())}/{len(before)}",
@@ -204,6 +207,6 @@ def loop(definition, out_dir, index, cases, selftest, write):
             best, best_results = candidate, new_results
         else:
             exhausted.add(category)
-            log(f"optimizer: iteration {it} lowered the score ({entry['score_before']} -> {entry['score_after']}); "
-                "reverted")
+            log(f"optimizer: iteration {it} did not raise the score ({entry['score_before']} -> "
+                f"{entry['score_after']}); reverted")
     return best, best_results, history, changes, stop_reason

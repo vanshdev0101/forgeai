@@ -150,22 +150,29 @@ def _rounds(*specs):
 
 
 def test_loop_keeps_improvements_reverts_regressions_and_logs_everything():
-    rounds = _rounds(("pd", "hal", "pass"),   # 0: 1/3; hallucination wins the tie on priority
-                     ("pd", "pass", "rm"),    # 1: 1/3 (>= before, kept); now retrieval_miss has priority
-                     ("pd", "pd", "pd"),      # 2: 0/3 -> reverted, retrieval_miss exhausted
+    rounds = _rounds(("pd", "hal", "rm"),     # 0: 0/3; retrieval_miss wins the tie on priority
+                     ("pd", "hal", "pass"),   # 1: 1/3 kept
+                     ("pd", "pd", "pd"),      # 2: hallucination fix -> 0/3, reverted
                      ("pass", "pass", "pass"))  # 3: prompt_defect fix on top of fix1
     best, final, history, changes, seen, written = _run_loop(rounds, [" +fix1", " +fix2", " +fix3"])
-    assert [h["passed"] for h in history] == [1, 1, 0, 3]
+    assert [h["passed"] for h in history] == [0, 1, 0, 3]
     assert [(c["category"], c["kept"]) for c in changes] == [
-        ("hallucination", True), ("retrieval_miss", False), ("prompt_defect", True)]
+        ("retrieval_miss", True), ("hallucination", False), ("prompt_defect", True)]
     assert seen[3]["system_prompt"].endswith(" +fix1 +fix3"), "fix3 must build on fix1, not on the reverted fix2"
     assert best["system_prompt"].endswith(" +fix1 +fix3")
     c1 = changes[0]
-    assert c1["score_before"] == "1/3" and c1["score_after"] == "1/3"
-    assert c1["newly_passing"] == ["A02"] and c1["newly_failing"] == ["A03"] and c1["targeted_cases"] == ["A02"]
-    assert changes[1]["newly_failing"] == ["A02"]
+    assert c1["score_before"] == "0/3" and c1["score_after"] == "1/3"
+    assert c1["newly_passing"] == ["A03"] and c1["newly_failing"] == [] and c1["targeted_cases"] == ["A03"]
+    assert changes[1]["newly_failing"] == ["A03"]
     assert {"results_iter0.json", "results_iter3.json", "agent_def_iter2.json"} <= set(written)
-    assert len(history) == optimizer.MAX_ITERATIONS + 1
+
+
+def test_equal_score_is_not_kept():
+    rounds = _rounds(("pd", "hal", "pass"), ("pd", "pass", "hal"), ("pd", "hal", "pass"))
+    best, final, history, changes, seen, _ = _run_loop(rounds, [" +swap", " +noop"])
+    assert changes[0]["kept"] is False and changes[1]["kept"] is False, changes
+    assert best["system_prompt"] == DEF["system_prompt"], "a swap or a no-op is not progress"
+    assert _run_loop.stop == "no applicable fix left for the remaining failures"
 
 
 def test_loop_stops_when_all_pass_and_skips_exhausted_categories():
@@ -180,10 +187,23 @@ def test_loop_stops_when_all_pass_and_skips_exhausted_categories():
 
 
 def test_loop_respects_the_iteration_cap():
-    rounds = _rounds(*[("pd", "pass", "pass")] * 8)  # never fixed, every fix kept (score never drops)
-    best, final, history, changes, seen, _ = _run_loop(rounds, [f" +f{i}" for i in range(8)])
-    assert len(history) == optimizer.MAX_ITERATIONS + 1 and len(seen) == optimizer.MAX_ITERATIONS + 1
-    assert _run_loop.stop == f"reached the {optimizer.MAX_ITERATIONS}-iteration limit"
+    rounds = _rounds(("pd", "hal", "rm"), ("pd", "hal", "pass"), ("pd", "pass", "pass"), ("pass", "pass", "pass"))
+    saved = optimizer.MAX_ITERATIONS
+    optimizer.MAX_ITERATIONS = 2
+    try:
+        best, final, history, changes, seen, _ = _run_loop(rounds, [" +a", " +b", " +c"])
+    finally:
+        optimizer.MAX_ITERATIONS = saved
+    assert len(history) == 3 and len(seen) == 3, "must stop at the cap even though it keeps improving"
+    assert _run_loop.stop == "reached the 2-iteration limit"
+
+
+def test_duplicate_rule_is_not_reapplied():
+    d = copy.deepcopy(DEF)
+    d["provenance"]["lessons"] = ["Never state unsupported details."]
+    optimizer.ask_json = lambda _p, check=None, **v: {"rule": "Never state unsupported details.", "why": "w"}
+    new, info = optimizer.fix_prompt(d, "hallucination", [_r("A01", False, "hallucination")], CASES)
+    assert new is None and "already in the prompt" in info["note"]
 
 
 def test_report_leads_with_remaining_failures():

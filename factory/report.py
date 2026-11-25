@@ -76,7 +76,7 @@ def build(req, definition, evals, history, changes, final_results, selftest, usa
               (f" Model's rationale: {c['why_model']}" if c.get("why_model") else ""),
               f"- **Score:** {c['score_before']} -> {c['score_after']}; newly passing: "
               f"{', '.join(c['newly_passing']) or 'none'}; newly failing: {', '.join(c['newly_failing']) or 'none'}",
-              f"- **Kept:** {'yes' if c['kept'] else 'no, reverted because the pass count went down'}", ""]
+              f"- **Kept:** {'yes' if c['kept'] else 'no, reverted because the pass count did not rise'}", ""]
 
     types = Counter(r["type"] for r in final_results)
     passed = Counter(r["type"] for r in final_results if r["passed"])
