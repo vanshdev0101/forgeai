@@ -12,7 +12,9 @@ E, J, F = "factory/evalgen.py", "factory/judge.py", "factory/facts.py"
 MUTANTS = [
     # eval generator
     ("facts not checked against passage", E, "if (f not in out and fact_in_text(f, passage)", "if (f not in out and True"),
-    ("relevance check removed", E, "and (reference is None or fact_in_text(f, reference))):", "):"),
+    ("relevance check removed", E, "and (reference is None or fact_in_text(f, reference))\n", "\n"),
+    ("question premises kept as facts", E, "and not (question and fact_in_text(f, question))):", "):"),
+    ("negative calc results kept", E, "        if value <= 0:", "        if False:"),
     ("long facts kept whole", E, "if len(fact.split()) <= MAX_FACT_WORDS:", "if True:"),
     ("code digits count as numbers", E, r"(?<![A-Za-z\d])\d[\d,]*", r"\d[\d,]*"),
     ("unit may be a function word", E, r"(?!(?:for|and|of|to|in|on|or|the|a|an|with|per|by|from|may|is|are)\b)", ""),

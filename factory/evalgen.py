@@ -51,17 +51,20 @@ def _shorten(fact):
     return [m.group(0).strip() for m in _NUMPHRASE.finditer(fact)]
 
 
-def _verified(facts, passage, reference=None):
+def _verified(facts, passage, reference=None, question=""):
     """Keep facts that are (1) short (long ones shortened to their numeric core), (2) really in the
-    source passage and (3) part of the generator's own reference answer. (3) is a relevance check: a
-    fact the generator's answer doesn't mention isn't what its question asks (live: a flight-class
-    question listed the daily allowance as its facts)."""
+    source passage, (3) part of the generator's own reference answer and (4) not already in the question.
+    (3) is a relevance check: a fact the generator's answer doesn't mention isn't what its question asks
+    (live: a flight-class question listed the daily allowance as its facts). (4): a fact the question
+    states is its premise, not something the answer must supply (live: "under six hours" was the
+    expected fact for "which class for a journey under six hours?")."""
     out = []
     for raw in facts:
         raw = raw.strip().strip('"').strip() if isinstance(raw, str) else ""
         for f in _shorten(raw) if raw else []:
             if (f not in out and fact_in_text(f, passage)
-                    and (reference is None or fact_in_text(f, reference))):
+                    and (reference is None or fact_in_text(f, reference))
+                    and not (question and fact_in_text(f, question))):
                 out.append(f)
     return out
 
@@ -110,7 +113,7 @@ def answerable(req, pool, n, dropped):
                      audience=req["audience"], summary=req["summary"], chunk_id=c["id"], passage=c["text"],
                      avoid=avoid)
         asked[c["id"]].append(o["question"])
-        facts = _verified(o["key_facts"], c["text"], str(o.get("answer") or ""))
+        facts = _verified(o["key_facts"], c["text"], str(o.get("answer") or ""), o["question"])
         if not facts:
             dropped.append({"type": "answerable", "question": o["question"], "chunk": c["id"],
                             "why": f"no key fact of {o['key_facts']} is short, in the source passage and in "
@@ -147,7 +150,8 @@ def multi_doc(req, pool, n, dropped):
                      id_b=b["id"], passage_b=b["text"], avoid=avoid)
         asked[key].append(o["question"])
         ref = str(o.get("answer") or "")
-        fa, fb = _verified(o["facts_a"], a["text"], ref), _verified(o["facts_b"], b["text"], ref)
+        fa = _verified(o["facts_a"], a["text"], ref, o["question"])
+        fb = _verified(o["facts_b"], b["text"], ref, o["question"])
         if not (fa and fb):
             dropped.append({"type": "multi_doc", "question": o["question"], "chunks": [a["id"], b["id"]],
                             "why": f"needs a verified fact from each passage; proposed A={o['facts_a']} "
@@ -227,6 +231,10 @@ def calculator_cases(req, pool, n, dropped):
                                    f"({sorted(used - allowed)})"})
             continue
         value = result["result"]
+        if value <= 0:  # live: "how much more can I spend?" with expected -500
+            dropped.append({"type": "calculator", "question": o["question"], "chunk": c["id"],
+                            "why": f"non-positive result {expr} = {value}: a confusing test"})
+            continue
         fact = str(int(value)) if float(value) == int(value) else f"{value:.2f}".rstrip("0").rstrip(".")
         # Code can verify the numbers, not the logic. Logic check = agreement: a fresh call that never sees
         # the proposed expression solves the question itself; keep the case only if both results match.

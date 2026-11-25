@@ -97,6 +97,20 @@ def test_facts_must_be_short_and_in_the_reference_answer():
         "facts the reference answer doesn't mention are irrelevant to the question (A06)"
 
 
+def test_facts_restating_the_question_are_not_required():
+    assert evalgen._verified(["under 6 hours", "economy class"], "Economy class for flights under 6 hours.",
+                             "Economy class, since it is under 6 hours.",
+                             "What class must I book for a journey under six hours?") == ["economy class"]
+
+
+def test_non_positive_calculator_results_are_dropped():
+    stub({"eval_calc": {"question": "I spent INR 3,000 of my INR 2,500 allowance. How much is left?",
+                        "expression": "2500 - 3000", "unit": "INR"},
+          "eval_solve_calc": {"answerable": True, "expression": "2500 - 3000"}})
+    dropped = []
+    assert evalgen.calculator_cases(REQ, CHUNKS, 1, dropped) == [] and "non-positive" in dropped[-1]["why"]
+
+
 def test_answerable_drops_unverified_facts():
     replies = iter([
         {"question": "How many sick days do I get?", "answer": "You get 12 days.", "key_facts": ["12 days", "15 bonus days"]},
