@@ -1,0 +1,36 @@
+{
+  "title": "ForgeAI requirements document",
+  "type": "object",
+  "required": ["name", "summary", "audience", "tone", "answer_length", "must_answer_topics", "must_refuse_topics", "assumptions"],
+  "properties": {
+    "name": {"type": "string", "description": "kebab-case agent name"},
+    "summary": {"type": "string", "description": "one or two sentences: what the agent is for"},
+    "audience": {"type": "string"},
+    "tone": {"type": "string"},
+    "answer_length": {"type": "string", "enum": ["short", "medium", "detailed"]},
+    "must_answer_topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "details", "source_docs"],
+        "properties": {
+          "topic": {"type": "string"},
+          "details": {"type": "string"},
+          "source_docs": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "must_refuse_topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "reason"],
+        "properties": {"topic": {"type": "string"}, "reason": {"type": "string"}}
+      }
+    },
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "clarifications": {"type": "array"},
+    "documents": {"type": "array"},
+    "groundability": {"type": "object"}
+  }
+}

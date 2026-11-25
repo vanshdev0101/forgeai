@@ -193,6 +193,14 @@ def test_contract_enforcement():
     assert "uncited_answer" in res["violations"], res
 
 
+def test_empty_answer_becomes_flagged_refusal():
+    agent = _agent(tools=[], retrieval={"chunk_words": 200, "overlap": 30, "k": 2, "min_score": 0.0})
+    llm.chat = lambda *a, **k: {"role": "assistant", "content": '{"answer": "", "citations": ["S1"], "refused": false}'}
+    res = agent.answer("what is my colleague's salary")
+    assert res["refused"] and res["answer"] == agent.d["output_contract"]["refusal_message"], res
+    assert res["refusal_source"] == "empty_answer" and "empty_answer" in res["violations"] and res["citations"] == []
+
+
 def test_tool_loop_executes_allowed_tool():
     agent = _agent(retrieval={"chunk_words": 200, "overlap": 30, "k": 2, "min_score": 0.0})
     calls = {"role": "assistant", "content": "", "tool_calls": [

@@ -169,7 +169,10 @@ class Agent:
         `tags` maps the S-tags shown to the model to real chunk ids."""
         oc = self.d["output_contract"]
         answer = str(out.get("answer", "")).strip()
-        refused = bool(out.get("refused")) or answer == oc["refusal_message"]
+        empty = not answer
+        if empty:  # never show a blank reply: an answer we can't see is treated as a refusal
+            answer = oc["refusal_message"]
+        refused = empty or bool(out.get("refused")) or answer == oc["refusal_message"]
         valid_ids = set(tags.values())
         cited = [str(c).strip("[] ") for c in (out.get("citations") or []) if isinstance(c, (str, int))]
         good = []
@@ -177,7 +180,7 @@ class Agent:
             cid = tags.get(c) or tags.get(f"S{c}") or (c if c in valid_ids else None)
             if cid and cid not in good:
                 good.append(cid)
-        violations = []
+        violations = ["empty_answer"] if empty else []
         if len(good) < len(set(cited)):
             violations.append("invalid_citation")
         if refused and answer != oc["refusal_message"]:
@@ -187,7 +190,8 @@ class Agent:
         max_words = oc.get("max_words", 150)
         if len(answer.split()) > max_words * 1.5:
             violations.append("too_long")
-        return {"answer": answer, "citations": good, "refused": refused, "refusal_source": "model" if refused else None,
+        return {"answer": answer, "citations": [] if empty else good, "refused": refused,
+                "refusal_source": "empty_answer" if empty else ("model" if refused else None),
                 "violations": violations}
 
 
