@@ -63,6 +63,10 @@ def test_normaliser_fixes_found_live():
     assert facts.fact_in_text("2 consecutive working days", "more than two consecutive working days")  # A08
     assert facts.fact_in_text("lapses on 31 December", "Any unused leave will lapse by December 31st.")  # A02
     assert facts.fact_in_text("annual_leave_days: 21", "you get 21 days of annual leave")  # CSV column names
+    assert facts.fact_in_text("31st December", "it lapses on 31 December"), "ordinal inside the fact"
+    assert facts.fact_in_text("auto-create a test set from the documents themselves",
+                              "you must auto-generate test sets (at least 20 cases) from the documents themselves"), \
+        "M02: plural 'sets' must stem to 'set'"
     assert not facts.fact_in_text("annual_leave_days: 21", "you get 18 days of annual leave")
 
 
@@ -79,7 +83,13 @@ def test_claim_filter():
 def test_facts_must_be_short_and_in_the_reference_answer():
     assert evalgen._verified(["12 days", "Employees receive 12 days of paid sick leave per calendar year."],
                              LEAVE, "You get 12 days, as employees receive 12 days of paid sick leave per "
-                                    "calendar year.") == ["12 days"], "long sentence-facts are dropped"
+                                    "calendar year.") == ["12 days"], "long sentence-facts shrink to their numbers"
+    assert evalgen._shorten("Shore staff travelling for work receive a daily allowance of INR 2,500 for "
+                            "domestic travel and USD 90 for international travel.") == ["INR 2,500", "USD 90"]
+    assert evalgen._shorten("Unused annual leave of up to 10 days may be carried into the next calendar year") \
+        == ["10 days"]
+    assert evalgen._shorten("Grade G5 staff in the Director band are entitled to the most annual leave days") == [], \
+        "no number: dropped; and G5 is a code, not a number"
     assert evalgen._verified(["INR 2,500", "within"], TRAVEL, "Economy is mandatory.") == [], \
         "facts the reference answer doesn't mention are irrelevant to the question (A06)"
 
@@ -103,7 +113,9 @@ def test_small_corpus_reuses_passages_with_an_avoid_list():
 
     def reply(v):
         seen_avoid.append(v["avoid"])
-        return {"question": f"Question number {len(seen_avoid)} about it?", "answer": "12 days", "key_facts": ["12 days"]}
+        topics = ["sick leave entitlement", "certificate rules", "carry over limits"]
+        return {"question": f"Question number {len(seen_avoid)}: what about {topics[len(seen_avoid) - 1]}?",
+                "answer": "12 days", "key_facts": ["12 days"]}
     stub({"eval_answerable": reply})
     cases = evalgen.answerable(REQ, CHUNKS[:1], 3, [])
     assert len(cases) == 3 and seen_avoid[0] == "" and "Question number 1" in seen_avoid[1]
@@ -115,14 +127,15 @@ def test_multi_doc_needs_a_fact_from_each_passage():
     cases = evalgen.multi_doc(REQ, CHUNKS, 1, [])
     assert cases and cases[0]["expected"]["source_docs"] == ["leave_policy.md", "travel_policy.md"]
     dropped = []
-    stub({"eval_multi": {"question": "Sick abroad: allowance and certificate?", "answer": "a",
-                         "facts_a": ["12 days"], "facts_b": ["EUR 70"]}})
+    stub({"eval_multi": {"question": "Sick abroad: allowance and certificate?", "answer": "12 days; EUR 70 a day.",
+                         "facts_a": ["12 days"], "facts_b": ["EUR 70"]}})  # A verifies, B is not in passage B
     assert evalgen.multi_doc(REQ, CHUNKS, 1, dropped) == [] and dropped
 
 
 def test_calculator_expected_value_is_computed_and_numbers_checked():
     stub({"eval_calc": {"question": "Our 7 staff travel domestically for 13 days. Total allowance?",
-                        "expression": "7 * 13 * 2500", "unit": "INR"}})
+                        "expression": "7 * 13 * 2500", "unit": "INR"},
+          "eval_solve_calc": {"answerable": True, "expression": "13 * 7 * 2500"}})
     cases = evalgen.calculator_cases(REQ, CHUNKS, 1, [])
     assert cases[0]["expected"]["key_facts"] == ["227500"] and cases[0]["expected"]["tool"] == "calculator"
 
@@ -139,6 +152,45 @@ def test_csv_cases_come_from_real_cells():
     for c in cases:
         row = rows[c["origin"]["csv_row"]]
         assert c["expected"]["key_facts"] == [row[c["origin"]["column"]]] and row["grade"] in c["question"]
+
+
+def test_near_duplicates_are_rejected():
+    cases = [{"question": "After a domestic trip, how many unused annual leave days can an employee carry over?"}]
+    assert not evalgen._new(cases, "After a domestic trip, how many unused annual leave days can I carry over?")
+    assert evalgen._new(cases, "What is the international daily allowance?")
+
+
+def test_ambiguous_rewrites_are_meaning_checked():
+    base = [{"type": "answerable", "question": "What is the daily allowance for domestic work travel?",
+             "expected": {"refuse": False, "key_facts": ["INR 2,500"]}},
+            {"type": "answerable", "question": "How many sick days do I get each year?",
+             "expected": {"refuse": False, "key_facts": ["12 days"]}}]
+    rewrites = iter([{"question": "how much do we get paid daily if working at home?"},
+                     {"question": "sick days per yr??"}])
+    verdicts = iter([{"same_information": False, "reason": "travel became working from home"},
+                     {"same_information": True, "reason": "same"}])
+    stub({"eval_ambiguous": lambda v: next(rewrites), "eval_check_rewrite": lambda v: next(verdicts)})
+    dropped = []
+    cases = evalgen.ambiguous(base, 2, dropped)
+    assert [c["question"] for c in cases] == ["sick days per yr??"] and cases[0]["expected"]["key_facts"] == ["12 days"]
+    assert "working from home" in dropped[0]["why"]
+
+
+def test_calculator_logic_needs_an_agreeing_independent_derivation():
+    calls = stub({"eval_calc": {"question": "If 4 of us travel domestically, how much allowance per day in total?",
+                                "expression": "4 * 90", "unit": "INR"},
+                  "eval_solve_calc": {"answerable": True, "expression": "4 * 2500"}})
+    dropped = []
+    assert evalgen.calculator_cases(REQ, CHUNKS, 1, dropped) == []
+    assert any("disagrees" in d["why"] and "10000" in d["why"] for d in dropped), dropped
+    solve_inputs = [v for n, v in calls if n == "eval_solve_calc"]
+    assert solve_inputs and all("4 * 90" not in str(v) for v in solve_inputs), "solver must not see the proposal"
+
+    stub({"eval_calc": {"question": "If 4 of us travel domestically, how much allowance per day in total?",
+                        "expression": "4 * 2500", "unit": "INR"},
+          "eval_solve_calc": {"answerable": False, "expression": ""}})
+    dropped = []
+    assert evalgen.calculator_cases(REQ, CHUNKS, 1, dropped) == [] and "unanswerable" in dropped[-1]["why"]
 
 
 def test_refusals_typed_by_topic():
@@ -204,6 +256,13 @@ def test_judge_claims_must_be_quoted_and_unsupported():
     assert not r["passed"] and r["failure"] == "hallucination"
 
 
+def test_claims_judge_sees_the_question():
+    calls = stub({"judge_claims": {"unsupported_claims": []}})
+    judge.score(CASE, _trace("You get 12 days.", citations=["leave_policy.md#0"]), Idx(CHUNKS))
+    sent = [v for n, v in calls if n == "judge_claims"]
+    assert sent and sent[0]["question"] == CASE["question"], "user-supplied numbers must count as given (C01)"
+
+
 def test_judge_grounding():
     stub({"judge_claims": {"unsupported_claims": []}})
     r = judge.score(CASE, _trace("You get 12 days.", citations=["travel_policy.md#0"]), Idx(CHUNKS))
@@ -229,15 +288,18 @@ def test_selftest_detects_a_judge_that_says_yes_to_everything():
     st = judge.judge_selftest(cases, Idx(CHUNKS))
     # number_changed and fabricated_claim need a flagged claim; a claims judge that never flags fails them.
     assert st["claim_verdict_accuracy"] < 1.0 and st["fact_verdict_accuracy"] == 1.0, st
+    assert st["accuracy"] < 1.0 and st["correct"] < st["probes"], "reported accuracy must include claim verdicts"
 
 
 def test_prompts_fill():
     for name, vals in {
         "eval_answerable": dict(audience="a", summary="s", chunk_id="c", passage="p", avoid=""),
-        "eval_multi": dict(audience="a", summary="s", id_a="a", passage_a="p", id_b="b", passage_b="q"),
+        "eval_multi": dict(audience="a", summary="s", id_a="a", passage_a="p", id_b="b", passage_b="q", avoid=""),
         "eval_ambiguous": dict(question="q"),
         "eval_refuse": dict(audience="a", summary="s", refuse_topics="t", n_unrelated="2"),
         "eval_calc": dict(audience="a", chunk_id="c", passage="p"),
+        "eval_check_rewrite": dict(original="o", rewrite="r"),
+        "eval_solve_calc": dict(passage="p", question="q"),
         "judge_fact": dict(question="q", fact="f", answer="a", source="s"),
         "judge_claims": dict(passages="p", tool_results="t", answer="a", question="q"),
     }.items():

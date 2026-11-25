@@ -15,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from factory.common import ask_json, log
-from factory.facts import NUM, fact_in_text, numbers
+from factory.facts import NUM, content_words, fact_in_text, numbers
 from runtime import tools
 
 TARGETS = {"answerable": 10, "multi_doc": 3, "ambiguous": 3, "unrelated": 2, "calculator": 2, "csv_lookup": 2}
@@ -37,18 +37,32 @@ def _spread(chunks):
 
 
 MAX_FACT_WORDS = 8
+# Numeric core of a sentence: optional currency, a number (not inside a code like G5), and a unit that
+# isn't a function word. "allowance of INR 2,500 for domestic travel" -> "INR 2,500"; "up to 10 days" -> "10 days".
+_NUMPHRASE = re.compile(r"(?:(?:INR|USD|EUR|GBP|Rs\.?|\$|€|£)\s?)?(?<![A-Za-z\d])\d[\d,]*(?:\.\d+)?"
+                        r"(?:\s?%|\s+(?!(?:for|and|of|to|in|on|or|the|a|an|with|per|by|from|may|is|are)\b)[A-Za-z]+)?")
+
+
+def _shorten(fact):
+    """A sentence-long 'fact' (the 9b model often copies whole sentences) is replaced by its numeric
+    phrases; a long fact with no number is dropped."""
+    if len(fact.split()) <= MAX_FACT_WORDS:
+        return [fact]
+    return [m.group(0).strip() for m in _NUMPHRASE.finditer(fact)]
 
 
 def _verified(facts, passage, reference=None):
-    """Keep facts that are (1) short, (2) really in the source passage and (3) part of the generator's
-    own reference answer. (3) is a relevance check: a fact the generator's answer doesn't mention isn't
-    what its question asks (live: a flight-class question listed the daily allowance as its facts)."""
+    """Keep facts that are (1) short (long ones shortened to their numeric core), (2) really in the
+    source passage and (3) part of the generator's own reference answer. (3) is a relevance check: a
+    fact the generator's answer doesn't mention isn't what its question asks (live: a flight-class
+    question listed the daily allowance as its facts)."""
     out = []
-    for f in facts:
-        f = f.strip().strip('"').strip() if isinstance(f, str) else ""
-        if (f and len(f.split()) <= MAX_FACT_WORDS and fact_in_text(f, passage)
-                and (reference is None or fact_in_text(f, reference))):
-            out.append(f)
+    for raw in facts:
+        raw = raw.strip().strip('"').strip() if isinstance(raw, str) else ""
+        for f in _shorten(raw) if raw else []:
+            if (f not in out and fact_in_text(f, passage)
+                    and (reference is None or fact_in_text(f, reference))):
+                out.append(f)
     return out
 
 
@@ -61,9 +75,26 @@ def _q_ok(o, *keys):
     return None
 
 
+DUP_SIMILARITY = 0.8
+
+
+def _similar(a, b):
+    wa, wb = set(content_words(a, drop_filler=True)), set(content_words(b, drop_filler=True))
+    return bool(wa and wb) and len(wa & wb) / len(wa | wb) >= DUP_SIMILARITY
+
+
 def _new(cases, question):
-    key = re.sub(r"\W+", " ", question.lower()).strip()
-    return question.strip() and key not in {re.sub(r"\W+", " ", c["question"].lower()).strip() for c in cases}
+    """Not empty and not a near-duplicate (live: 'how many can an employee carry over' and 'how many
+    can I carry over' were both kept)."""
+    return bool(question.strip()) and not any(_similar(question, c["question"]) for c in cases)
+
+
+def _bool_check(*keys):
+    def check(o):
+        if not isinstance(o, dict) or not all(isinstance(o.get(k), bool) for k in keys):
+            return "need JSON with boolean " + ", ".join(keys)
+        return None
+    return check
 
 
 def answerable(req, pool, n, dropped):
@@ -103,18 +134,24 @@ def multi_doc(req, pool, n, dropped):
                     pairs.append((a, b))
     else:
         pairs = list(zip(pool, pool[1:]))
-    cases = []
-    for a, b in pairs[: n * 3]:
-        if len(cases) >= n:
+    cases, asked = [], defaultdict(list)
+    for attempt in range(n * 4):  # cycle pairs: a 3-document corpus has only 3 pairs
+        if len(cases) >= n or not pairs:
             break
+        a, b = pairs[attempt % len(pairs)]
+        key = (a["id"], b["id"])
+        avoid = ("Do NOT ask any of these again:\n" + "\n".join(f"- {q}" for q in asked[key]) + "\n"
+                 if asked[key] else "")
         o = ask_json("eval_multi", check=lambda o: _q_ok(o, "facts_a", "facts_b"), temperature=TEMPERATURE,
                      audience=req["audience"], summary=req["summary"], id_a=a["id"], passage_a=a["text"],
-                     id_b=b["id"], passage_b=b["text"])
+                     id_b=b["id"], passage_b=b["text"], avoid=avoid)
+        asked[key].append(o["question"])
         ref = str(o.get("answer") or "")
         fa, fb = _verified(o["facts_a"], a["text"], ref), _verified(o["facts_b"], b["text"], ref)
         if not (fa and fb):
             dropped.append({"type": "multi_doc", "question": o["question"], "chunks": [a["id"], b["id"]],
-                            "why": "needs a verified fact from each passage"})
+                            "why": f"needs a verified fact from each passage; proposed A={o['facts_a']} "
+                                   f"B={o['facts_b']}, kept A={fa} B={fb}"})
             continue
         if _new(cases, o["question"]):
             cases.append({"type": "multi_doc", "question": o["question"].strip(),
@@ -125,13 +162,26 @@ def multi_doc(req, pool, n, dropped):
     return cases
 
 
-def ambiguous(base, n):
+def ambiguous(base, n, dropped):
+    """Informal rewrites of answerable cases. An independent check confirms each still asks for the
+    same information (live: 'domestic work travel' was rewritten as 'working at home')."""
     cases = []
-    for b in base[:n]:
+    for b in base[: n * 2]:
+        if len(cases) >= n:
+            break
         o = ask_json("eval_ambiguous", check=_q_ok, temperature=TEMPERATURE, question=b["question"])
-        if _new(cases + base, o["question"]):
-            cases.append({"type": "ambiguous", "question": o["question"].strip(), "expected": dict(b["expected"]),
-                          "origin": {"prompt": "eval_ambiguous", "rewrite_of": b["question"]}})
+        rewrite = o["question"].strip()
+        same = ask_json("eval_check_rewrite", check=_bool_check("same_information"),
+                        original=b["question"], rewrite=rewrite)
+        if not same["same_information"]:
+            dropped.append({"type": "ambiguous", "question": rewrite, "rewrite_of": b["question"],
+                            "why": f"rewrite changed the meaning: {same.get('reason', '')}"})
+            continue
+        others = cases + [x for x in base if x is not b]  # a rewrite naturally resembles its own original
+        if _new(others, rewrite) and rewrite.lower() != b["question"].lower():
+            cases.append({"type": "ambiguous", "question": rewrite, "expected": dict(b["expected"]),
+                          "origin": {"prompt": "eval_ambiguous", "rewrite_of": b["question"],
+                                     "meaning_check": same.get("reason", "")}})
     return cases
 
 
@@ -178,6 +228,19 @@ def calculator_cases(req, pool, n, dropped):
             continue
         value = result["result"]
         fact = str(int(value)) if float(value) == int(value) else f"{value:.2f}".rstrip("0").rstrip(".")
+        # Code can verify the numbers, not the logic. Logic check = agreement: a fresh call that never sees
+        # the proposed expression solves the question itself; keep the case only if both results match.
+        # (A "is this correct?" verdict nitpicked valid cases live; a confused question such as
+        # "5 days of vacation -> how many monthly accrual days?" yields a different derivation.)
+        solve = ask_json("eval_solve_calc", check=lambda o: None if isinstance(o, dict) and isinstance(
+            o.get("answerable"), bool) else 'need {"answerable": bool, "expression": str}',
+            passage=c["text"], question=o["question"])
+        second = tools.calculator(str(solve.get("expression") or "").replace(",", "")) if solve["answerable"] else {}
+        if "result" not in second or abs(float(second["result"]) - float(value)) > 1e-6 * max(1.0, abs(value)):
+            dropped.append({"type": "calculator", "question": o["question"], "chunk": c["id"],
+                            "why": f"independent derivation disagrees: proposed {expr} = {fact}, "
+                                   f"re-derived {solve.get('expression')!r} -> {second.get('result', 'unanswerable')}"})
+            continue
         if _new(cases, o["question"]):
             cases.append({"type": "calculator", "question": o["question"].strip(),
                           "expected": {"refuse": False, "key_facts": [fact], "source_docs": [c["doc"]],
@@ -224,7 +287,7 @@ def generate(req, definition, index, docs_dir):
     log("evalgen: multi-document cases")
     cases += multi_doc(req, pool, TARGETS["multi_doc"], dropped)
     log("evalgen: ambiguous rewrites")
-    cases += ambiguous(base, TARGETS["ambiguous"])
+    cases += ambiguous(base, TARGETS["ambiguous"], dropped)
     log("evalgen: refusal cases")
     cases += refusals(req, TARGETS["unrelated"])
     if "calculator" in definition["tools"]:

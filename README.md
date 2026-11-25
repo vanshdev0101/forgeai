@@ -10,8 +10,8 @@ and an honest report. Everything runs locally on small open models via Ollama.
 |---|---|---|
 | 1 | Runtime spine: LLM wrapper, RAG, tool registry, agent-definition schema, generic runner (req 8) | done |
 | 2 | Intake interviewer (req 1), groundability guard (req 2), agent generator (req 3) | done |
-| 3 | Eval generator (req 4) + judge (req 5) | next |
-| 4 | Critic-optimizer loop (req 6) + honest report (req 7) | |
+| 3 | Eval generator (req 4) + judge (req 5) | done |
+| 4 | Critic-optimizer loop (req 6) + honest report (req 7) | next |
 | 5 | Two full demo runs (req 9) | |
 
 The groundability guard was planned for a later phase but moved into Phase 2: live runs showed the
@@ -71,6 +71,51 @@ Every rule below was added after a live run went wrong.
   0.53, questions at least 0.64). If they overlap (assignment PDF: probes up to 0.60, real questions down to
   0.54), it is only a recall floor and the agent's scope rules do the refusing.
 
+## How the factory tests what it built (and why)
+
+**Eval generator (req 4).** At least 20 cases generated from the documents; every prompt is in
+`prompts/eval_*.md`. The factory model only *phrases* questions; what counts as correct is checked or
+computed in code, because a weak model writing its own tests otherwise writes easy or wrong ones.
+
+| Type | Expected answer comes from |
+|---|---|
+| answerable | key facts the model proposes, kept only if short, present in the source passage, and stated in the model's own reference answer (relevance check: a flight-class question once listed the allowance as its facts) |
+| multi_doc | a verified fact from each of two passages in different documents |
+| ambiguous | an informal rewrite of an answerable case, kept only if an independent check says it asks for the same information (one rewrite turned "domestic work travel" into "working at home") |
+| calculator | the model's expression, run by the calculator; every number must appear in the passage or question, and a second call that never sees the expression must derive the same result |
+| csv_lookup | a real cell, read from the CSV (no LLM) |
+| out_of_scope, ungroundable | must-refuse topics and topics the guard found unsupported; must be refused |
+
+Sentence-long "facts" (the 9b model often copies whole sentences) are cut to their numeric phrases, and
+near-duplicate questions are rejected. Every rejected case is kept in `evals.json` under `dropped`, with
+the reason.
+
+**Judge (req 5).** Deterministic checks first, the 9b model only where code cannot decide, and the
+model's verdicts checked again by code:
+
+- refusal correct, grounding (cites an expected source document or used the expected tool) and key facts
+  (normalised: number words, ordinals, Indian digit grouping, CSV column names, light stemming) in code;
+- facts code can't match go to a per-fact yes/no question; a "yes" counts only if its quoted span is really
+  in the answer and carries every number of the fact, so a judge that accepts a changed number is overruled;
+- hallucination: the model lists unsupported claims, given the passages, tool results and the question;
+  a claim counts only if quoted from the answer and checkable (courtesy filler and verbatim restatements are
+  filtered in code).
+
+Bias defences: binary per-fact questions instead of quality scores (verbosity), no pairwise comparison
+(position), judge model differs from the agent model and is never told who wrote the answer
+(self-preference). **The judge is tested every run**: a self-test grades probes whose verdict is known
+(correct answer, the same padded with filler, a changed number, an invented claim) and the result is in the
+scorecard. It caught the claims judge flagging courtesy filler as hallucination, which led to the filter.
+
+Live, on the two development briefs: HR policy 20/22 (91%), self-test 12/12; assignment FAQ 15/21 (71%),
+self-test 11/11. Every failure was audited by hand; the remaining ones are agent errors (a wrong
+entitlement, an invented carry-over rule, "may" turned into "must", "3-4 tools" turned into "at least four").
+
+**Known limits of the evals.** An independent derivation can share the generator's misreading of a
+confused calculator question (seen once); a question-only "is this sensible?" check was tried and rejected
+because it threw out more good cases than bad. The 9b fact judge leans strict on paraphrases in prose-heavy
+documents, so recall on such corpora is a slight underestimate.
+
 ## Run an agent
 
 ```
@@ -114,10 +159,12 @@ python tests/test_phase1.py     # runtime, offline: fake embeddings, stubbed LLM
 python tests/test_phase2.py     # factory, offline: stubbed factory model
 python tests/mutate_phase1.py   # break each runtime guard in turn; the suite must fail every time
 python tests/mutate_phase2.py   # same for the factory
+python tests/test_phase3.py     # eval generator + judge, offline
+python tests/mutate_phase3.py
 python tests/smoke_live.py      # live run against Ollama
 ```
 
-Both mutation suites currently pass: 18/18 and 33/33 mutants caught, with the clean suite passing before
+All three mutation suites pass: 18/18, 33/33 and 30/30 mutants caught, with the clean suite passing before
 and after. The harness runs with `PYTHONDONTWRITEBYTECODE=1`: a same-size mutation restored within the
 same second once left stale bytecode running, which made later "caught" results meaningless.
 

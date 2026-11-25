@@ -38,7 +38,7 @@ def norm(text):
 
 def _stem(w):
     for suf in ("ing", "ed", "s"):  # not "es": lapses -> laps would miss lapse
-        if len(w) > len(suf) + 3 and w.endswith(suf):
+        if len(w) > len(suf) + 2 and w.endswith(suf):  # +2 so "sets" -> "set" (live: M02 judged wrong)
             return w[: -len(suf)]
     return w
 
