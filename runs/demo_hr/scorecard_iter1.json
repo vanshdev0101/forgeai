@@ -1,0 +1,148 @@
+{
+  "cases": 23,
+  "passed": 20,
+  "pass_rate": 0.87,
+  "by_type": {
+    "answerable": {
+      "n": 10,
+      "passed": 9
+    },
+    "multi_doc": {
+      "n": 3,
+      "passed": 2
+    },
+    "ambiguous": {
+      "n": 3,
+      "passed": 3
+    },
+    "out_of_scope": {
+      "n": 4,
+      "passed": 4
+    },
+    "ungroundable": {
+      "n": 1,
+      "passed": 1
+    },
+    "calculator": {
+      "n": 2,
+      "passed": 1
+    }
+  },
+  "failures": {
+    "missing_facts": 3
+  },
+  "answerable_fact_recall": 0.898,
+  "refusal_accuracy": 1.0,
+  "wrong_refusal_rate": 0.0,
+  "hallucination_rate": 0.0,
+  "retrieval_hit_rate": 1.0,
+  "mean_agent_llm_calls": 1.13,
+  "judge_selftest": {
+    "probes": 10,
+    "correct": 10,
+    "accuracy": 1.0,
+    "fact_verdict_accuracy": 1.0,
+    "claim_verdict_accuracy": 1.0,
+    "details": [
+      {
+        "case": "A01",
+        "probe": "correct",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": []
+      },
+      {
+        "case": "A01",
+        "probe": "verbose_correct",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": []
+      },
+      {
+        "case": "A01",
+        "probe": "fabricated_claim",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": [
+          "Employees also receive 45 days of paid bonus leave every year for the Founder's Day celebration."
+        ]
+      },
+      {
+        "case": "A02",
+        "probe": "correct",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": []
+      },
+      {
+        "case": "A02",
+        "probe": "verbose_correct",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": []
+      },
+      {
+        "case": "A02",
+        "probe": "number_changed",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": false,
+        "claims_flagged": [
+          "9 days",
+          "17:7 to 23:7"
+        ]
+      },
+      {
+        "case": "A02",
+        "probe": "fabricated_claim",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": [
+          "Employees also receive 45 days of paid bonus leave every year for the Founder's Day celebration."
+        ]
+      },
+      {
+        "case": "A03",
+        "probe": "correct",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": []
+      },
+      {
+        "case": "A03",
+        "probe": "verbose_correct",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": []
+      },
+      {
+        "case": "A03",
+        "probe": "fabricated_claim",
+        "judge_correct": true,
+        "fact_verdict_correct": true,
+        "claim_verdict_correct": true,
+        "facts_accepted": true,
+        "claims_flagged": [
+          "Employees also receive 45 days of paid bonus leave every year for the Founder's Day celebration."
+        ]
+      }
+    ]
+  }
+}

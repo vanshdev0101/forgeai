@@ -181,7 +181,7 @@ def loop(definition, out_dir, index, cases, selftest, write):
             exhausted.add(category)
             changes.append({"iteration": it, "category": category, "applied": False, **info})
         if not candidate:
-            stop_reason = "no applicable fix left for the remaining failures"
+            stop_reason = "no applicable fix was left for the remaining failures"
             log("optimizer: no applicable fix for the remaining failures; stopping")
             break
 

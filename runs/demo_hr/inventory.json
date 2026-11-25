@@ -1,0 +1,49 @@
+[
+  {
+    "name": "leave_policy.pdf",
+    "kind": "pdf",
+    "words": 522,
+    "summary": "This document outlines Shore Staff Leave Policy for all shore-based employees of Meridian Ship Management across Mumbai and Singapore offices, detailing entitlements, accrual methods, application procedures, and approval timelines.",
+    "topics": [
+      "Annual leave entitlement by grade",
+      "Leave accrual rates",
+      "Carry-over limits for annual leave",
+      "Sick leave requirements",
+      "Maternity and paternity leave duration",
+      "Bereavement leave eligibility",
+      "Planned absence request timelines",
+      "Emergency leave application process"
+    ]
+  },
+  {
+    "name": "remote_work_conduct_policy.pdf",
+    "kind": "pdf",
+    "words": 628,
+    "summary": "This policy establishes remote work guidelines, equipment allowances, and conduct standards for shore staff at Meridian Ship Management working from Mumbai or Singapore offices.",
+    "topics": [
+      "remote_work_eligibility",
+      "core_working_hours",
+      "home_office_allowance",
+      "gifts_and_hospitality_limits",
+      "conflicts_of_interest_declaration",
+      "harassment_reporting_timeline",
+      "ethics_hotline_channels"
+    ]
+  },
+  {
+    "name": "travel_expense_policy.pdf",
+    "kind": "pdf",
+    "words": 646,
+    "summary": "This document outlines Meridian Ship Management's business travel and expense policy for all shore staff grades across its Mumbai and Singapore offices, covering flight classes, daily allowances, accommodation limits, vehicle reimbursement rates, claim procedures, and conduct standards.",
+    "topics": [
+      "flight class requirements",
+      "daily allowance amounts",
+      "accommodation spending limits",
+      "personal vehicle reimbursement rate",
+      "expense receipt thresholds",
+      "claim submission deadlines",
+      "late filing approval process",
+      "policy violations and disciplinary actions"
+    ]
+  }
+]

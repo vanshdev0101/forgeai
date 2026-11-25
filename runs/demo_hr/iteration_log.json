@@ -1,0 +1,45 @@
+{
+  "history": [
+    {
+      "iteration": 0,
+      "change": null,
+      "passed": 20,
+      "cases": 23,
+      "pass_rate": 0.87,
+      "categories": {
+        "prompt_defect": 3
+      }
+    },
+    {
+      "iteration": 1,
+      "change": "added prompt rule: 'If any part of a multi-part question is missing from your sources, state you cannot answer that specific detail rather than providing partial information.'",
+      "kept": false,
+      "passed": 20,
+      "cases": 23,
+      "pass_rate": 0.87,
+      "categories": {
+        "prompt_defect": 3
+      }
+    }
+  ],
+  "changes": [
+    {
+      "iteration": 1,
+      "category": "prompt_defect",
+      "applied": true,
+      "kept": false,
+      "change": "added prompt rule: 'If any part of a multi-part question is missing from your sources, state you cannot answer that specific detail rather than providing partial information.'",
+      "why_model": "This prevents incomplete answers when source documents lack details for parts of the query.",
+      "targeted_cases": [
+        "A04",
+        "M01",
+        "C01"
+      ],
+      "score_before": "20/23",
+      "score_after": "20/23",
+      "newly_passing": [],
+      "newly_failing": []
+    }
+  ],
+  "stop_reason": "no applicable fix was left for the remaining failures"
+}

@@ -1,0 +1,56 @@
+{
+  "questions": [
+    {
+      "question": "Should the assistant handle queries regarding shipboard crew members (seafarers), or strictly limit answers to shore-based staff as implied by the document titles?",
+      "why": "The brief mentions 'shore staff' and documents cover 'shore-based employees', but it is unclear if the user wants a single unified policy for all Meridian employees. If yes, we must explicitly refuse shipboard queries; otherwise, we might need to clarify how to handle seafarer-specific policies not listed in the provided docs.",
+      "default_assumption": "The assistant will strictly answer questions only about shore-based staff and decline inquiries regarding seafarers."
+    },
+    {
+      "question": "Are there any other HR-related documents (e.g., code of conduct, grievance procedures) that should be included in the knowledge base beyond the three provided PDFs?",
+      "why": "The brief lists specific policy areas but does not mention others like grievances or codes of conduct. If these are expected to be covered by default, we need more documents; if not, the assistant must refuse such questions.",
+      "default_assumption": "The assistant will only answer based on the three provided PDFs and decline queries about topics outside their scope."
+    },
+    {
+      "question": "What tone or style should the assistant use when answering HR policy questions (e.g., formal, empathetic, concise)?",
+      "why": "HR-related responses often require a specific balance of professionalism and empathy. Without guidance, we risk defaulting to an inappropriate tone.",
+      "default_assumption": "The assistant will adopt a professional yet approachable tone suitable for internal HR communications."
+    },
+    {
+      "question": "Should the assistant provide direct links or instructions on how users can access official versions of these policies if they need further details?",
+      "why": "This determines whether the assistant acts purely as an information retriever from its training data or also guides users to external resources.",
+      "default_assumption": "The assistant will not provide external links unless explicitly instructed and instead summarize relevant policy points directly."
+    },
+    {
+      "question": "Is there a specific deadline by which the assistant must respond, or should it prioritize accuracy over speed?",
+      "why": "This affects whether we optimize for quick responses (potentially sacrificing depth) or thorough answers.",
+      "default_assumption": "The assistant will prioritize accurate and complete answers without strict response time constraints."
+    }
+  ],
+  "clarifications": [
+    {
+      "question": "Should the assistant handle queries regarding shipboard crew members (seafarers), or strictly limit answers to shore-based staff as implied by the document titles?",
+      "answer": "Shore staff only. Seafarers have a separate crewing policy, so politely point them to the Crewing department instead.",
+      "source": "requester"
+    },
+    {
+      "question": "Are there any other HR-related documents (e.g., code of conduct, grievance procedures) that should be included in the knowledge base beyond the three provided PDFs?",
+      "answer": "Not yet. Staff will also ask about salary bands and the payroll calendar, but those documents are not ready, so for now it must say it cannot answer those rather than guess.",
+      "source": "requester"
+    },
+    {
+      "question": "What tone or style should the assistant use when answering HR policy questions (e.g., formal, empathetic, concise)?",
+      "answer": "Friendly, concise, plain English: most staff are not HR specialists. Say which policy the answer comes from.",
+      "source": "requester"
+    },
+    {
+      "question": "Should the assistant provide direct links or instructions on how users can access official versions of these policies if they need further details?",
+      "answer": "No links. For anything it cannot answer, tell them to contact the HR team through the intranet.",
+      "source": "requester"
+    },
+    {
+      "question": "Is there a specific deadline by which the assistant must respond, or should it prioritize accuracy over speed?",
+      "answer": "Accuracy over speed. It must never guess a number or a rule; if the policies do not say, it should say so.",
+      "source": "requester"
+    }
+  ]
+}

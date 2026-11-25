@@ -1,0 +1,123 @@
+{
+  "tool_decisions": [
+    {
+      "tool": "csv_lookup",
+      "attached": false,
+      "need_signal": null,
+      "evidence": null,
+      "serves_undocumented_topics": [],
+      "reason": "the brief and requirements never call for it"
+    },
+    {
+      "tool": "calculator",
+      "attached": true,
+      "need_signal": "accrual",
+      "evidence": "leave_policy.pdf#0: ...days G5 Director: 30 days Leave accrues monthly at a rate of one twelfth of the yearly ...",
+      "serves_undocumented_topics": [],
+      "reason": "needed ('accrual' in the requirements) and usable (leave_policy.pdf#0: ...days G5 Director: 30 days Leave accrues monthly at a rate of one twelfth of the yearly ...)"
+    },
+    {
+      "tool": "weather",
+      "attached": false,
+      "need_signal": null,
+      "evidence": null,
+      "serves_undocumented_topics": [],
+      "reason": "the brief and requirements never call for it"
+    },
+    {
+      "tool": "current_date",
+      "attached": true,
+      "need_signal": "eligibility",
+      "evidence": "remote_work_conduct_policy.pdf#2: ... Conflicts of interest must be declared within 7 days of becoming aware of them. This in...",
+      "serves_undocumented_topics": [],
+      "reason": "needed ('eligibility' in the requirements) and usable (remote_work_conduct_policy.pdf#2: ... Conflicts of interest must be declared within 7 days of becoming aware of them. This in...)"
+    }
+  ],
+  "calibration": {
+    "off_topic_max": 0.5586,
+    "in_scope_min": 0.6441,
+    "in_scope_source": "sample_questions",
+    "separable": true,
+    "gate_role": "refuses off-topic on its own",
+    "off_topic_scores": {
+      "What is the capital of Peru?": 0.4855,
+      "Give me a recipe for butter chicken.": 0.5496,
+      "Who won the 2022 football World Cup?": 0.4518,
+      "How do I write quicksort in Python?": 0.4566,
+      "Explain how photosynthesis works.": 0.501,
+      "Summarise the plot of Hamlet.": 0.5451,
+      "How do I change a flat tyre on a bicycle?": 0.469,
+      "What is the distance from the Earth to the Moon?": 0.5586,
+      "What are the rules of chess castling?": 0.5578,
+      "Translate 'good morning' into French.": 0.5162,
+      "Which guitar chords are in the key of G major?": 0.4789,
+      "What is the best smartphone to buy this year?": 0.4936
+    },
+    "in_scope_scores": {
+      "How much paid maternity and paternity leave do I get?": 0.7388,
+      "What is the deadline for taking my paternity leave?": 0.7926,
+      "How many days a week can I work remotely?": 0.7772,
+      "What are the rules for accepting gifts from clients?": 0.6899,
+      "Do I need a receipt if my flight costs less than $500?": 0.6441,
+      "What happens if I submit my travel claim two weeks after returning from the trip?": 0.665
+    }
+  },
+  "usage": {
+    "inventory": {
+      "calls": 3,
+      "prompt_tokens": 2769,
+      "completion_tokens": 357,
+      "seconds": 16.1,
+      "wall_seconds": 16.2
+    },
+    "questions": {
+      "calls": 1,
+      "prompt_tokens": 577,
+      "completion_tokens": 542,
+      "seconds": 13.62,
+      "wall_seconds": 13.6
+    },
+    "requirements": {
+      "calls": 1,
+      "prompt_tokens": 1194,
+      "completion_tokens": 557,
+      "seconds": 13.49,
+      "wall_seconds": 13.5
+    },
+    "groundability": {
+      "calls": 4,
+      "prompt_tokens": 4268,
+      "completion_tokens": 357,
+      "seconds": 10.67,
+      "wall_seconds": 11.1
+    },
+    "generate": {
+      "calls": 1,
+      "prompt_tokens": 904,
+      "completion_tokens": 113,
+      "seconds": 3.07,
+      "wall_seconds": 3.4
+    },
+    "evalgen": {
+      "calls": 41,
+      "prompt_tokens": 20557,
+      "completion_tokens": 3428,
+      "seconds": 89.7,
+      "wall_seconds": 105.7
+    },
+    "judge_selftest": {
+      "calls": 11,
+      "prompt_tokens": 5720,
+      "completion_tokens": 226,
+      "seconds": 12.39,
+      "wall_seconds": 12.4
+    },
+    "eval_and_optimize": {
+      "calls": 97,
+      "prompt_tokens": 139506,
+      "completion_tokens": 3203,
+      "seconds": 485.3,
+      "wall_seconds": 519.5
+    }
+  }
+}

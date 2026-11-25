@@ -1,0 +1,582 @@
+{
+  "cases": [
+    {
+      "type": "answerable",
+      "question": "What is the maximum number of annual leave days a G1 Associate can carry over to the next year?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "ten days"
+        ],
+        "source_docs": [
+          "leave_policy.pdf"
+        ],
+        "source_chunks": [
+          "leave_policy.pdf#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Unused annual leave may be carried into the next calendar year, provided the total does not exceed ten days."
+      },
+      "id": "A01"
+    },
+    {
+      "type": "answerable",
+      "question": "How many days per week is remote work permitted for shore staff, and what are the required core working hours on those days?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "2 days",
+          "10:00 to 16:00"
+        ],
+        "source_docs": [
+          "remote_work_conduct_policy.pdf"
+        ],
+        "source_chunks": [
+          "remote_work_conduct_policy.pdf#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Remote work is strictly limited to up to two days per week with mandatory core hours of 10:00 to 16:00 IST."
+      },
+      "id": "A02"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the maximum advance notice required to request annual leave through the internal portal?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "fourteen days"
+        ],
+        "source_docs": [
+          "leave_policy.pdf"
+        ],
+        "source_chunks": [
+          "leave_policy.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Employees must submit a formal request at least fourteen days in advance of the intended start date."
+      },
+      "id": "A03"
+    },
+    {
+      "type": "answerable",
+      "question": "How often is the home-office equipment allowance provided and what are acceptable uses for it?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "INR 15,000",
+          "once every 3 years",
+          "ergonomic furniture"
+        ],
+        "source_docs": [
+          "remote_work_conduct_policy.pdf"
+        ],
+        "source_chunks": [
+          "remote_work_conduct_policy.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "The home-office equipment allowance of INR 15,000 is provided once every three years to purchase ergonomic furniture, reliable internet upgrades, or hardware like laptops."
+      },
+      "id": "A04"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the daily allowance for international travel outside India?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "USD 90",
+          "per day"
+        ],
+        "source_docs": [
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "travel_expense_policy.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "The standard daily allowance is USD 90 per day."
+      },
+      "id": "A05"
+    },
+    {
+      "type": "answerable",
+      "question": "If I return to duty after emergency leave today, how many working days do I have to apply retrospectively?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "three"
+        ],
+        "source_docs": [
+          "leave_policy.pdf"
+        ],
+        "source_chunks": [
+          "leave_policy.pdf#2"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Employees may apply for retrospective approval within three working days of returning to duty."
+      },
+      "id": "A06"
+    },
+    {
+      "type": "answerable",
+      "question": "How many days do I have to declare a conflict of interest after becoming aware of it, and where should harassment complaints be filed?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "within 7 days",
+          "Internal Committee"
+        ],
+        "source_docs": [
+          "remote_work_conduct_policy.pdf"
+        ],
+        "source_chunks": [
+          "remote_work_conduct_policy.pdf#2"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Conflicts of interest must be declared within 7 days of awareness, while harassment complaints are submitted confidentially through the Internal Committee."
+      },
+      "id": "A07"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the reimbursement rate for fuel and wear-and-tear when using a personal vehicle on an approved business route, and what happens if I miss the standard submission deadline?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "INR 12",
+          "thirty days",
+          "Finance Director"
+        ],
+        "source_docs": [
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "travel_expense_policy.pdf#2"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "The fixed reimbursement rate is INR 12 per kilometer traveled. If you file after thirty days without special permission, your claim requires direct approval from the Finance Director."
+      },
+      "id": "A08"
+    },
+    {
+      "type": "answerable",
+      "question": "Who is responsible for enforcing the ethics hotline guidelines across Mumbai and Singapore offices?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "managers"
+        ],
+        "source_docs": [
+          "remote_work_conduct_policy.pdf"
+        ],
+        "source_chunks": [
+          "remote_work_conduct_policy.pdf#3"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Managers are responsible for enforcing these guidelines consistently across Mumbai and Singapore offices."
+      },
+      "id": "A09"
+    },
+    {
+      "type": "answerable",
+      "question": "At what rate is the use of a personal car reimbursed?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "INR 12",
+          "per km"
+        ],
+        "source_docs": [
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "travel_expense_policy.pdf#3"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "The use of a personal car is reimbursed at INR 12 per km."
+      },
+      "id": "A10"
+    },
+    {
+      "type": "multi_doc",
+      "question": "What are the annual leave entitlement days for a G2 Senior Associate and what travel class is required for international operations between Mumbai and Singapore?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "G2 Senior Associate: 21 days",
+          "must select premium economy class."
+        ],
+        "source_docs": [
+          "leave_policy.pdf",
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "leave_policy.pdf#0",
+          "travel_expense_policy.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_multi",
+        "reference_answer": "A G2 Senior Associate receives 21 days of annual leave, and staff must select premium economy class."
+      },
+      "id": "M01"
+    },
+    {
+      "type": "multi_doc",
+      "question": "A G3 Manager in Mumbai needs to carry over unused annual leave and later claim a car trip expense; what are their specific daily entitlement, the maximum days they can defer without losing them, and the per-kilometer reimbursement rate?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "G3 Manager: 24 days",
+          "reimbursed at INR 12 per km"
+        ],
+        "source_docs": [
+          "leave_policy.pdf",
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "leave_policy.pdf#0",
+          "travel_expense_policy.pdf#3"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_multi",
+        "reference_answer": "The manager is entitled to 24 days of annual leave (G3 Manager: 24 days), may carry over up to ten days before any excess lapses on thirty-one December, and their personal car use is reimbursed at INR 12 per km."
+      },
+      "id": "M02"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If an employee is approved to work remotely in Mumbai and then travels internationally for a meeting, what are the core working hours during their remote days and which travel class must they select?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "core hours are 10:00 to 16:00 IST",
+          "must select premium economy class"
+        ],
+        "source_docs": [
+          "remote_work_conduct_policy.pdf",
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "remote_work_conduct_policy.pdf#0",
+          "travel_expense_policy.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_multi",
+        "reference_answer": "Core hours are 10:00 to 16:00 IST; staff must select premium economy class."
+      },
+      "id": "M03"
+    },
+    {
+      "type": "ambiguous",
+      "question": "like, how many vacation days can a g1 associate take into next year?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "ten days"
+        ],
+        "source_docs": [
+          "leave_policy.pdf"
+        ],
+        "source_chunks": [
+          "leave_policy.pdf#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_ambiguous",
+        "rewrite_of": "What is the maximum number of annual leave days a G1 Associate can carry over to the next year?",
+        "meaning_check": "The rewrite maintains the core inquiry about carryover limits for G1 associates while intentionally adopting an informal tone and simplified vocabulary as instructed."
+      },
+      "id": "B01"
+    },
+    {
+      "type": "ambiguous",
+      "question": "Like, how often do I get that money for my work stuff at home and what can i actually spend it on?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "INR 15,000",
+          "once every 3 years",
+          "ergonomic furniture"
+        ],
+        "source_docs": [
+          "remote_work_conduct_policy.pdf"
+        ],
+        "source_chunks": [
+          "remote_work_conduct_policy.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_ambiguous",
+        "rewrite_of": "How often is the home-office equipment allowance provided and what are acceptable uses for it?",
+        "meaning_check": "The rewrite retains the core questions about frequency and acceptable uses of the home-office equipment allowance while adopting an informal tone with slang and typos as intended."
+      },
+      "id": "B02"
+    },
+    {
+      "type": "ambiguous",
+      "question": "Hey, how much money do I get per day if i go abroad?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "USD 90",
+          "per day"
+        ],
+        "source_docs": [
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "travel_expense_policy.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_ambiguous",
+        "rewrite_of": "What is the daily allowance for international travel outside India?",
+        "meaning_check": "The rewrite asks for the same daily allowance information as the original but uses informal language and slang without changing the core meaning or adding new conditions."
+      },
+      "id": "B03"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "What is the current salary band for a Senior Officer in the Mumbai office and when does the next payroll run occur?",
+      "expected": {
+        "refuse": true,
+        "topic": "salary_bands_and_payroll_calendar"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "R01"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "How many days of paid leave can I take if my child falls ill, according to section 4.2 of the employee handbook?",
+      "expected": {
+        "refuse": true,
+        "topic": "unspecified_policy_rules_or_numbers"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "R02"
+    },
+    {
+      "type": "ungroundable",
+      "question": "What is the mandatory medical insurance contribution percentage for seafarers deployed on long-term contracts in West Africa?",
+      "expected": {
+        "refuse": true,
+        "topic": "seafarer_redirects"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "U01"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "Can I schedule a meeting with my direct supervisor to discuss my annual performance review next Tuesday at 2 PM?",
+      "expected": {
+        "refuse": true,
+        "topic": "unrelated"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "R03"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "What is the company's policy on ordering office supplies for the Singapore branch when the local vendor runs out of stock?",
+      "expected": {
+        "refuse": true,
+        "topic": "unrelated"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "R04"
+    },
+    {
+      "type": "calculator",
+      "question": "If an employee works remotely for 2 approved days in a week, what is the total maximum number of hours they must be available during core working time?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "12"
+        ],
+        "source_docs": [
+          "remote_work_conduct_policy.pdf"
+        ],
+        "source_chunks": [
+          "remote_work_conduct_policy.pdf#0"
+        ],
+        "tool": "calculator"
+      },
+      "origin": {
+        "prompt": "eval_calc",
+        "expression": "2 * (16 - 10)",
+        "unit": ""
+      },
+      "id": "C01"
+    },
+    {
+      "type": "calculator",
+      "question": "How much total daily allowance in INR is provided to a team of three employees traveling domestically within India?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "7500"
+        ],
+        "source_docs": [
+          "travel_expense_policy.pdf"
+        ],
+        "source_chunks": [
+          "travel_expense_policy.pdf#1"
+        ],
+        "tool": "calculator"
+      },
+      "origin": {
+        "prompt": "eval_calc",
+        "expression": "3 * 2500",
+        "unit": "INR"
+      },
+      "id": "C02"
+    }
+  ],
+  "dropped": [
+    {
+      "type": "answerable",
+      "question": "What flight class must I book for a journey under six hours?",
+      "chunk": "travel_expense_policy.pdf#0",
+      "why": "no key fact of ['Economy Class', 'under six hours'] is short, in the source passage and in its own reference answer"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I am a G2 Senior Associate approved to work remotely, how many days of annual leave do I accrue yearly and what are the core working hours for my remote shifts?",
+      "chunks": [
+        "leave_policy.pdf#0",
+        "remote_work_conduct_policy.pdf#0"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=[', G2 Senior Associate: 21 days'] B=['Core Working Hours While flexibility exists regarding start times, all staff must adhere to core hours are 10:00 to 16:00 IST'], kept A=[] B=['10', '00', '16', '00 IST']"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I am a G2 Senior Associate flying from Mumbai to Singapore for work, what is my annual leave entitlement and which flight class must I book?",
+      "chunks": [
+        "leave_policy.pdf#0",
+        "travel_expense_policy.pdf#0"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['G2 Senior Associate: 21 days', 'Unused annual leave may be carried into the next calendar year'] B=['Economy Class: This category applies exclusively to flights with a total flying time of under six hours.', 'Premium Economy: For any flight segment lasting six hours or longer, employees must select premium economy class.'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I am a G2 Senior Associate in Mumbai who received an INR 15,000 equipment allowance last cycle and now need to use it for new furniture while also planning my annual leave, what are the specific financial limit reset rule and my exact number of paid days entitled this year?",
+      "chunks": [
+        "leave_policy.pdf#0",
+        "remote_work_conduct_policy.pdf#1"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=[', G2 Senior Associate: 21 days'] B=['any unspent balance from a previous cycle does not carry forward'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If an employee in the Mumbai office receives a gift and then needs to take sick leave extending beyond two consecutive days, what are their obligations regarding the gift limit documentation and medical certification?",
+      "chunks": [
+        "leave_policy.pdf#0",
+        "remote_work_conduct_policy.pdf#2"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['beyond two consecutive working days', 'medical certificate is required'] B=['Declared gifts exceeding this limit'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I am a G3 Manager returning from an approved business trip where I used my personal vehicle for INR 600 worth of fuel expenses, what are the specific reimbursement rate per kilometer and receipt requirements must I follow within how many days?",
+      "chunks": [
+        "leave_policy.pdf#0",
+        "travel_expense_policy.pdf#2"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['G3 Manager: 24 days'] B=['Receipt Requirements: Original physical or digital receipts are mandatory'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I am a G3 Manager in Mumbai who has carried over leave exceeding ten days and wants to anonymously report an ethical breach, how many unused annual leave days will be lost that day?",
+      "chunks": [
+        "leave_policy.pdf#0",
+        "remote_work_conduct_policy.pdf#3"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['Any carried-over leave above ten days lapses on thirty-one December'] B=['ethics hotline is open 24 hours a day'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If an employee in Mumbai is approved to work remotely from home on a Tuesday and needs to fly to Singapore for a meeting that day, what are the specific requirements regarding their availability during core hours and their flight class?",
+      "chunks": [
+        "remote_work_conduct_policy.pdf#0",
+        "travel_expense_policy.pdf#0"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['all staff must adhere to core hours are 10:00 to 16:00', 'Outside of these windows, staff may manage their schedules'] B=['Economy Class: This category applies exclusively to flights with a total flying time of under six hours.'], kept A=['10', '00', '16'] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I need to work remotely on a Tuesday while also taking leave for my sibling's funeral next week, what are the maximum remote days allowed per week and how many bereavement days do I get?",
+      "chunks": [
+        "remote_work_conduct_policy.pdf#0",
+        "leave_policy.pdf#1"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['strictly up to 2 days per week'] B=[\"In the event of a death within an immediate family member's circle\", 'five days of paid bereavement leave are granted automatically'], kept A=['strictly up to 2 days per week'] B=[]"
+    },
+    {
+      "type": "ambiguous",
+      "question": "How many days a week can people at home be off duty, like the guys in town?",
+      "rewrite_of": "How many days per week is remote work permitted for shore staff, and what are the required core working hours on those days?",
+      "why": "rewrite changed the meaning: The rewrite changes the meaning by asking about days off duty instead of permitted remote work and incorrectly implies that shore staff are located at home."
+    },
+    {
+      "type": "ambiguous",
+      "question": "what's the max time I need to give for asking off work on the yearly vacation thing using that website?",
+      "rewrite_of": "What is the maximum advance notice required to request annual leave through the internal portal?",
+      "why": "rewrite changed the meaning: The rewrite incorrectly changes 'annual leave' to 'yearly vacation thing', which implies a different type of time off than the formal annual leave specified in the original question."
+    },
+    {
+      "type": "calculator",
+      "question": "If a G3 Manager takes 5 days of annual leave, how many total days is that equivalent to in terms of their monthly accrual rate?",
+      "chunk": "leave_policy.pdf#0",
+      "why": "independent derivation disagrees: proposed 1/12 * 5 = 0.42, re-derived '(24/12)*5' -> 10.0"
+    },
+    {
+      "type": "calculator",
+      "question": "If I buy a laptop for INR 12,000 and have already spent INR 3,500 on internet upgrades in my current eligibility window, how much more can I spend from the allowance before it is exhausted?",
+      "chunk": "remote_work_conduct_policy.pdf#1",
+      "why": "non-positive result (15000 - (12000 + 3500)) = -500: a confusing test"
+    }
+  ],
+  "counts": {
+    "answerable": 10,
+    "multi_doc": 3,
+    "ambiguous": 3,
+    "out_of_scope": 4,
+    "ungroundable": 1,
+    "calculator": 2
+  },
+  "total": 23
+}

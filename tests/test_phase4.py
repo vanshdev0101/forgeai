@@ -172,7 +172,7 @@ def test_equal_score_is_not_kept():
     best, final, history, changes, seen, _ = _run_loop(rounds, [" +swap", " +noop"])
     assert changes[0]["kept"] is False and changes[1]["kept"] is False, changes
     assert best["system_prompt"] == DEF["system_prompt"], "a swap or a no-op is not progress"
-    assert _run_loop.stop == "no applicable fix left for the remaining failures"
+    assert _run_loop.stop == "no applicable fix was left for the remaining failures"
 
 
 def test_loop_stops_when_all_pass_and_skips_exhausted_categories():
@@ -183,7 +183,7 @@ def test_loop_stops_when_all_pass_and_skips_exhausted_categories():
     best, final, history, changes, seen, _ = _run_loop(_rounds(("pd", "pass", "pass"), ("pd", "pd", "pass")),
                                                        [" +same"])
     assert len(history) == 2 and changes[0]["kept"] is False and len(seen) == 2, "no third identical attempt"
-    assert _run_loop.stop == "no applicable fix left for the remaining failures"
+    assert _run_loop.stop == "no applicable fix was left for the remaining failures"
 
 
 def test_loop_respects_the_iteration_cap():
