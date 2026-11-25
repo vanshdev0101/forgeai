@@ -10,11 +10,14 @@ Artifacts written to --out:
   inventory.json         what the factory found in the document folder
   interview.json         questions asked, answers, and which answers were assumed
   requirements.json/.md  the requirements document, including the groundability verdict per topic
-  agent_def.json         the generated agent, loadable by `python -m runtime.runner`
+  agent_def.json         the final agent (best kept iteration), loadable by `python -m runtime.runner`
+  agent_def_iterN.json   the definition at each iteration
   generation_log.json    tool decisions and retrieval calibration, with token usage per stage
   evals.json             the generated test set (and cases dropped as unverifiable)
-  results_iter0.json     per-case agent trace and judge verdict
-  scorecard_iter0.json   aggregate scores, failure counts, judge self-test
+  results_iterN.json     per-case agent trace, judge verdict and failure category
+  scorecard_iterN.json   aggregate scores, failure counts, judge self-test
+  iteration_log.json     every change: what, why, which failures, score before/after, kept or reverted
+  report.md              the honest report: what still fails and why, per-iteration scorecard
 """
 import argparse
 import json
@@ -22,10 +25,9 @@ import sys
 import time
 from pathlib import Path
 
-from factory import evalgen, generator, groundability, intake, judge
+from factory import evalgen, generator, groundability, intake, judge, optimizer, report
 from factory.common import FACTORY_MODEL, log, write_json
 from runtime import llm
-from runtime.runner import Agent
 
 
 def stage(name, usage_log, fn, *args):
@@ -101,20 +103,24 @@ def main(argv=None):
         log(f"evalgen: {evals['total']} cases {evals['counts']}, {len(evals['dropped'])} dropped as unverifiable")
 
         selftest = stage("judge_selftest", usage, judge.judge_selftest, evals["cases"], index)
-        agent = Agent(definition, base_dir=out, index=index)
-        results = stage("judge_iter0", usage, judge.run, agent, evals["cases"])
-        card = judge.scorecard(results, selftest)
-        write_json(out / "results_iter0.json", results)
-        write_json(out / "scorecard_iter0.json", card)
+        best, final_results, history, changes, stop_reason = stage(
+            "eval_and_optimize", usage, optimizer.loop, definition, out, index, evals["cases"], selftest,
+            lambda name, obj: write_json(out / name, obj))
+        write_json(out / "agent_def.json", best)  # the definition the runner should use: best kept iteration
+        write_json(out / "iteration_log.json", {"history": history, "changes": changes, "stop_reason": stop_reason})
         write_json(out / "generation_log.json", {
             "tool_decisions": definition["provenance"]["tool_decisions"],
             "calibration": definition["provenance"]["calibration"], "usage": usage})
+        (out / "report.md").write_text(report.build(req, best, evals, history, changes, final_results,
+                                                    selftest, usage, stop_reason))
     except (llm.LLMError, ValueError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
 
-    log(f"iteration 0: {card['passed']}/{card['cases']} passed ({card['pass_rate']:.0%}); failures {card['failures']}; "
-        f"judge self-test {selftest['correct']}/{selftest['probes']}")
+    line = " -> ".join(f"{h['passed']}/{h['cases']}" + ("" if h["iteration"] == 0 or h.get("kept") else " (reverted)")
+                       for h in history)
+    log(f"scores by iteration: {line}; judge self-test {selftest['correct']}/{selftest['probes']}")
+    log(f"report: {out / 'report.md'}")
     log(f"chat with it: python -m runtime.runner {out / 'agent_def.json'}")
     return 0
 
