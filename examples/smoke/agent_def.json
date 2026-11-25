@@ -1,0 +1,17 @@
+{
+  "name": "smoke-hr-assistant",
+  "description": "Hand-written Phase 1 smoke agent: answers shore-staff leave and travel policy questions.",
+  "system_prompt": "You are the HR policy assistant for shore staff. You answer questions about leave and business travel policy, clearly and briefly, for employees who are not HR specialists. You do not give legal advice, discuss individual salaries, or answer questions unrelated to HR policy.",
+  "docs_dir": "docs",
+  "retrieval": {"chunk_words": 200, "overlap": 30, "k": 4, "min_score": 0.6},
+  "tools": ["csv_lookup", "calculator"],
+  "tool_rationale": {
+    "csv_lookup": "leave entitlement per grade lives in leave_entitlements.csv",
+    "calculator": "questions like accrued leave after N months need arithmetic"
+  },
+  "output_contract": {
+    "must_cite": true,
+    "refusal_message": "I can't answer that from the HR policy documents I have.",
+    "max_words": 120
+  }
+}

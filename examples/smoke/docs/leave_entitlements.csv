@@ -1,0 +1,6 @@
+grade,title_band,annual_leave_days,monthly_accrual_days
+G1,Associate,18,1.5
+G2,Senior Associate,21,1.75
+G3,Manager,24,2.0
+G4,Senior Manager,27,2.25
+G5,Director,30,2.5

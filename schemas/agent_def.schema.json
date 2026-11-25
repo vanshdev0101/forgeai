@@ -1,0 +1,36 @@
+{
+  "title": "ForgeAI agent definition",
+  "type": "object",
+  "required": ["name", "description", "system_prompt", "docs_dir", "retrieval", "tools", "output_contract"],
+  "properties": {
+    "name": {"type": "string", "description": "kebab-case identifier"},
+    "description": {"type": "string", "description": "one sentence: who it serves and what it answers"},
+    "system_prompt": {"type": "string", "description": "role, scope, audience, tone, must-refuse topics; the runner appends the output contract itself"},
+    "docs_dir": {"type": "string", "description": "document folder, relative to this definition file or absolute"},
+    "retrieval": {
+      "type": "object",
+      "required": ["chunk_words", "overlap", "k", "min_score"],
+      "properties": {
+        "chunk_words": {"type": "integer", "minimum": 50, "maximum": 1200},
+        "overlap": {"type": "integer", "minimum": 0, "maximum": 300},
+        "k": {"type": "integer", "minimum": 1, "maximum": 12},
+        "min_score": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {"type": "string", "enum": ["csv_lookup", "calculator", "weather", "current_date"]}
+    },
+    "tool_rationale": {"type": "object", "description": "tool name -> why the brief needs it"},
+    "output_contract": {
+      "type": "object",
+      "required": ["must_cite", "refusal_message"],
+      "properties": {
+        "must_cite": {"type": "boolean"},
+        "refusal_message": {"type": "string"},
+        "max_words": {"type": "integer", "minimum": 20, "maximum": 400}
+      }
+    },
+    "provenance": {"type": "object", "description": "factory metadata: brief, iteration, change log pointer"}
+  }
+}
