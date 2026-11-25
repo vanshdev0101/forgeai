@@ -12,6 +12,9 @@ Artifacts written to --out:
   requirements.json/.md  the requirements document, including the groundability verdict per topic
   agent_def.json         the generated agent, loadable by `python -m runtime.runner`
   generation_log.json    tool decisions and retrieval calibration, with token usage per stage
+  evals.json             the generated test set (and cases dropped as unverifiable)
+  results_iter0.json     per-case agent trace and judge verdict
+  scorecard_iter0.json   aggregate scores, failure counts, judge self-test
 """
 import argparse
 import json
@@ -19,9 +22,10 @@ import sys
 import time
 from pathlib import Path
 
-from factory import generator, groundability, intake
+from factory import evalgen, generator, groundability, intake, judge
 from factory.common import FACTORY_MODEL, log, write_json
 from runtime import llm
+from runtime.runner import Agent
 
 
 def stage(name, usage_log, fn, *args):
@@ -89,12 +93,28 @@ def main(argv=None):
         write_json(out / "generation_log.json", {
             "tool_decisions": definition["provenance"]["tool_decisions"],
             "calibration": definition["provenance"]["calibration"], "usage": usage})
+        log(f"generated: tools={definition['tools'] or 'none'}  min_score={definition['retrieval']['min_score']}")
+
+        log("evalgen: building the test set from the documents")
+        evals = stage("evalgen", usage, evalgen.generate, req, definition, index, docs)
+        write_json(out / "evals.json", evals)
+        log(f"evalgen: {evals['total']} cases {evals['counts']}, {len(evals['dropped'])} dropped as unverifiable")
+
+        selftest = stage("judge_selftest", usage, judge.judge_selftest, evals["cases"], index)
+        agent = Agent(definition, base_dir=out, index=index)
+        results = stage("judge_iter0", usage, judge.run, agent, evals["cases"])
+        card = judge.scorecard(results, selftest)
+        write_json(out / "results_iter0.json", results)
+        write_json(out / "scorecard_iter0.json", card)
+        write_json(out / "generation_log.json", {
+            "tool_decisions": definition["provenance"]["tool_decisions"],
+            "calibration": definition["provenance"]["calibration"], "usage": usage})
     except (llm.LLMError, ValueError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2
 
-    log(f"done: {out / 'agent_def.json'}  tools={definition['tools'] or 'none'}  "
-        f"min_score={definition['retrieval']['min_score']}")
+    log(f"iteration 0: {card['passed']}/{card['cases']} passed ({card['pass_rate']:.0%}); failures {card['failures']}; "
+        f"judge self-test {selftest['correct']}/{selftest['probes']}")
     log(f"chat with it: python -m runtime.runner {out / 'agent_def.json'}")
     return 0
 
