@@ -64,6 +64,9 @@ def test_normaliser_fixes_found_live():
     assert facts.fact_in_text("lapses on 31 December", "Any unused leave will lapse by December 31st.")  # A02
     assert facts.fact_in_text("annual_leave_days: 21", "you get 21 days of annual leave")  # CSV column names
     assert facts.fact_in_text("31st December", "it lapses on 31 December"), "ordinal inside the fact"
+    assert facts.fact_in_text("26 weeks", "eligible for twenty-six weeks of paid maternity leave")
+    assert facts.numbers("twenty-six weeks") == {"26"} and facts.numbers("20 6") == {"20", "6"}, \
+        "compound number words combine; written digits never do"
     assert facts.fact_in_text("auto-create a test set from the documents themselves",
                               "you must auto-generate test sets (at least 20 cases) from the documents themselves"), \
         "M02: plural 'sets' must stem to 'set'"

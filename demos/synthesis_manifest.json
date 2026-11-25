@@ -1,0 +1,41 @@
+{
+  "hr": [
+    {
+      "name": "leave_policy",
+      "words": 538,
+      "facts": 12,
+      "appended": [
+        "carried-over leave above 10 days lapses on 31 December",
+        "26 weeks of paid maternity leave"
+      ]
+    },
+    {
+      "name": "travel_expense_policy",
+      "words": 664,
+      "facts": 9,
+      "appended": [
+        "use of a personal car is reimbursed at INR 12 per km"
+      ]
+    },
+    {
+      "name": "remote_work_conduct_policy",
+      "words": 638,
+      "facts": 7,
+      "appended": []
+    }
+  ],
+  "spares": [
+    {
+      "name": "nordic_marine_supply_terms",
+      "words": 587,
+      "facts": 8,
+      "appended": []
+    },
+    {
+      "name": "asia_pacific_ship_parts_terms",
+      "words": 514,
+      "facts": 7,
+      "appended": []
+    }
+  ]
+}

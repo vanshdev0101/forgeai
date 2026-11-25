@@ -46,8 +46,11 @@ MUTANTS = [
     # facts
     ("numbers not required", F, "    if fnums - numbers(text):\n        return False", "    if False:\n        return False"),
     ("span numbers not required", F, "return not (numbers(fact) - numbers(span))", "return True"),
-    ("number words not normalised", F, "return \" \".join(_WORDNUM.get(w, w) for w in t.split())",
-     "return \" \".join(t.split())"),
+    ("number words not normalised", F, "        w = _WORDNUM.get(raw, raw)", "        w = raw"),
+    ("compound number words split", F, "        if tens_word and raw in _WORDNUM and len(w) == 1 and w != \"0\":",
+     "        if False:"),
+    ("written digits merged", F, "        if tens_word and raw in _WORDNUM and len(w) == 1 and w != \"0\":",
+     "        if out and out[-1] in _TENS and len(w) == 1 and w != \"0\":"),
     ("ordinals not normalised", F, "t = re.sub(r\"\\b(\\d+)(st|nd|rd|th)\\b\", r\"\\1\", t)  # 31st -> 31", "pass"),
     ("underscores kept", F, "t = str(text).lower().replace(\"_\", \" \")", "t = str(text).lower()"),
     ("no stemming", F, "    for suf in (\"ing\", \"ed\", \"s\"):", "    for suf in ():"),

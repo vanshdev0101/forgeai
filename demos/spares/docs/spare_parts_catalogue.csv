@@ -1,0 +1,34 @@
+part_number,description,category,compatible_engine,unit_price_usd,stock_qty,supplier,lead_time_days,min_order_qty
+MBW-0145,fuel injector nozzle,fuel system,MAN B&W 6S50MC-C,350.53,0,Nordic Marine Supply,21,1
+MBW-0221,piston ring set,piston,MAN B&W 6S50MC-C,1588.11,6,Asia Pacific Ship Parts,0,1
+MBW-0487,exhaust valve spindle,valves,MAN B&W 6S50MC-C,2602.46,6,Asia Pacific Ship Parts,0,1
+MBW-0579,turbocharger bearing,turbocharger,MAN B&W 6S50MC-C,2120.5,10,Nordic Marine Supply,0,4
+MBW-0610,lube oil filter element,filters,MAN B&W 6S50MC-C,112.04,24,Asia Pacific Ship Parts,0,1
+MBW-0745,fuel oil filter element,filters,MAN B&W 6S50MC-C,96.55,2,Nordic Marine Supply,0,2
+MBW-0954,cooling water pump seal,cooling,MAN B&W 6S50MC-C,462.78,2,Nordic Marine Supply,0,1
+MBW-1025,starting air valve,valves,MAN B&W 6S50MC-C,2251.48,6,Asia Pacific Ship Parts,0,4
+WRT-0289,piston ring set,piston,Wartsila 6L32,1801.95,10,Nordic Marine Supply,0,2
+WRT-0318,cylinder liner,cylinder,Wartsila 6L32,8064.54,10,Asia Pacific Ship Parts,0,1
+WRT-0439,exhaust valve spindle,valves,Wartsila 6L32,3946.37,0,Nordic Marine Supply,42,2
+WRT-0556,turbocharger bearing,turbocharger,Wartsila 6L32,1850.79,24,Asia Pacific Ship Parts,0,2
+WRT-0699,lube oil filter element,filters,Wartsila 6L32,120.49,2,Nordic Marine Supply,0,1
+WRT-0778,fuel oil filter element,filters,Wartsila 6L32,128.1,0,Asia Pacific Ship Parts,21,4
+WRT-0898,cylinder head gasket kit,gaskets,Wartsila 6L32,690.22,10,Nordic Marine Supply,0,2
+WRT-0917,cooling water pump seal,cooling,Wartsila 6L32,384.1,24,Asia Pacific Ship Parts,0,1
+WRT-1044,starting air valve,valves,Wartsila 6L32,1457.92,4,Nordic Marine Supply,0,2
+YAN-0160,fuel injector nozzle,fuel system,Yanmar 6EY18,472.09,4,Nordic Marine Supply,0,4
+YAN-0443,exhaust valve spindle,valves,Yanmar 6EY18,3755.22,6,Asia Pacific Ship Parts,0,4
+YAN-0556,turbocharger bearing,turbocharger,Yanmar 6EY18,1910.29,4,Nordic Marine Supply,0,1
+YAN-0616,lube oil filter element,filters,Yanmar 6EY18,116.9,0,Asia Pacific Ship Parts,21,1
+YAN-0786,fuel oil filter element,filters,Yanmar 6EY18,91.49,4,Nordic Marine Supply,0,4
+YAN-0877,cylinder head gasket kit,gaskets,Yanmar 6EY18,592.45,4,Asia Pacific Ship Parts,0,1
+YAN-0997,cooling water pump seal,cooling,Yanmar 6EY18,521.81,0,Nordic Marine Supply,28,2
+CAT-0110,fuel injector nozzle,fuel system,Caterpillar 3512,485.23,4,Asia Pacific Ship Parts,0,2
+CAT-0232,piston ring set,piston,Caterpillar 3512,1528.07,24,Nordic Marine Supply,0,1
+CAT-0391,cylinder liner,cylinder,Caterpillar 3512,10327.55,2,Asia Pacific Ship Parts,0,1
+CAT-0430,exhaust valve spindle,valves,Caterpillar 3512,3423.01,24,Nordic Marine Supply,0,1
+CAT-0512,turbocharger bearing,turbocharger,Caterpillar 3512,1797.46,4,Asia Pacific Ship Parts,0,2
+CAT-0649,lube oil filter element,filters,Caterpillar 3512,87.37,24,Nordic Marine Supply,0,1
+CAT-0720,fuel oil filter element,filters,Caterpillar 3512,128.25,0,Asia Pacific Ship Parts,14,1
+CAT-0931,cooling water pump seal,cooling,Caterpillar 3512,391.66,6,Asia Pacific Ship Parts,0,4
+CAT-1098,starting air valve,valves,Caterpillar 3512,1576.01,6,Nordic Marine Supply,0,2

@@ -46,6 +46,9 @@ def main(argv=None):
     who = ap.add_mutually_exclusive_group()
     who.add_argument("--answers", help="JSON file of answers (list by position, or {question: answer})")
     who.add_argument("--auto", action="store_true", help="no requester: use each question's default assumption")
+    who.add_argument("--questions-only", action="store_true",
+                     help="print the clarifying questions and stop (decoding is deterministic, so a later run "
+                          "asks the same ones; answer them with --answers)")
     a = ap.parse_args(argv)
 
     brief_path = Path(a.brief)
@@ -66,6 +69,11 @@ def main(argv=None):
 
         log("intake: drafting clarifying questions")
         qs = stage("questions", usage, intake.questions, brief, inv)
+        if a.questions_only:
+            write_json(out / "questions.json", qs)
+            for i, q in enumerate(qs, 1):
+                print(f"{i}. {q['question']}\n   default if unanswered: {q['default_assumption']}")
+            return 0
         if a.answers:
             answer_fn = intake.file_answerer(json.loads(Path(a.answers).read_text()))
         elif a.auto or not sys.stdin.isatty():

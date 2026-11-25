@@ -12,7 +12,9 @@ NUM = re.compile(r"\d+(?:\.\d+)?")
 _WORDNUM = {w: str(i) for i, w in enumerate(
     "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen "
     "seventeen eighteen nineteen twenty".split())}
-_WORDNUM.update({"thirty": "30", "forty": "40", "fifty": "50", "sixty": "60", "ninety": "90", "hundred": "100"})
+_WORDNUM.update({"thirty": "30", "forty": "40", "fifty": "50", "sixty": "60", "seventy": "70", "eighty": "80",
+                 "ninety": "90", "hundred": "100"})
+_TENS = {"20", "30", "40", "50", "60", "70", "80", "90"}
 # Words that carry no checkable content: attribution and courtesy.
 _FILLER = set("according policy policies document documents documentation note please per states stated mentioned "
               "provided guidance general always feel free reach relevant team unclear happy help questions also "
@@ -33,7 +35,18 @@ def norm(text):
     t = re.sub(r"\b(\d+)(st|nd|rd|th)\b", r"\1", t)  # 31st -> 31
     t = re.sub(r"[^\w\s.%]", " ", t)
     t = re.sub(r"(?<!\d)\.|\.(?!\d)", " ", t)  # keep decimal points, drop sentence dots
-    return " ".join(_WORDNUM.get(w, w) for w in t.split())
+    out, tens_word = [], False
+    for raw in t.split():
+        w = _WORDNUM.get(raw, raw)
+        # "twenty-six" -> "twenty six" -> 26 (found in a synthesized policy: "twenty-six weeks"). Only a
+        # spelled-out tens word absorbs the next unit; written digits "20 6" stay two numbers.
+        if tens_word and raw in _WORDNUM and len(w) == 1 and w != "0":
+            out[-1] = str(int(out[-1]) + int(w))
+            tens_word = False
+            continue
+        tens_word = raw in _WORDNUM and w in _TENS
+        out.append(w)
+    return " ".join(out)
 
 
 def _stem(w):
