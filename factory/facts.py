@@ -94,7 +94,7 @@ def is_checkable_claim(claim, context):
     nums = numbers(claim)
     if not nums and len(in_ctx) < 2:
         return False
-    if not (nums - numbers(context)) and words and len(in_ctx) == len(words):
+    if not (nums - numbers(context)) and len(in_ctx) == len(words):  # incl. a bare supported "$350.53"
         return False
     return True
 

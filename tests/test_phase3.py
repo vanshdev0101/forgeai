@@ -81,6 +81,8 @@ def test_claim_filter():
                                         "economy.", ctx), "verbatim restatement is not unsupported"
     assert facts.is_checkable_claim("you must book flights in premium economy due to the duration", ctx), "M03"
     assert facts.is_checkable_claim("you get an additional 4 days of carry-over", ctx), "M01: unsupported number"
+    assert not facts.is_checkable_claim("$350.53", "unit_price_usd: 350.53"), "a bare supported number is no claim"
+    assert facts.is_checkable_claim("$999.99", "unit_price_usd: 350.53")
 
 
 def test_facts_must_be_short_and_in_the_reference_answer():
@@ -249,6 +251,19 @@ def test_judge_deterministic_paths_skip_the_llm():
     assert r["failure"] == "wrong_refusal" and r["retrieval_hit"] is True
 
 
+def test_paraphrased_refusals_count_as_refusals():
+    refuse_case = {"id": "U01", "type": "ungroundable", "question": "customs duties?", "expected": {"refuse": True}}
+    stub({})
+    t = _trace("I am unable to provide information on customs duties; it is not included in the provided documents.")
+    r = judge.score(refuse_case, t, Idx(CHUNKS))
+    assert r["passed"] and r["refused_paraphrased"], r
+    r = judge.score(CASE, t, Idx(CHUNKS))
+    assert r["failure"] == "wrong_refusal", "a paraphrased refusal of an answerable question is a wrong refusal"
+    stub({"judge_claims": {"unsupported_claims": []}})
+    t = _trace("I cannot be sure, but it is 9 LPA.")
+    assert not judge.score(refuse_case, t, Idx(CHUNKS))["passed"], "refusal words plus a figure is an answer"
+
+
 def test_judge_llm_yes_is_verified():
     stub({"judge_claims": {"unsupported_claims": []},
           "judge_fact": {"states_fact": True, "answer_span": "a dozen days"}})
@@ -314,7 +329,7 @@ def test_prompts_fill():
         "eval_multi": dict(audience="a", summary="s", id_a="a", passage_a="p", id_b="b", passage_b="q", avoid="", doc_a="x", doc_b="y"),
         "eval_ambiguous": dict(question="q"),
         "eval_refuse": dict(audience="a", summary="s", refuse_topics="t", n_unrelated="2"),
-        "eval_calc": dict(audience="a", chunk_id="c", passage="p"),
+        "eval_calc": dict(audience="a", chunk_id="c", passage="p", others="o"),
         "eval_check_rewrite": dict(original="o", rewrite="r"),
         "eval_solve_calc": dict(passage="p", question="q"),
         "judge_fact": dict(question="q", fact="f", answer="a", source="s"),

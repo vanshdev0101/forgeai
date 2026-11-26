@@ -221,7 +221,8 @@ def calculator_cases(req, pool, n, dropped):
             break
         o = ask_json("eval_calc", check=lambda o: _q_ok(o) or (None if isinstance(o.get("expression"), str)
                                                                else "need an 'expression' string"),
-                     temperature=TEMPERATURE, audience=req["audience"], chunk_id=c["id"], passage=c["text"])
+                     temperature=TEMPERATURE, audience=req["audience"], chunk_id=c["id"], passage=c["text"],
+                     others=", ".join(sorted({p["doc"] for p in pool} - {c["doc"]})) or "nothing else")
         expr = o["expression"].replace(",", "")
         used, allowed = numbers(expr), numbers(c["text"]) | numbers(o["question"])
         result = tools.calculator(expr)

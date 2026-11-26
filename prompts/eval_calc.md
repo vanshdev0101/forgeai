@@ -11,6 +11,8 @@ quantities the user states in the question. Keep it simple and unambiguous; use 
   quantity x quantity x rate ("4 people x 5 days x INR 2,500 per day")
   rate x quantity + amount
 The question must contain every number the user supplies, and the passage must supply the rate.
+The collection also contains: $others. If another document could give a different rate (for example a second
+supplier), the question MUST name which supplier, product or group it is about.
 
 Rules:
 - expression: the exact arithmetic that answers it, using only numbers that appear in the passage or in

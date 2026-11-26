@@ -31,9 +31,9 @@ MUTANTS = [
     ("refusal cases not typed", E, "cases.append({\"type\": kinds.get(topic, \"out_of_scope\")",
      "cases.append({\"type\": \"out_of_scope\""),
     # judge
-    ("refusal not required", J, "r.update(passed=trace[\"refused\"], checks={\"refusal\": trace[\"refused\"]})",
+    ("refusal not required", J, "r.update(passed=refused, checks={\"refusal\": refused})",
      "r.update(passed=True, checks={\"refusal\": True})"),
-    ("wrong refusal not failed", J, "    if trace[\"refused\"]:\n        r.update(passed=False, failure=\"wrong_refusal\"",
+    ("wrong refusal not failed", J, "    if refused:\n        r.update(passed=False, failure=\"wrong_refusal\"",
      "    if False:\n        r.update(passed=False, failure=\"wrong_refusal\""),
     ("llm yes trusted blindly", J, "if o[\"states_fact\"] and span_supports(span, fact, answer):", "if o[\"states_fact\"]:"),
     ("claims not verified as quotes", J, "if norm(c) and norm(c) in norm(answer) and is_checkable_claim(c, context)]",
@@ -45,6 +45,8 @@ MUTANTS = [
     ("claims ignored in verdict", J, "\"no_unsupported_claims\": not claims}", "\"no_unsupported_claims\": True}"),
     ("question hidden from claims judge", J, "question=question or \"(none)\",", "question=\"(none)\","),
     ("selftest ignores claim verdict", J, "\"judge_correct\": fact_right and claim_right,", "\"judge_correct\": fact_right,"),
+    ("paraphrased refusal ignored", J, "    return trace[\"refused\"] or (bool(_REFUSAL.search", "    return trace[\"refused\"] or (False and bool(_REFUSAL.search"),
+    ("refusal with figures accepted", J, "and not re.search(r\"\\d\", trace[\"answer\"]))", ")"),
     # facts
     ("numbers not required", F, "    if fnums - numbers(text):\n        return False", "    if False:\n        return False"),
     ("span numbers not required", F, "return not (numbers(fact) - numbers(span))", "return True"),
@@ -61,7 +63,7 @@ MUTANTS = [
     ("filler counted as claim", F, "    if not nums and len(in_ctx) < 2:\n        return False",
      "    if False:\n        return False"),
     ("restatement counted as claim", F,
-     "    if not (nums - numbers(context)) and words and len(in_ctx) == len(words):\n        return False",
+     "    if not (nums - numbers(context)) and len(in_ctx) == len(words):  # incl. a bare supported \"$350.53\"\n        return False",
      "    if False:\n        return False"),
 ]
 

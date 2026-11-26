@@ -65,6 +65,17 @@ def _claims_check(answer, passages, tool_results, question=""):
     return verified, [c for c in claims if c not in verified]
 
 
+_REFUSAL = re.compile(r"\b(cannot|can't|can not|unable to|not able to|do not have|don't have|no information|"
+                      r"not (included|covered|available|specified|mentioned|provided) in|outside (my|the) scope|"
+                      r"please contact)\b", re.I)
+
+
+def reads_as_refusal(trace):
+    """A refusal in other words: refusal phrasing and no figures. Live: "I am unable to provide information on
+    customs duties ... not included in the provided documents" had refused=false and was scored as answering."""
+    return trace["refused"] or (bool(_REFUSAL.search(trace["answer"])) and not re.search(r"\d", trace["answer"]))
+
+
 def score(case, trace, index):
     exp = case["expected"]
     retrieved = [h["id"] for h in trace["retrieved"]]
@@ -74,15 +85,17 @@ def score(case, trace, index):
          "citations": trace["citations"], "retrieved": trace["retrieved"], "tools_used": tools_used,
          "violations": trace["violations"]}
 
+    refused = reads_as_refusal(trace)
+    r["refused_paraphrased"] = refused and not trace["refused"]
     if exp["refuse"]:
-        r.update(passed=trace["refused"], checks={"refusal": trace["refused"]})
-        if not trace["refused"]:
+        r.update(passed=refused, checks={"refusal": refused})
+        if not refused:
             r["failure"] = "answered_out_of_scope"
         return r
 
     r["retrieval_hit"] = (any(c in retrieved for c in exp["source_chunks"]) if exp["source_chunks"]
                           else any(i.split("#")[0] in exp["source_docs"] for i in retrieved))
-    if trace["refused"]:
+    if refused:
         r.update(passed=False, failure="wrong_refusal", checks={"refusal": False}, fact_recall=0.0)
         return r
 
