@@ -1,0 +1,103 @@
+{
+  "name": "vessel-spare-parts-assistant",
+  "description": "A specialized tool for Meridian Ship Management superintendents to retrieve spare part data and compare supplier terms from regional documents.",
+  "system_prompt": "You are an AI assistant serving Meridian Ship Management's vessel superintendents, providing formal and precise responses. Answer questions using only the provided documents; if information is missing or unsupported by the sources, state plainly that it cannot be found without guessing policy, numbers, or dates.\n\n## Scope\nYou answer questions about:\n- spare_parts_lookup: Retrieving part numbers, descriptions, compatible engine models (MAN B&W, Wartsila, Yanmar, Caterpillar), and current stock quantities from the catalogue.\n- pricing_and_lead_time: Providing unit prices in USD, minimum order quantities, supplier names, and estimated lead times for listed parts.\n- supplier_terms_comparison: Comparing payment conditions, warranty coverage, return policies, restocking fees, and logistics terms between Asia Pacific Ship Parts and Nordic Marine Supply based on the user's specified office location.\n- urgent_service_fees: Identifying applicable urgent air freight surcharges and volume discount structures available in the provided terms documents.\n- regional_compliance_check: Verifying if a requested part or transaction aligns with the specific compliance requirements and operational guidelines of the relevant region (Singapore, Mumbai, etc.).\n\nYour documents do not cover the following yet. If asked, say so and refuse rather than guess:\n- catalogue_limitation_notice\n\n## Must refuse\nDecline, using the refusal message, any question about:\n- custom_quotes_for_unlisted_parts (The assistant cannot generate quotes, search external databases, or provide information for parts not explicitly listed in the provided spare_parts_catalogue.csv.)\n- supplier_negotiation_or_contact (The assistant is strictly an information retrieval tool and cannot initiate contact with suppliers, negotiate terms, place orders, or execute purchase requests on behalf of Meridian Ship Management.)\n- anything unrelated to the scope above\n\n## Lessons from testing\n- Never infer percentages or specific fee structures from partial data; explicitly state that exact figures are unavailable if not fully supported by a single source.",
+  "docs_dir": "../../demos/spares/docs",
+  "retrieval": {
+    "chunk_words": 250,
+    "overlap": 40,
+    "k": 4,
+    "min_score": 0.576
+  },
+  "tools": [
+    "csv_lookup",
+    "calculator",
+    "current_date"
+  ],
+  "tool_rationale": {
+    "csv_lookup": "needed (\"supported topics sourced from ['spare_parts_catalogue.csv']\" in the requirements) and usable (CSV present in the document folder)",
+    "calculator": "needed ('prices' in the requirements) and usable (spare_parts_catalogue.csv#2: ...lves; compatible_engine: Wartsila 6L32; unit_price_usd: 1457.92; stock_qty: 4; supplier: N...)",
+    "current_date": "needed ('lead times' in the requirements) and usable (nordic_marine_supply_terms.pdf#1: ...ly held in stock, we commit to shipping within 3 working days of order confirmation. Ple...)"
+  },
+  "output_contract": {
+    "must_cite": true,
+    "refusal_message": "I am unable to provide information for parts not listed in the catalogue or actions outside my defined scope.",
+    "max_words": 150
+  },
+  "provenance": {
+    "factory_model": "qwen3.5-9b-8k",
+    "agent_model": "qwen3.5-4b-8k",
+    "embed_model": "nomic-embed-text",
+    "iteration": 1,
+    "calibration": {
+      "off_topic_max": 0.5556,
+      "in_scope_min": 0.6148,
+      "in_scope_source": "sample_questions",
+      "separable": true,
+      "gate_role": "refuses off-topic on its own",
+      "off_topic_scores": {
+        "What is the capital of Peru?": 0.4978,
+        "Give me a recipe for butter chicken.": 0.535,
+        "Who won the 2022 football World Cup?": 0.4605,
+        "How do I write quicksort in Python?": 0.4653,
+        "Explain how photosynthesis works.": 0.5113,
+        "Summarise the plot of Hamlet.": 0.5556,
+        "How do I change a flat tyre on a bicycle?": 0.4821,
+        "What is the distance from the Earth to the Moon?": 0.5255,
+        "What are the rules of chess castling?": 0.5338,
+        "Translate 'good morning' into French.": 0.5106,
+        "Which guitar chords are in the key of G major?": 0.4749,
+        "What is the best smartphone to buy this year?": 0.4641
+      },
+      "in_scope_scores": {
+        "What is the part number and current stock quantity for a fuel injector nozzle on a Yanmar engine?": 0.7526,
+        "Which spare parts are available in stock for Caterpillar 3512 engines?": 0.7539,
+        "What is the unit price in USD and minimum order quantity for part CAT-0232?": 0.6148,
+        "Who supplies this item, what is their estimated lead time in days?": 0.6465,
+        "What are the payment terms and restocking fees for Asia Pacific Ship Parts?": 0.8046,
+        "How does Nordic Marine Supply's warranty period compare to Asia Pacific Ship Parts?": 0.8098,
+        "What is the fee percentage for urgent air freight?": 0.7041,
+        "Does an urgent service discount apply to volume orders?": 0.6971,
+        "Who do I contact if my order needs urgent air freight approval?": 0.6782,
+        "What is the restocking fee percentage for returns made after 14 days?": 0.7066
+      }
+    },
+    "tool_decisions": [
+      {
+        "tool": "csv_lookup",
+        "attached": true,
+        "need_signal": "supported topics sourced from ['spare_parts_catalogue.csv']",
+        "evidence": "CSV present in the document folder",
+        "serves_undocumented_topics": [],
+        "reason": "needed (\"supported topics sourced from ['spare_parts_catalogue.csv']\" in the requirements) and usable (CSV present in the document folder)"
+      },
+      {
+        "tool": "calculator",
+        "attached": true,
+        "need_signal": "prices",
+        "evidence": "spare_parts_catalogue.csv#2: ...lves; compatible_engine: Wartsila 6L32; unit_price_usd: 1457.92; stock_qty: 4; supplier: N...",
+        "serves_undocumented_topics": [],
+        "reason": "needed ('prices' in the requirements) and usable (spare_parts_catalogue.csv#2: ...lves; compatible_engine: Wartsila 6L32; unit_price_usd: 1457.92; stock_qty: 4; supplier: N...)"
+      },
+      {
+        "tool": "weather",
+        "attached": false,
+        "need_signal": null,
+        "evidence": null,
+        "serves_undocumented_topics": [],
+        "reason": "the brief and requirements never call for it"
+      },
+      {
+        "tool": "current_date",
+        "attached": true,
+        "need_signal": "lead times",
+        "evidence": "nordic_marine_supply_terms.pdf#1: ...ly held in stock, we commit to shipping within 3 working days of order confirmation. Ple...",
+        "serves_undocumented_topics": [],
+        "reason": "needed ('lead times' in the requirements) and usable (nordic_marine_supply_terms.pdf#1: ...ly held in stock, we commit to shipping within 3 working days of order confirmation. Ple...)"
+      }
+    ],
+    "lessons": [
+      "Never infer percentages or specific fee structures from partial data; explicitly state that exact figures are unavailable if not fully supported by a single source."
+    ]
+  }
+}

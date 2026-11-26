@@ -1,0 +1,56 @@
+{
+  "questions": [
+    {
+      "question": "The brief mentions checking prices and stock, but does not specify if I should handle custom quotes for parts NOT listed in the provided CSV catalogue (e.g., non-standard or discontinued items).",
+      "why": "This resolves a gap between the available data (fixed 33 rows) and the user's need to 'find' spare parts. If yes, the assistant needs logic to search external databases or admit inability; if no, it strictly limits responses to the CSV.",
+      "default_assumption": "The assistant will only provide information for parts explicitly listed in the provided catalogue (spare_parts_catalogue.csv) and cannot generate quotes for unlisted items."
+    },
+    {
+      "question": "Should the assistant be able to initiate contact with suppliers or negotiate terms, or should it strictly present data from the documents without taking action?",
+      "why": "This defines a critical boundary. The brief asks to 'compare supplier terms,' which could imply just reading them vs. actively negotiating on behalf of the user.",
+      "default_assumption": "The assistant will act as an information retrieval and comparison tool only; it cannot initiate negotiations, place orders, or contact suppliers directly."
+    },
+    {
+      "question": "What is the appropriate tone for this assistant: formal corporate (suitable for official procurement), technical/engineering-focused, or casual?",
+      "why": "The brief does not specify audience/tone. This affects how the response to 'urgent air freight surcharges' or 'warranty coverage' is phrased.",
+      "default_assumption": "The assistant will adopt a formal, professional corporate tone suitable for Meridian Ship Management's authorized staff."
+    },
+    {
+      "question": "If the documents contain conflicting terms (e.g., different payment conditions in asia_pacific_ship_parts_terms.pdf vs. nordic_marine_supply_terms.pdf), should I prioritize one region over another or ask the user to specify their location?",
+      "why": "This addresses an ambiguity where two reasonable builders might handle regional conflicts differently (auto-prioritize vs. query).",
+      "default_assumption": "The assistant will detect conflicting terms and explicitly state that commercial terms vary by supplier/region, asking the requester to confirm which specific office or agreement applies before providing a definitive answer."
+    },
+    {
+      "question": "Are there any other documents (e.g., internal Meridian procurement policies) I should be aware of besides the three provided files?",
+      "why": "This addresses potential gaps in knowledge. The assistant might refuse to give advice if it lacks access to necessary internal compliance rules.",
+      "default_assumption": "The assistant will rely solely on the three provided documents and cannot answer questions regarding Meridian's specific internal policies not covered therein."
+    }
+  ],
+  "clarifications": [
+    {
+      "question": "The brief mentions checking prices and stock, but does not specify if I should handle custom quotes for parts NOT listed in the provided CSV catalogue (e.g., non-standard or discontinued items).",
+      "answer": "The assistant will only provide information for parts explicitly listed in the provided catalogue (spare_parts_catalogue.csv) and cannot generate quotes for unlisted items.",
+      "source": "assumed"
+    },
+    {
+      "question": "Should the assistant be able to initiate contact with suppliers or negotiate terms, or should it strictly present data from the documents without taking action?",
+      "answer": "The assistant will act as an information retrieval and comparison tool only; it cannot initiate negotiations, place orders, or contact suppliers directly.",
+      "source": "assumed"
+    },
+    {
+      "question": "What is the appropriate tone for this assistant: formal corporate (suitable for official procurement), technical/engineering-focused, or casual?",
+      "answer": "The assistant will adopt a formal, professional corporate tone suitable for Meridian Ship Management's authorized staff.",
+      "source": "assumed"
+    },
+    {
+      "question": "If the documents contain conflicting terms (e.g., different payment conditions in asia_pacific_ship_parts_terms.pdf vs. nordic_marine_supply_terms.pdf), should I prioritize one region over another or ask the user to specify their location?",
+      "answer": "The assistant will detect conflicting terms and explicitly state that commercial terms vary by supplier/region, asking the requester to confirm which specific office or agreement applies before providing a definitive answer.",
+      "source": "assumed"
+    },
+    {
+      "question": "Are there any other documents (e.g., internal Meridian procurement policies) I should be aware of besides the three provided files?",
+      "answer": "The assistant will rely solely on the three provided documents and cannot answer questions regarding Meridian's specific internal policies not covered therein.",
+      "source": "assumed"
+    }
+  ]
+}

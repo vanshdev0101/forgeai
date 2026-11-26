@@ -1,0 +1,85 @@
+{
+  "history": [
+    {
+      "iteration": 0,
+      "change": null,
+      "passed": 16,
+      "cases": 21,
+      "pass_rate": 0.762,
+      "categories": {
+        "hallucination": 2,
+        "prompt_defect": 2,
+        "retrieval_miss": 1
+      }
+    },
+    {
+      "iteration": 1,
+      "change": "added prompt rule: 'Never infer percentages or specific fee structures from partial data; explicitly state that exact figures are unavailable if not fully supported by a single source.'",
+      "kept": false,
+      "passed": 15,
+      "cases": 21,
+      "pass_rate": 0.714,
+      "categories": {
+        "hallucination": 3,
+        "prompt_defect": 3
+      }
+    },
+    {
+      "iteration": 2,
+      "change": "added prompt rule: 'Always extract every specific numerical value, percentage, or fee explicitly requested from your documents before answering.'",
+      "kept": true,
+      "passed": 17,
+      "cases": 21,
+      "pass_rate": 0.81,
+      "categories": {
+        "hallucination": 2,
+        "prompt_defect": 2
+      }
+    }
+  ],
+  "changes": [
+    {
+      "iteration": 1,
+      "category": "hallucination",
+      "applied": true,
+      "kept": false,
+      "change": "added prompt rule: 'Never infer percentages or specific fee structures from partial data; explicitly state that exact figures are unavailable if not fully supported by a single source.'",
+      "why_model": "This prevents hallucinating unsupported cost calculations and warranty documentation requirements when the provided documents lack complete details.",
+      "targeted_cases": [
+        "A04",
+        "A07"
+      ],
+      "score_before": "16/21",
+      "score_after": "15/21",
+      "newly_passing": [],
+      "newly_failing": [
+        "M01"
+      ]
+    },
+    {
+      "iteration": 2,
+      "category": "prompt_defect",
+      "applied": true,
+      "kept": true,
+      "change": "added prompt rule: 'Always extract every specific numerical value, percentage, or fee explicitly requested from your documents before answering.'",
+      "why_model": "This prevents missing required data points like discounts and fees by enforcing a complete extraction of all numeric answers.",
+      "targeted_cases": [
+        "M02",
+        "B03"
+      ],
+      "score_before": "16/21",
+      "score_after": "17/21",
+      "newly_passing": [
+        "A07"
+      ],
+      "newly_failing": []
+    },
+    {
+      "iteration": 3,
+      "category": "prompt_defect",
+      "applied": false,
+      "note": "the model proposed a rule already in the prompt: 'Always extract every specific numerical value, percentage, or fee explicitly requested from your documents before answering.'"
+    }
+  ],
+  "stop_reason": "no applicable fix was left for the remaining failures"
+}

@@ -1,0 +1,127 @@
+{
+  "tool_decisions": [
+    {
+      "tool": "csv_lookup",
+      "attached": true,
+      "need_signal": "supported topics sourced from ['spare_parts_catalogue.csv']",
+      "evidence": "CSV present in the document folder",
+      "serves_undocumented_topics": [],
+      "reason": "needed (\"supported topics sourced from ['spare_parts_catalogue.csv']\" in the requirements) and usable (CSV present in the document folder)"
+    },
+    {
+      "tool": "calculator",
+      "attached": true,
+      "need_signal": "prices",
+      "evidence": "spare_parts_catalogue.csv#2: ...lves; compatible_engine: Wartsila 6L32; unit_price_usd: 1457.92; stock_qty: 4; supplier: N...",
+      "serves_undocumented_topics": [],
+      "reason": "needed ('prices' in the requirements) and usable (spare_parts_catalogue.csv#2: ...lves; compatible_engine: Wartsila 6L32; unit_price_usd: 1457.92; stock_qty: 4; supplier: N...)"
+    },
+    {
+      "tool": "weather",
+      "attached": false,
+      "need_signal": null,
+      "evidence": null,
+      "serves_undocumented_topics": [],
+      "reason": "the brief and requirements never call for it"
+    },
+    {
+      "tool": "current_date",
+      "attached": true,
+      "need_signal": "lead times",
+      "evidence": "nordic_marine_supply_terms.pdf#1: ...ly held in stock, we commit to shipping within 3 working days of order confirmation. Ple...",
+      "serves_undocumented_topics": [],
+      "reason": "needed ('lead times' in the requirements) and usable (nordic_marine_supply_terms.pdf#1: ...ly held in stock, we commit to shipping within 3 working days of order confirmation. Ple...)"
+    }
+  ],
+  "calibration": {
+    "off_topic_max": 0.5556,
+    "in_scope_min": 0.6148,
+    "in_scope_source": "sample_questions",
+    "separable": true,
+    "gate_role": "refuses off-topic on its own",
+    "off_topic_scores": {
+      "What is the capital of Peru?": 0.4978,
+      "Give me a recipe for butter chicken.": 0.535,
+      "Who won the 2022 football World Cup?": 0.4605,
+      "How do I write quicksort in Python?": 0.4653,
+      "Explain how photosynthesis works.": 0.5113,
+      "Summarise the plot of Hamlet.": 0.5556,
+      "How do I change a flat tyre on a bicycle?": 0.4821,
+      "What is the distance from the Earth to the Moon?": 0.5255,
+      "What are the rules of chess castling?": 0.5338,
+      "Translate 'good morning' into French.": 0.5106,
+      "Which guitar chords are in the key of G major?": 0.4749,
+      "What is the best smartphone to buy this year?": 0.4641
+    },
+    "in_scope_scores": {
+      "What is the part number and current stock quantity for a fuel injector nozzle on a Yanmar engine?": 0.7526,
+      "Which spare parts are available in stock for Caterpillar 3512 engines?": 0.7539,
+      "What is the unit price in USD and minimum order quantity for part CAT-0232?": 0.6148,
+      "Who supplies this item, what is their estimated lead time in days?": 0.6465,
+      "What are the payment terms and restocking fees for Asia Pacific Ship Parts?": 0.8046,
+      "How does Nordic Marine Supply's warranty period compare to Asia Pacific Ship Parts?": 0.8098,
+      "What is the fee percentage for urgent air freight?": 0.7041,
+      "Does an urgent service discount apply to volume orders?": 0.6971,
+      "Who do I contact if my order needs urgent air freight approval?": 0.6782,
+      "What is the restocking fee percentage for returns made after 14 days?": 0.7066
+    }
+  },
+  "usage": {
+    "inventory": {
+      "calls": 3,
+      "prompt_tokens": 3863,
+      "completion_tokens": 294,
+      "seconds": 16.42,
+      "wall_seconds": 16.5
+    },
+    "questions": {
+      "calls": 1,
+      "prompt_tokens": 605,
+      "completion_tokens": 608,
+      "seconds": 13.06,
+      "wall_seconds": 13.1
+    },
+    "requirements": {
+      "calls": 1,
+      "prompt_tokens": 1256,
+      "completion_tokens": 743,
+      "seconds": 18.47,
+      "wall_seconds": 18.5
+    },
+    "groundability": {
+      "calls": 6,
+      "prompt_tokens": 8336,
+      "completion_tokens": 645,
+      "seconds": 22.99,
+      "wall_seconds": 23.6
+    },
+    "generate": {
+      "calls": 1,
+      "prompt_tokens": 1216,
+      "completion_tokens": 126,
+      "seconds": 4.19,
+      "wall_seconds": 4.8
+    },
+    "evalgen": {
+      "calls": 40,
+      "prompt_tokens": 30713,
+      "completion_tokens": 3872,
+      "seconds": 120.35,
+      "wall_seconds": 120.5
+    },
+    "judge_selftest": {
+      "calls": 15,
+      "prompt_tokens": 9361,
+      "completion_tokens": 344,
+      "seconds": 16.78,
+      "wall_seconds": 16.8
+    },
+    "eval_and_optimize": {
+      "calls": 152,
+      "prompt_tokens": 315800,
+      "completion_tokens": 10287,
+      "seconds": 913.07,
+      "wall_seconds": 972.9
+    }
+  }
+}

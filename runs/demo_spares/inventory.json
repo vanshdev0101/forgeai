@@ -1,0 +1,60 @@
+[
+  {
+    "name": "asia_pacific_ship_parts_terms.pdf",
+    "kind": "pdf",
+    "words": 504,
+    "summary": "This document outlines the commercial terms for supplying ship spare parts by Asia Pacific Ship Parts to Meridian Ship Management's authorized suppliers and purchasing staff in Singapore, Mumbai, and other shore offices.",
+    "topics": [
+      "payment conditions",
+      "pricing thresholds",
+      "discounts",
+      "delivery terms",
+      "logistics",
+      "urgent air freight surcharges",
+      "warranty coverage",
+      "return policy",
+      "restocking fees",
+      "operational guidelines"
+    ]
+  },
+  {
+    "name": "nordic_marine_supply_terms.pdf",
+    "kind": "pdf",
+    "words": 559,
+    "summary": "This document establishes commercial terms for supply agreements between Nordic Marine Supply and Meridian Ship Management, specifically covering orders for ship spare parts placed by staff in Mumbai and Singapore.",
+    "topics": [
+      "payment obligations",
+      "volume discount structure",
+      "delivery logistics",
+      "urgent service surcharges",
+      "warranty coverage",
+      "returns policy",
+      "compliance requirements"
+    ]
+  },
+  {
+    "name": "spare_parts_catalogue.csv",
+    "kind": "csv",
+    "words": 794,
+    "columns": [
+      "part_number",
+      "description",
+      "category",
+      "compatible_engine",
+      "unit_price_usd",
+      "stock_qty",
+      "supplier",
+      "lead_time_days",
+      "min_order_qty"
+    ],
+    "rows": 33,
+    "summary": "This CSV catalogue lists spare parts for four marine engine models (MAN B&W, Wartsila, Yanmar, and Caterpillar), including part numbers, descriptions, prices, stock levels, suppliers, and lead times.",
+    "topics": [
+      "spare_parts_inventory",
+      "marine_engine_compatibility",
+      "supplier_lead_times",
+      "stock_availability",
+      "unit_pricing"
+    ]
+  }
+]

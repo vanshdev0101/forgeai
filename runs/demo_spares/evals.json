@@ -1,0 +1,586 @@
+{
+  "cases": [
+    {
+      "type": "answerable",
+      "question": "What is the payment schedule and discount for orders from Asia Pacific Ship Parts exceeding USD 5,000?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "50% advance payment",
+          "3% discount"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf"
+        ],
+        "source_chunks": [
+          "asia_pacific_ship_parts_terms.pdf#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "A 50% advance payment is required prior to order processing with the balance due upon delivery, and a 3% discount applies automatically."
+      },
+      "id": "A01"
+    },
+    {
+      "type": "answerable",
+      "question": "Who supplies the fuel injector nozzle for a MAN B&W 6S50MC-C engine, and what are its unit price in USD and lead time?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "$350.53",
+          "21 days"
+        ],
+        "source_docs": [
+          "spare_parts_catalogue.csv"
+        ],
+        "source_chunks": [
+          "spare_parts_catalogue.csv#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Nordic Marine Supply provides the fuel injector nozzle (MBW-0145) at $350.53 with a lead time of 21 days."
+      },
+      "id": "A02"
+    },
+    {
+      "type": "answerable",
+      "question": "If I return a defective part received in Singapore after 10 days, what fee applies?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "15%"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf"
+        ],
+        "source_chunks": [
+          "asia_pacific_ship_parts_terms.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "You will incur a restocking fee equal to 15% of the original invoice value because returns are only accepted within 14 days."
+      },
+      "id": "A03"
+    },
+    {
+      "type": "answerable",
+      "question": "If I order spare parts worth USD 28,000 from Nordic Marine Supply for urgent delivery via air freight to the vessel's port, what is my total cost percentage increase compared to standard terms?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "8%",
+          "15%"
+        ],
+        "source_docs": [
+          "nordic_marine_supply_terms.pdf"
+        ],
+        "source_chunks": [
+          "nordic_marine_supply_terms.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "You will receive an 8% volume discount on your order value and incur a non-negotiable 15% surcharge specifically for using expedited air freight."
+      },
+      "id": "A04"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the unit price and lead time for a turbocharger bearing compatible with a Wartsila 6L32 engine from Asia Pacific Ship Parts?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "unit_price_usd: 1850.79",
+          "lead_time_days: 0"
+        ],
+        "source_docs": [
+          "spare_parts_catalogue.csv"
+        ],
+        "source_chunks": [
+          "spare_parts_catalogue.csv#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "The unit price is $1,850.79 USD and the lead time is 0 days."
+      },
+      "id": "A05"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the restocking fee percentage for items returned outside the specified timeframe by the consignee in Singapore?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "equal to 15%",
+          "original invoice value"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf"
+        ],
+        "source_chunks": [
+          "asia_pacific_ship_parts_terms.pdf#2"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "All returns incur a restocking fee equal to 15% of the original invoice value."
+      },
+      "id": "A06"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the restocking fee percentage for returned goods and what specific documentation must be included when submitting a warranty claim?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "restocking fee equal to 10%",
+          "photos and serial numbers"
+        ],
+        "source_docs": [
+          "nordic_marine_supply_terms.pdf"
+        ],
+        "source_chunks": [
+          "nordic_marine_supply_terms.pdf#2"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "A restocking fee equal to 10% of the original invoice value applies to returns, while warranty claims require supporting documentation including photos and serial numbers."
+      },
+      "id": "A07"
+    },
+    {
+      "type": "answerable",
+      "question": "Which supplier offers a fuel injector nozzle for the Caterpillar 3512 engine, what is its unit price in USD, and how many units are available in stock?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "$485.23",
+          "Asia Pacific Ship Parts"
+        ],
+        "source_docs": [
+          "spare_parts_catalogue.csv"
+        ],
+        "source_chunks": [
+          "spare_parts_catalogue.csv#2"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "Asia Pacific Ship Parts supplies the fuel injector nozzle for the Caterpillar 3512 at $485.23 per unit with a current stock quantity of 4."
+      },
+      "id": "A08"
+    },
+    {
+      "type": "answerable",
+      "question": "Who supplies the CAT-0720 fuel oil filter element for a Caterpillar 3512 engine and what is its current stock quantity?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "Asia Pacific Ship Parts"
+        ],
+        "source_docs": [
+          "spare_parts_catalogue.csv"
+        ],
+        "source_chunks": [
+          "spare_parts_catalogue.csv#3"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "The part is supplied by Asia Pacific Ship Parts, but it has zero units in stock."
+      },
+      "id": "A09"
+    },
+    {
+      "type": "answerable",
+      "question": "What payment terms and discount apply to an order over USD 5,000 from Asia Pacific Ship Parts?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "a 50% advance payment",
+          "A 3% discount applies"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf"
+        ],
+        "source_chunks": [
+          "asia_pacific_ship_parts_terms.pdf#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_answerable",
+        "reference_answer": "A 3% discount applies automatically with a requirement for a 50% advance payment prior to processing."
+      },
+      "id": "A10"
+    },
+    {
+      "type": "multi_doc",
+      "question": "For an order of spare parts exceeding USD 10,500 placed by a superintendent in Singapore using Asia Pacific Ship Parts versus Nordic Marine Supply, what are the specific percentage discounts and payment terms for each supplier?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "3%",
+          "50%",
+          "8%",
+          "USD 25,000",
+          "30 days"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf",
+          "nordic_marine_supply_terms.pdf"
+        ],
+        "source_chunks": [
+          "asia_pacific_ship_parts_terms.pdf#0",
+          "nordic_marine_supply_terms.pdf#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_multi",
+        "reference_answer": "Asia Pacific Ship Parts offers a 3% discount with Net 30 days (implied standard) but requires 50% advance before order processing; Nordic Marine Supply offers an 8% volume discount on orders over USD 25,000 and is payable within Net 30 days."
+      },
+      "id": "M01"
+    },
+    {
+      "type": "multi_doc",
+      "question": "A superintendent in Singapore needs to order spare parts exceeding USD 25,000 from Nordic Marine Supply and must inquire about the return policy for items sent back; what are the applicable volume discount percentage and restocking fee percentage?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "8%",
+          "15%"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf",
+          "nordic_marine_supply_terms.pdf"
+        ],
+        "source_chunks": [
+          "nordic_marine_supply_terms.pdf#0",
+          "asia_pacific_ship_parts_terms.pdf#2"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_multi",
+        "reference_answer": "The applicable volume discount is 8% and the restocking fee is 15%. The volume discount of 8% applies because orders exceeding USD 25,000 qualify. The restocking fee of 15% applies to all returns."
+      },
+      "id": "M02"
+    },
+    {
+      "type": "ambiguous",
+      "question": "Hey, what's the deal with payments and discounts on big orders over $5k from Asian parts?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "50% advance payment",
+          "3% discount"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf"
+        ],
+        "source_chunks": [
+          "asia_pacific_ship_parts_terms.pdf#0"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_ambiguous",
+        "rewrite_of": "What is the payment schedule and discount for orders from Asia Pacific Ship Parts exceeding USD 5,000?",
+        "meaning_check": "The rewrite retains the core inquiry about payment schedules and discounts for large orders from Asian suppliers while intentionally using informal language and slang as instructed."
+      },
+      "id": "B01"
+    },
+    {
+      "type": "ambiguous",
+      "question": "so if i send back a broken thing from singapore like ten days later, how much do they charge?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "15%"
+        ],
+        "source_docs": [
+          "asia_pacific_ship_parts_terms.pdf"
+        ],
+        "source_chunks": [
+          "asia_pacific_ship_parts_terms.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_ambiguous",
+        "rewrite_of": "If I return a defective part received in Singapore after 10 days, what fee applies?",
+        "meaning_check": "The rewrite maintains the core scenario of returning a defective item from Singapore after approximately ten days and asking about applicable fees, despite using informal language and synonyms."
+      },
+      "id": "B02"
+    },
+    {
+      "type": "ambiguous",
+      "question": "I'm ordering spare parts worth 28k from Nordic Marine Supply for air freight super urgent. What's the extra % I'll pay versus normal?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "8%",
+          "15%"
+        ],
+        "source_docs": [
+          "nordic_marine_supply_terms.pdf"
+        ],
+        "source_chunks": [
+          "nordic_marine_supply_terms.pdf#1"
+        ]
+      },
+      "origin": {
+        "prompt": "eval_ambiguous",
+        "rewrite_of": "If I order spare parts worth USD 28,000 from Nordic Marine Supply for urgent delivery via air freight to the vessel's port, what is my total cost percentage increase compared to standard terms?",
+        "meaning_check": "The rewrite retains the core elements of ordering spare parts from Nordic Marine Supply for urgent air freight and asks about the cost increase compared to standard terms without altering any specific conditions or values."
+      },
+      "id": "B03"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "Can you search for a quote on the hydraulic pump model XJ-902 which is not in our spare parts catalogue?",
+      "expected": {
+        "refuse": true,
+        "topic": "custom_quotes_for_unlisted_parts"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "R01"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "I need to call Supplier A immediately to negotiate a better lead time for item #458.",
+      "expected": {
+        "refuse": true,
+        "topic": "supplier_negotiation_or_contact"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "R02"
+    },
+    {
+      "type": "ungroundable",
+      "question": "Can you tell me the customs duties and import taxes for this specific engine part?",
+      "expected": {
+        "refuse": true,
+        "topic": "catalogue_limitation_notice"
+      },
+      "origin": {
+        "prompt": "eval_refuse"
+      },
+      "id": "U01"
+    },
+    {
+      "type": "calculator",
+      "question": "What is the total cost to order 4 turbocharger bearings from Nordic Marine Supply?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "8482"
+        ],
+        "source_docs": [
+          "spare_parts_catalogue.csv"
+        ],
+        "source_chunks": [
+          "spare_parts_catalogue.csv#0"
+        ],
+        "tool": "calculator"
+      },
+      "origin": {
+        "prompt": "eval_calc",
+        "expression": "2120.5 * 4",
+        "unit": "USD"
+      },
+      "id": "C01"
+    },
+    {
+      "type": "csv_lookup",
+      "question": "What is the description for part number MBW-0145?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "fuel injector nozzle"
+        ],
+        "source_docs": [
+          "spare_parts_catalogue.csv"
+        ],
+        "source_chunks": [],
+        "tool": null
+      },
+      "origin": {
+        "prompt": null,
+        "csv_row": 0,
+        "column": "description"
+      },
+      "id": "T01"
+    },
+    {
+      "type": "csv_lookup",
+      "question": "What is the category for part number WRT-1044?",
+      "expected": {
+        "refuse": false,
+        "key_facts": [
+          "valves"
+        ],
+        "source_docs": [
+          "spare_parts_catalogue.csv"
+        ],
+        "source_chunks": [],
+        "tool": null
+      },
+      "origin": {
+        "prompt": null,
+        "csv_row": 16,
+        "column": "category"
+      },
+      "id": "T02"
+    }
+  ],
+  "dropped": [
+    {
+      "type": "answerable",
+      "question": "What volume discount applies to a Nordic Marine Supply order exceeding USD 25,000 from the Mumbai shore office?",
+      "chunk": "nordic_marine_supply_terms.pdf#0",
+      "why": "no key fact of ['Net 30 days', '$10,000', 'USD 25,000'] is short, in the source passage and in its own reference answer"
+    },
+    {
+      "type": "multi_doc",
+      "question": "What are the payment conditions and applicable discount for a single order of MBW-0487 from Asia Pacific Ship Parts, assuming it exceeds USD 5,000 in total value?",
+      "chunks": [
+        "asia_pacific_ship_parts_terms.pdf#0",
+        "spare_parts_catalogue.csv#0"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['a 50% advance payment is required prior to order processing', 'A 3% discount applies automatically to orders exceeding USD 5,000 in total value.'] B=[], kept A=['50%', '3%'] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "A superintendent in Singapore needs to order spare parts for a vessel and asks about the specific payment split required by Asia Pacific Ship Parts, how long it takes to ship stock items there, and what discount tier applies if the total value is USD 12,000 under Nordic Marine Supply's terms.",
+      "chunks": [
+        "asia_pacific_ship_parts_terms.pdf#0",
+        "nordic_marine_supply_terms.pdf#1"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['50% advance payment'] B=['Above USD 10,000', 'Warranty Coverage'], kept A=['50% advance payment'] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "What are the payment conditions and applicable discount for ordering a cylinder liner from Asia Pacific Ship Parts, given their specific terms?",
+      "chunks": [
+        "asia_pacific_ship_parts_terms.pdf#0",
+        "spare_parts_catalogue.csv#1"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['a 50% advance payment is required prior to order processing', 'A 3% discount applies automatically'] B=[], kept A=['50%', 'A 3% discount applies automatically'] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "A superintendent in Singapore orders parts from Asia Pacific Ship Parts exceeding USD 5,000; what is the applicable discount and return fee percentage if a claim arises under Nordic Marine Supply terms?",
+      "chunks": [
+        "asia_pacific_ship_parts_terms.pdf#0",
+        "nordic_marine_supply_terms.pdf#2"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['A 3% discount applies automatically to orders exceeding USD 5,000 in total value.', 'Any goods returned to Nordic Marine Supply will incur a restocking fee equal to 10% of the original invoice value.'] B=[], kept A=['3%'] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "What are the payment conditions and applicable discount for a single order of fuel injector nozzles (part number CAT-0110) from Asia Pacific Ship Parts, given that the total value exceeds USD 5,000?",
+      "chunks": [
+        "asia_pacific_ship_parts_terms.pdf#0",
+        "spare_parts_catalogue.csv#2"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['a 50% advance payment is required prior to order processing', 'A 3% discount applies automatically to orders exceeding USD 5,000'] B=[], kept A=['50%', '3%'] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "For an order of the CAT-0391 cylinder liner from Asia Pacific Ship Parts, what is the total cost after discounts and what are the payment conditions?",
+      "chunks": [
+        "asia_pacific_ship_parts_terms.pdf#0",
+        "spare_parts_catalogue.csv#3"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['a 50% advance payment is required prior to order processing', 'A 3% discount applies automatically to orders exceeding USD 5,000 in total value'] B=['part_number: CAT-0391; description: cylinder liner; unit_price_usd: 10327.55'], kept A=['50%', 'USD 5,000'] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "A superintendent needs to order 5 turbocharger bearings from Nordic Marine Supply and wants to know the final unit price after any applicable volume discount.",
+      "chunks": [
+        "nordic_marine_supply_terms.pdf#0",
+        "spare_parts_catalogue.csv#0"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['Above USD 10,000 5%'] B=['part_number: MBW-0579; description: turbocharger bearing'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "For an urgent air freight order exceeding USD 25,000 placed by Meridian Ship Management staff in Singapore to Nordic Marine Supply Rotterdam, what are the specific payment terms and applicable surcharges?",
+      "chunks": [
+        "nordic_marine_supply_terms.pdf#0",
+        "asia_pacific_ship_parts_terms.pdf#1"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['Net 30 days from invoice', 'Above USD 25,000 8%'] B=['adds a 20% charge on the order value'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I order the exhaust valve spindle (WRT-0439) and three fuel oil filter elements from Nordic Marine Supply, what is my total discount percentage after applying volume thresholds?",
+      "chunks": [
+        "nordic_marine_supply_terms.pdf#0",
+        "spare_parts_catalogue.csv#1"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['>=USD 25,000 applies', 'Above USD 25,000 8%'] B=['exhaust valve spindle ... unit_price_usd: 3946.37', 'fuel oil filter element ... unit_price_usd: 120.49'], kept A=[] B=[]"
+    },
+    {
+      "type": "multi_doc",
+      "question": "If I order the fuel injector nozzle (YAN-0160) and the turbocharger bearing (YAN-0556) from Nordic Marine Supply for a Yanmar 6EY18 engine, what is the total net subtotal after applying volume discounts according to the supply terms?",
+      "chunks": [
+        "nordic_marine_supply_terms.pdf#0",
+        "spare_parts_catalogue.csv#2"
+      ],
+      "why": "needs a verified fact from each passage; proposed A=['A 5% volume discount applies to orders exceeding USD 10,000.'] B=['unit_price_usd: 472.09', 'unit_price_usd: 1910.29'], kept A=['USD 10,000'] B=[]"
+    },
+    {
+      "type": "ambiguous",
+      "question": "Hey, who sells the injectors for that big MAN B&W ship engine (like a 6S50MC-C) and how much do they cost in dollars plus when can I get them?",
+      "rewrite_of": "Who supplies the fuel injector nozzle for a MAN B&W 6S50MC-C engine, and what are its unit price in USD and lead time?",
+      "why": "rewrite changed the meaning: The rewrite changes the specific engine model from 'MAN B&W 6S50MC-C' to a vague '(like a 6S50MC-C)', which alters the precise subject of the inquiry and could lead to incorrect answers for other MAN B&W engines."
+    },
+    {
+      "type": "calculator",
+      "question": "What is the total discount amount for an order from Asia Pacific Ship Parts worth USD 6,000?",
+      "chunk": "asia_pacific_ship_parts_terms.pdf#0",
+      "why": "expression '6000 * 3 / 100' invalid or uses numbers not in passage/question (['100'])"
+    },
+    {
+      "type": "calculator",
+      "question": "What is the total discount amount for an order of spare parts valued at USD 28,000 under Nordic Marine Supply terms?",
+      "chunk": "nordic_marine_supply_terms.pdf#0",
+      "why": "expression '(28000 - (10000 + 25000)) * 0.08' invalid or uses numbers not in passage/question (['0.08'])"
+    },
+    {
+      "type": "calculator",
+      "question": "What is the total urgent air freight surcharge for an order valued at INR 50,000?",
+      "chunk": "asia_pacific_ship_parts_terms.pdf#1",
+      "why": "expression '50000 * 20 / 100' invalid or uses numbers not in passage/question (['100'])"
+    },
+    {
+      "type": "calculator",
+      "question": "What is the urgent air freight surcharge amount for an order of spare parts valued at USD 20,000?",
+      "chunk": "nordic_marine_supply_terms.pdf#1",
+      "why": "expression '20000 * 15 / 100' invalid or uses numbers not in passage/question (['100'])"
+    },
+    {
+      "type": "calculator",
+      "question": "What is the total cost in USD for 5 units of part WRT-0778 from Asia Pacific Ship Parts?",
+      "chunk": "spare_parts_catalogue.csv#1",
+      "why": "independent derivation disagrees: proposed 128.1*5 = 640.5, re-derived '' -> unanswerable"
+    }
+  ],
+  "counts": {
+    "answerable": 10,
+    "multi_doc": 2,
+    "ambiguous": 3,
+    "out_of_scope": 2,
+    "ungroundable": 1,
+    "calculator": 1,
+    "csv_lookup": 2
+  },
+  "total": 21
+}

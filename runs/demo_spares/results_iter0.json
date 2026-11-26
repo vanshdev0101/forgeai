@@ -1,0 +1,1169 @@
+[
+  {
+    "id": "A01",
+    "type": "answerable",
+    "question": "What is the payment schedule and discount for orders from Asia Pacific Ship Parts exceeding USD 5,000?",
+    "answer": "For orders from Asia Pacific Ship Parts exceeding USD 5,000 in total value:\n\n1. **Payment Schedule**: A 50% advance payment is required prior to order processing, with the remaining balance due upon delivery of goods.\n2. **Discount**: An automatic 3% discount applies.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "asia_pacific_ship_parts_terms.pdf#0"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.8154
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.7394
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.7096
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.7059
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "50% advance payment",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "3% discount",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 12.9,
+    "category": null
+  },
+  {
+    "id": "A02",
+    "type": "answerable",
+    "question": "Who supplies the fuel injector nozzle for a MAN B&W 6S50MC-C engine, and what are its unit price in USD and lead time?",
+    "answer": "Nordic Marine Supply supplies the fuel injector nozzle (part number MBW-0145) compatible with the MAN B&W 6S50MC-C engine. The unit price is $350.53, but it has a stock quantity of 0 and an estimated lead time of 21 days.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "spare_parts_catalogue.csv#0"
+    ],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#0",
+        "score": 0.8058
+      },
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.7049
+      },
+      {
+        "id": "spare_parts_catalogue.csv#3",
+        "score": 0.6632
+      },
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.6622
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "$350.53",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "21 days",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 10.1,
+    "category": null
+  },
+  {
+    "id": "A03",
+    "type": "answerable",
+    "question": "If I return a defective part received in Singapore after 10 days, what fee applies?",
+    "answer": "A restocking fee of 15% of the original invoice value applies to returns made within 14 days of receipt.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "asia_pacific_ship_parts_terms.pdf#1"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#1",
+        "score": 0.7879
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.7233
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.6917
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.6832
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "15%",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 7.6,
+    "category": null
+  },
+  {
+    "id": "A04",
+    "type": "answerable",
+    "question": "If I order spare parts worth USD 28,000 from Nordic Marine Supply for urgent delivery via air freight to the vessel's port, what is my total cost percentage increase compared to standard terms?",
+    "answer": "The total cost percentage increase compared to standard terms (which include an automatic volume discount for orders exceeding USD 10,000) is approximately **9.7%**.\n\nCalculation details:\n- Order Value: USD 28,000\n- Volume Discount (-5%): Net value before surcharge = $26,600 (S2)\n- Urgent Air Freight Surcharge (+15% on net value): +$3,990 (S1)\n- Total Cost with Urgency: $30,590\n- Standard Terms Cost (Discount only, no urgency): $26,600\n- Percentage Increase: (($30,590 - $26,600) / $26,600) * 100 = **9.7%**\n\nNote: If comparing against undiscounted standard terms ($28,000), the increase would be approximately 9.4%.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "nordic_marine_supply_terms.pdf#1",
+      "nordic_marine_supply_terms.pdf#0"
+    ],
+    "retrieved": [
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.8314
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.7708
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.7359
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.685
+      }
+    ],
+    "tools_used": [
+      "calculator",
+      "calculator"
+    ],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": false,
+    "checks": {
+      "refusal": true,
+      "facts": false,
+      "grounded": true,
+      "no_unsupported_claims": false
+    },
+    "fact_recall": 0.5,
+    "facts": [
+      {
+        "fact": "8%",
+        "stated": false,
+        "method": "llm",
+        "span": null
+      },
+      {
+        "fact": "15%",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [
+      "Urgent Air Freight Surcharge (+15% on net value): +$3,990 (S1)"
+    ],
+    "judge_claims_rejected": [
+      "(28000 * 0.95) + (26600 * 0.15) - 28000",
+      "'(26600 * 1.15 - 28000) / 26600 * 100'",
+      "Volume Discount (-5%): Net value before surcharge = $26,600 (S2)"
+    ],
+    "tool_used_as_expected": null,
+    "failure": "hallucination",
+    "agent_llm_calls": 5,
+    "agent_seconds": 38.0,
+    "category": "hallucination"
+  },
+  {
+    "id": "A05",
+    "type": "answerable",
+    "question": "What is the unit price and lead time for a turbocharger bearing compatible with a Wartsila 6L32 engine from Asia Pacific Ship Parts?",
+    "answer": "The part number is WRT-0556. The unit price is USD 1,850.79 and the lead time is 0 days.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "spare_parts_catalogue.csv#1"
+    ],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.8014
+      },
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.7513
+      },
+      {
+        "id": "spare_parts_catalogue.csv#3",
+        "score": 0.6849
+      },
+      {
+        "id": "spare_parts_catalogue.csv#0",
+        "score": 0.677
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "unit_price_usd: 1850.79",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "lead_time_days: 0",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 9.9,
+    "category": null
+  },
+  {
+    "id": "A06",
+    "type": "answerable",
+    "question": "What is the restocking fee percentage for items returned outside the specified timeframe by the consignee in Singapore?",
+    "answer": "The restocking fee for returns outside the specified timeframe (14 days) equals 15% of the original invoice value.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "asia_pacific_ship_parts_terms.pdf#1"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.7844
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#1",
+        "score": 0.7837
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.6872
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.6722
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "equal to 15%",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "original invoice value",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 8.3,
+    "category": null
+  },
+  {
+    "id": "A07",
+    "type": "answerable",
+    "question": "What is the restocking fee percentage for returned goods and what specific documentation must be included when submitting a warranty claim?",
+    "answer": "The restocking fee percentages depend on the supplier:\n\n- **Nordic Marine Supply**: 10% of the original invoice value.\n- **Asia Pacific Ship Parts**: 15% of the original invoice value.\n\nRegarding warranty claims, both suppliers require supporting documentation including photos and serial numbers. Nordic Marine Supply specifies this requirement explicitly within its validity window.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "nordic_marine_supply_terms.pdf#2",
+      "asia_pacific_ship_parts_terms.pdf#2",
+      "asia_pacific_ship_parts_terms.pdf#1",
+      "nordic_marine_supply_terms.pdf#1"
+    ],
+    "retrieved": [
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.7252
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.7216
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#1",
+        "score": 0.6857
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.6394
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": false,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": false
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "restocking fee equal to 10%",
+        "stated": true,
+        "method": "llm",
+        "span": "Nordic Marine Supply**: 10% of the original invoice value."
+      },
+      {
+        "fact": "photos and serial numbers",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [
+      "Nordic Marine Supply specifies this requirement explicitly within its validity window."
+    ],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "failure": "hallucination",
+    "agent_llm_calls": 1,
+    "agent_seconds": 8.9,
+    "category": "hallucination"
+  },
+  {
+    "id": "A08",
+    "type": "answerable",
+    "question": "Which supplier offers a fuel injector nozzle for the Caterpillar 3512 engine, what is its unit price in USD, and how many units are available in stock?",
+    "answer": "Asia Pacific Ship Parts offers a fuel injector nozzle (part number CAT-0110) for the Caterpillar 3512 engine at a unit price of $485.23 USD, with 4 units in stock.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "spare_parts_catalogue.csv#2"
+    ],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#3",
+        "score": 0.779
+      },
+      {
+        "id": "spare_parts_catalogue.csv#0",
+        "score": 0.7054
+      },
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.7032
+      },
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.6453
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "$485.23",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "Asia Pacific Ship Parts",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 9.5,
+    "category": null
+  },
+  {
+    "id": "A09",
+    "type": "answerable",
+    "question": "Who supplies the CAT-0720 fuel oil filter element for a Caterpillar 3512 engine and what is its current stock quantity?",
+    "answer": "The supplier of part number CAT-0720 (fuel oil filter element) for the Caterpillar 3512 engine is Asia Pacific Ship Parts, with a current stock quantity of 0.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "spare_parts_catalogue.csv#3"
+    ],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#3",
+        "score": 0.7692
+      },
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.6366
+      },
+      {
+        "id": "spare_parts_catalogue.csv#0",
+        "score": 0.6311
+      },
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.6064
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "Asia Pacific Ship Parts",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 8.8,
+    "category": null
+  },
+  {
+    "id": "A10",
+    "type": "answerable",
+    "question": "What payment terms and discount apply to an order over USD 5,000 from Asia Pacific Ship Parts?",
+    "answer": "For orders exceeding USD 5,000 from Asia Pacific Ship Parts, a 3% automatic discount applies based on the total value at confirmation. Payment terms require a 50% advance payment prior to order processing, with the remaining balance due upon delivery of goods.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "asia_pacific_ship_parts_terms.pdf#0"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.8307
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.7556
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.7224
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.7163
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "a 50% advance payment",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "A 3% discount applies",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 12.7,
+    "category": null
+  },
+  {
+    "id": "M01",
+    "type": "multi_doc",
+    "question": "For an order of spare parts exceeding USD 10,500 placed by a superintendent in Singapore using Asia Pacific Ship Parts versus Nordic Marine Supply, what are the specific percentage discounts and payment terms for each supplier?",
+    "answer": "For orders exceeding USD 10,500:\n\n**Asia Pacific Ship Parts (Singapore):**\n- **Discount:** A flat 3% discount applies to all orders exceeding USD 5,000.\n- **Payment Terms:** Requires a 50% advance payment prior to order processing; the remaining balance is due upon delivery of goods.\n\n**Nordic Marine Supply (Rotterdam):**\n- **Discount:** A tiered structure applies. Orders between USD 10,000 and USD 25,000 receive a 5% discount. Orders exceeding USD 25,000 receive an 8% discount.\n- **Payment Terms:** Invoices are payable within Net 30 days from the invoice date.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "asia_pacific_ship_parts_terms.pdf#0",
+      "nordic_marine_supply_terms.pdf#0"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.8146
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.7873
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.7827
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.7231
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "3%",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "50%",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "8%",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "USD 25,000",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "30 days",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 9.2,
+    "category": null
+  },
+  {
+    "id": "M02",
+    "type": "multi_doc",
+    "question": "A superintendent in Singapore needs to order spare parts exceeding USD 25,000 from Nordic Marine Supply and must inquire about the return policy for items sent back; what are the applicable volume discount percentage and restocking fee percentage?",
+    "answer": "For orders exceeding USD 25,000 with Nordic Marine Supply: The applicable volume discount is **8%**. For returns within the permitted timeframe (30 days of receipt), a restocking fee equal to **10%** of the original invoice value applies.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "nordic_marine_supply_terms.pdf#0",
+      "nordic_marine_supply_terms.pdf#2"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.8005
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.7852
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.7827
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.7607
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": false,
+    "checks": {
+      "refusal": true,
+      "facts": false,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 0.5,
+    "facts": [
+      {
+        "fact": "8%",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "15%",
+        "stated": false,
+        "method": "llm",
+        "span": null
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "failure": "missing_facts",
+    "agent_llm_calls": 1,
+    "agent_seconds": 7.8,
+    "category": "prompt_defect"
+  },
+  {
+    "id": "B01",
+    "type": "ambiguous",
+    "question": "Hey, what's the deal with payments and discounts on big orders over $5k from Asian parts?",
+    "answer": "For Asia Pacific Ship Parts (Singapore), a 3% discount applies automatically to orders exceeding USD 5,000 in total value. Payment requires a 50% advance prior to order processing, with the remaining balance due upon delivery.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "asia_pacific_ship_parts_terms.pdf#0"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.6805
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.6252
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.6227
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.6206
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "50% advance payment",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "3% discount",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 8.4,
+    "category": null
+  },
+  {
+    "id": "B02",
+    "type": "ambiguous",
+    "question": "so if i send back a broken thing from singapore like ten days later, how much do they charge?",
+    "answer": "Asia Pacific Ship Parts charges a restocking fee of 15% of the original invoice value for returns requested within 14 days. Since your return is occurring at day 10 (within this window), you would be liable for that percentage.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "asia_pacific_ship_parts_terms.pdf#1"
+    ],
+    "retrieved": [
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#1",
+        "score": 0.742
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#2",
+        "score": 0.6651
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.6351
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.6172
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "15%",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 7.9,
+    "category": null
+  },
+  {
+    "id": "B03",
+    "type": "ambiguous",
+    "question": "I'm ordering spare parts worth 28k from Nordic Marine Supply for air freight super urgent. What's the extra % I'll pay versus normal?",
+    "answer": "Utilizing urgent air freight with Nordic Marine Supply triggers a non-negotiable surcharge of 15% on the order value, regardless of volume discounts.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "nordic_marine_supply_terms.pdf#1"
+    ],
+    "retrieved": [
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.7845
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.7281
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.6953
+      },
+      {
+        "id": "asia_pacific_ship_parts_terms.pdf#0",
+        "score": 0.6403
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": false,
+    "checks": {
+      "refusal": true,
+      "facts": false,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 0.5,
+    "facts": [
+      {
+        "fact": "8%",
+        "stated": false,
+        "method": "llm",
+        "span": null
+      },
+      {
+        "fact": "15%",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "failure": "missing_facts",
+    "agent_llm_calls": 1,
+    "agent_seconds": 9.2,
+    "category": "prompt_defect"
+  },
+  {
+    "id": "R01",
+    "type": "out_of_scope",
+    "question": "Can you search for a quote on the hydraulic pump model XJ-902 which is not in our spare parts catalogue?",
+    "answer": "I am unable to provide information for parts not listed in the catalogue or actions outside my defined scope.",
+    "refused": true,
+    "refusal_source": "model",
+    "citations": [],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.6264
+      },
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.6177
+      },
+      {
+        "id": "spare_parts_catalogue.csv#3",
+        "score": 0.6139
+      },
+      {
+        "id": "spare_parts_catalogue.csv#0",
+        "score": 0.6137
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "passed": true,
+    "checks": {
+      "refusal": true
+    },
+    "agent_llm_calls": 1,
+    "agent_seconds": 9.2,
+    "category": null
+  },
+  {
+    "id": "R02",
+    "type": "out_of_scope",
+    "question": "I need to call Supplier A immediately to negotiate a better lead time for item #458.",
+    "answer": "I am unable to provide information for parts not listed in the catalogue or actions outside my defined scope.",
+    "refused": true,
+    "refusal_source": "model",
+    "citations": [],
+    "retrieved": [
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.6338
+      },
+      {
+        "id": "spare_parts_catalogue.csv#3",
+        "score": 0.6168
+      },
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.6026
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#2",
+        "score": 0.6015
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "passed": true,
+    "checks": {
+      "refusal": true
+    },
+    "agent_llm_calls": 1,
+    "agent_seconds": 3.1,
+    "category": null
+  },
+  {
+    "id": "U01",
+    "type": "ungroundable",
+    "question": "Can you tell me the customs duties and import taxes for this specific engine part?",
+    "answer": "I am unable to provide information on customs duties or import taxes as these details are not included in the provided documents.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.6505
+      },
+      {
+        "id": "spare_parts_catalogue.csv#3",
+        "score": 0.6418
+      },
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.6364
+      },
+      {
+        "id": "spare_parts_catalogue.csv#0",
+        "score": 0.6359
+      }
+    ],
+    "tools_used": [],
+    "violations": [
+      "uncited_answer"
+    ],
+    "refused_paraphrased": true,
+    "passed": true,
+    "checks": {
+      "refusal": true
+    },
+    "agent_llm_calls": 1,
+    "agent_seconds": 2.7,
+    "category": null
+  },
+  {
+    "id": "C01",
+    "type": "calculator",
+    "question": "What is the total cost to order 4 turbocharger bearings from Nordic Marine Supply?",
+    "answer": "The total cost is USD 7,641.16 (calculated as 4 units × USD 1910.29 per unit). This applies only to part YAN-0556 for Yanmar engines.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "spare_parts_catalogue.csv#2"
+    ],
+    "retrieved": [
+      {
+        "id": "nordic_marine_supply_terms.pdf#0",
+        "score": 0.7104
+      },
+      {
+        "id": "nordic_marine_supply_terms.pdf#1",
+        "score": 0.7099
+      },
+      {
+        "id": "spare_parts_catalogue.csv#2",
+        "score": 0.6914
+      },
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.6817
+      }
+    ],
+    "tools_used": [
+      "calculator"
+    ],
+    "violations": [
+      "invalid_citation"
+    ],
+    "refused_paraphrased": false,
+    "retrieval_hit": false,
+    "passed": false,
+    "checks": {
+      "refusal": true,
+      "facts": false,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 0.0,
+    "facts": [
+      {
+        "fact": "8482",
+        "stated": false,
+        "method": "llm",
+        "span": null
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": true,
+    "failure": "missing_facts",
+    "agent_llm_calls": 4,
+    "agent_seconds": 8.8,
+    "category": "retrieval_miss"
+  },
+  {
+    "id": "T01",
+    "type": "csv_lookup",
+    "question": "What is the description for part number MBW-0145?",
+    "answer": "The description for part number MBW-0145 is fuel injector nozzle.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "spare_parts_catalogue.csv#0"
+    ],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#0",
+        "score": 0.6903
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "fuel injector nozzle",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 8.6,
+    "category": null
+  },
+  {
+    "id": "T02",
+    "type": "csv_lookup",
+    "question": "What is the category for part number WRT-1044?",
+    "answer": "The category for part number WRT-1044 (starting air valve) is valves.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "spare_parts_catalogue.csv#1"
+    ],
+    "retrieved": [
+      {
+        "id": "spare_parts_catalogue.csv#1",
+        "score": 0.5945
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "valves",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "agent_llm_calls": 1,
+    "agent_seconds": 7.9,
+    "category": null
+  }
+]
