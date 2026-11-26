@@ -2,21 +2,18 @@
 
 > I need an assistant that answers HR policy questions for shore staff.
 
-**Result: 20/23 test cases pass (87%) after 1 optimisation iteration(s).** 3 still fail; each is listed below with the reason. The judge reproduced 10/10 known verdicts in its self-test.
+**Result: 19/21 test cases pass (90%) after 2 optimisation iteration(s).** 2 still fail; each is listed below with the reason. The judge reproduced 10/10 known verdicts in its self-test.
 
 ## What still fails, and why
 
-### prompt_defect (3): the assistant had the passage but answered incompletely, cited wrongly, or answered something it should have refused
+### prompt_defect (2): the assistant had the passage but answered incompletely, cited wrongly, or answered something it should have refused
 
-- **A04** (answerable) *How often is the home-office equipment allowance provided and what are acceptable uses for it?*  
+- **A05** (answerable) *How often is the home-office equipment allowance provided, and what happens to any unspent balance from a previous cycle?*  
   left out: "INR 15,000".  
-  Answer given: "The home-office equipment allowance is provided once every three years. Acceptable uses include purchasing ergonomic furniture, upgrading internet connectivity, or buying necessary hardware like laptops and monitors."
-- **M01** (multi_doc) *What are the annual leave entitlement days for a G2 Senior Associate and what travel class is required for international operations between Mumbai and Singapore?*  
-  left out: "must select premium economy class.".  
-  Answer given: "A G2 Senior Associate gets 21 annual leave days per year. For international flights (6+ hours), Premium Economy class is required."
-- **C01** (calculator) *If an employee works remotely for 2 approved days in a week, what is the total maximum number of hours they must be available during core working time?*  
-  left out: "12".  
-  Answer given: "The policy states that remote work is permitted up to **2 days per week** and requires availability from **10:00 to 16:00 IST**. However, it does not specify the total number of hours across those two days. I cannot calc..."
+  Answer given: "The home-office equipment allowance is provided once every 3 years. Any unspent balance from a previous cycle does not carry forward."
+- **M01** (multi_doc) *What is the maximum number of annual leave days a G3 Manager can carry over to the next year, and how often do they receive their home office equipment allowance?*  
+  left out: "INR 15,000".  
+  Answer given: "A G3 Manager can carry over up to ten unused annual leave days per calendar year. They receive their home office equipment allowance once every three years."
 
 Fixes the loop tried that did not help are in the change log below; they were reverted or not applied, so these failures are what the current definition actually does.
 
@@ -24,8 +21,9 @@ Fixes the loop tried that did not help are in the change log below; they were re
 
 | Iteration | Change | Kept | Passed | Pass rate | Failures by category |
 |---|---|---|---|---|---|
-| 0 | generated agent | baseline | 20/23 | 87% | prompt_defect 3 |
-| 1 | added prompt rule: 'If any part of a multi-part question is missing from your sources, state you cannot answer that specific detail rather than providing partial information.' | **reverted** | 20/23 | 87% | prompt_defect 3 |
+| 0 | generated agent | baseline | 18/21 | 86% | hallucination 1, prompt_defect 2 |
+| 1 | added prompt rule: 'Answer every part of multi-part questions completely; if any detail is missing from your sources, state you cannot answer that specific point.' | **reverted** | 17/21 | 81% | prompt_defect 4 |
+| 2 | added prompt rule: 'Never invent specific leave accrual numbers, hours, or durations; strictly state if these details are missing from your source documents.' | yes | 19/21 | 90% | prompt_defect 2 |
 
 The loop stopped because no applicable fix was left for the remaining failures.
 
@@ -33,18 +31,25 @@ The loop stopped because no applicable fix was left for the remaining failures.
 
 ### Iteration 1: prompt_defect
 
-- **What changed:** added prompt rule: 'If any part of a multi-part question is missing from your sources, state you cannot answer that specific detail rather than providing partial information.'
-- **Why:** 3 failure(s) classified as prompt_defect (A04, M01, C01): the assistant had the passage but answered incompletely, cited wrongly, or answered something it should have refused. Model's rationale: This prevents incomplete answers when source documents lack details for parts of the query.
-- **Score:** 20/23 -> 20/23; newly passing: none; newly failing: none
+- **What changed:** added prompt rule: 'Answer every part of multi-part questions completely; if any detail is missing from your sources, state you cannot answer that specific point.'
+- **Why:** 2 failure(s) classified as prompt_defect (A05, M01): the assistant had the passage but answered incompletely, cited wrongly, or answered something it should have refused. Model's rationale: This prevents incomplete answers by forcing the model to address all sub-questions and admit ignorance for missing details.
+- **Score:** 18/21 -> 17/21; newly passing: C01; newly failing: A02, A08
 - **Kept:** no, reverted because the pass count did not rise
+
+### Iteration 2: hallucination
+
+- **What changed:** added prompt rule: 'Never invent specific leave accrual numbers, hours, or durations; strictly state if these details are missing from your source documents.'
+- **Why:** 1 failure(s) classified as hallucination (C01): the assistant stated things its passages do not support. Model's rationale: This prevents hallucinating unsupported numerical claims about leave entitlements when exact figures aren't provided in the reference materials.
+- **Score:** 18/21 -> 19/21; newly passing: C01; newly failing: none
+- **Kept:** yes
 
 ## Final results by case type
 
 | Type | Passed |
 |---|---|
-| ambiguous | 3/3 |
+| ambiguous | 1/1 |
 | answerable | 9/10 |
-| calculator | 1/2 |
+| calculator | 2/2 |
 | multi_doc | 2/3 |
 | out_of_scope | 4/4 |
 | ungroundable | 1/1 |
@@ -52,7 +57,7 @@ The loop stopped because no applicable fix was left for the remaining failures.
 ## How far to trust these numbers
 
 - **Judge self-test:** 10/10 known verdicts reproduced (fact verdicts 100%, hallucination verdicts 100%). Probes: correct answer, the same padded with filler (verbosity), one number changed, one invented claim.
-- **Test set:** 23 generated cases {'answerable': 10, 'multi_doc': 3, 'ambiguous': 3, 'out_of_scope': 4, 'ungroundable': 1, 'calculator': 2}; 13 candidates were dropped because their expected answer could not be verified ({'answerable': 1, 'multi_doc': 8, 'ambiguous': 2, 'calculator': 2}). Prompts: `prompts/eval_*.md`.
+- **Test set:** 21 generated cases {'answerable': 10, 'multi_doc': 3, 'ambiguous': 1, 'out_of_scope': 4, 'ungroundable': 1, 'calculator': 2}; 13 candidates were dropped because their expected answer could not be verified ({'answerable': 1, 'multi_doc': 5, 'ambiguous': 5, 'calculator': 2}). Prompts: `prompts/eval_*.md`.
 - **Same model family:** the agent (4b), the eval generator and the judge (9b) are all qwen3.5. The judge is a different size and is never told which model answered, but shared blind spots are possible.
 - **Eval cases can be wrong:** facts are verified against the source text, but the question a fact is attached to is written by a model; a calculator case whose question both independent derivations misread the same way would survive.
 
@@ -80,15 +85,15 @@ chunk_words=250, overlap=40, k=4, min_score=0.579. Calibration: off-topic probes
 
 ## Cost
 
-159 local LLM calls, 184278 tokens, 695 s wall time.
+196 local LLM calls, 256101 tokens, 881 s wall time.
 
 | Stage | Calls | Tokens | Seconds |
 |---|---|---|---|
-| inventory | 3 | 3126 | 16.2 |
-| questions | 1 | 1119 | 13.6 |
-| requirements | 1 | 1751 | 13.5 |
-| groundability | 4 | 4625 | 11.1 |
-| generate | 1 | 1017 | 3.4 |
-| evalgen | 41 | 23985 | 105.7 |
-| judge_selftest | 11 | 5946 | 12.4 |
-| eval_and_optimize | 97 | 142709 | 519.5 |
+| inventory | 3 | 3126 | 12.7 |
+| questions | 1 | 1119 | 10.8 |
+| requirements | 1 | 1751 | 12.6 |
+| groundability | 4 | 4625 | 13.6 |
+| generate | 1 | 1017 | 4.1 |
+| evalgen | 38 | 21726 | 93.8 |
+| judge_selftest | 11 | 5905 | 13.3 |
+| eval_and_optimize | 137 | 216832 | 720.2 |

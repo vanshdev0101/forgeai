@@ -1,7 +1,7 @@
 {
-  "cases": 23,
-  "passed": 20,
-  "pass_rate": 0.87,
+  "cases": 21,
+  "passed": 18,
+  "pass_rate": 0.857,
   "by_type": {
     "answerable": {
       "n": 10,
@@ -12,8 +12,8 @@
       "passed": 2
     },
     "ambiguous": {
-      "n": 3,
-      "passed": 3
+      "n": 1,
+      "passed": 1
     },
     "out_of_scope": {
       "n": 4,
@@ -29,14 +29,15 @@
     }
   },
   "failures": {
-    "missing_facts": 3
+    "missing_facts": 2,
+    "hallucination": 1
   },
-  "answerable_fact_recall": 0.898,
+  "answerable_fact_recall": 0.958,
   "refusal_accuracy": 1.0,
   "wrong_refusal_rate": 0.0,
-  "hallucination_rate": 0.0,
+  "hallucination_rate": 0.062,
   "retrieval_hit_rate": 1.0,
-  "mean_agent_llm_calls": 1.13,
+  "mean_agent_llm_calls": 1.143,
   "judge_selftest": {
     "probes": 10,
     "correct": 10,
@@ -99,8 +100,8 @@
         "claim_verdict_correct": true,
         "facts_accepted": false,
         "claims_flagged": [
-          "9 days",
-          "17:7 to 23:7"
+          "up to 9 days",
+          "17:7 to 23:7 IST"
         ]
       },
       {

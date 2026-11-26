@@ -2,8 +2,8 @@
   {
     "id": "A01",
     "type": "answerable",
-    "question": "What is the maximum number of annual leave days a G1 Associate can carry over to the next year?",
-    "answer": "A G1 Associate can carry over up to 10 unused annual leave days.",
+    "question": "What is the maximum number of annual leave days a G1 Associate can carry over to the next calendar year?",
+    "answer": "A G1 Associate has an entitlement of 18 days per year, which accrues monthly at one-twelfth that rate (1.5 days). Unused annual leave may be carried into the next calendar year provided it does not exceed ten days.",
     "refused": false,
     "refusal_source": null,
     "citations": [
@@ -12,23 +12,24 @@
     "retrieved": [
       {
         "id": "leave_policy.pdf#0",
-        "score": 0.7677
+        "score": 0.7767
       },
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.6781
+        "score": 0.683
       },
       {
         "id": "leave_policy.pdf#1",
-        "score": 0.6393
+        "score": 0.6486
       },
       {
-        "id": "remote_work_conduct_policy.pdf#2",
-        "score": 0.6226
+        "id": "remote_work_conduct_policy.pdf#1",
+        "score": 0.6302
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -49,14 +50,14 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 7.1,
+    "agent_seconds": 7.6,
     "category": null
   },
   {
     "id": "A02",
     "type": "answerable",
-    "question": "How many days per week is remote work permitted for shore staff, and what are the required core working hours on those days?",
-    "answer": "Remote work is permitted up to 2 days per week with manager approval. Core working hours during these days must be from 10:00 to 16:00 IST.",
+    "question": "How many days per week is remote work permitted for shore staff, and what are the required core working hours during those days?",
+    "answer": "Remote work is permitted up to 2 days per week with manager approval. Core working hours must be strictly adhered to between 10:00 AM and 4:00 PM IST.",
     "refused": false,
     "refusal_source": null,
     "citations": [
@@ -65,23 +66,85 @@
     "retrieved": [
       {
         "id": "remote_work_conduct_policy.pdf#0",
-        "score": 0.8223
+        "score": 0.825
       },
       {
         "id": "leave_policy.pdf#0",
-        "score": 0.7374
+        "score": 0.7395
       },
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.6901
+        "score": 0.6939
       },
       {
         "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.6653
+        "score": 0.6686
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": false,
+    "checks": {
+      "refusal": true,
+      "facts": false,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 0.5,
+    "facts": [
+      {
+        "fact": "up to 2 days",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "10:00 to 16:00 IST",
+        "stated": false,
+        "method": "llm_overruled",
+        "span": "10:00 AM and 4:00 PM IST"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": null,
+    "failure": "missing_facts",
+    "agent_llm_calls": 1,
+    "agent_seconds": 7.2,
+    "category": "prompt_defect"
+  },
+  {
+    "id": "A03",
+    "type": "answerable",
+    "question": "What flight class must I book for a journey under six hours?",
+    "answer": "You must book Economy Class.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "travel_expense_policy.pdf#0"
+    ],
+    "retrieved": [
+      {
+        "id": "travel_expense_policy.pdf#0",
+        "score": 0.7297
+      },
+      {
+        "id": "travel_expense_policy.pdf#1",
+        "score": 0.6434
+      },
+      {
+        "id": "travel_expense_policy.pdf#3",
+        "score": 0.6264
+      },
+      {
+        "id": "remote_work_conduct_policy.pdf#0",
+        "score": 0.6129
+      }
+    ],
+    "tools_used": [],
+    "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -93,12 +156,7 @@
     "fact_recall": 1.0,
     "facts": [
       {
-        "fact": "2 days",
-        "stated": true,
-        "method": "deterministic"
-      },
-      {
-        "fact": "10:00 to 16:00",
+        "fact": "Economy Class",
         "stated": true,
         "method": "deterministic"
       }
@@ -107,14 +165,14 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 6.9,
+    "agent_seconds": 6.7,
     "category": null
   },
   {
-    "id": "A03",
+    "id": "A04",
     "type": "answerable",
-    "question": "What is the maximum advance notice required to request annual leave through the internal portal?",
-    "answer": "The maximum (minimum) advance notice required for planned annual leave requests is 14 days.",
+    "question": "How many working days of paid paternity leave do male employees receive, and what is the time limit to take it?",
+    "answer": "Male employees receive 10 working days of paid paternity leave, which must be taken within three months of birth.",
     "refused": false,
     "refusal_source": null,
     "citations": [
@@ -122,24 +180,25 @@
     ],
     "retrieved": [
       {
-        "id": "leave_policy.pdf#0",
-        "score": 0.707
+        "id": "leave_policy.pdf#1",
+        "score": 0.8056
       },
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.683
+        "score": 0.7053
       },
       {
-        "id": "leave_policy.pdf#1",
-        "score": 0.6608
+        "id": "leave_policy.pdf#0",
+        "score": 0.6655
       },
       {
-        "id": "remote_work_conduct_policy.pdf#2",
-        "score": 0.6298
+        "id": "remote_work_conduct_policy.pdf#0",
+        "score": 0.6324
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -151,7 +210,12 @@
     "fact_recall": 1.0,
     "facts": [
       {
-        "fact": "fourteen days",
+        "fact": "ten working days",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "three months",
         "stated": true,
         "method": "deterministic"
       }
@@ -160,14 +224,14 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 6.9,
+    "agent_seconds": 7.3,
     "category": null
   },
   {
-    "id": "A04",
+    "id": "A05",
     "type": "answerable",
-    "question": "How often is the home-office equipment allowance provided and what are acceptable uses for it?",
-    "answer": "The home-office equipment allowance is provided once every three years. Acceptable uses include purchasing ergonomic furniture, upgrading internet connectivity, or buying necessary hardware like laptops and monitors.",
+    "question": "How often is the home-office equipment allowance provided, and what happens to any unspent balance from a previous cycle?",
+    "answer": "The home-office equipment allowance is provided once every 3 years. Any unspent balance from a previous cycle does not carry forward.",
     "refused": false,
     "refusal_source": null,
     "citations": [
@@ -176,23 +240,24 @@
     "retrieved": [
       {
         "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.8014
-      },
-      {
-        "id": "travel_expense_policy.pdf#1",
-        "score": 0.6549
-      },
-      {
-        "id": "remote_work_conduct_policy.pdf#0",
-        "score": 0.6255
+        "score": 0.7306
       },
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.6232
+        "score": 0.6187
+      },
+      {
+        "id": "travel_expense_policy.pdf#3",
+        "score": 0.6178
+      },
+      {
+        "id": "leave_policy.pdf#0",
+        "score": 0.6029
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": false,
     "checks": {
@@ -215,7 +280,7 @@
         "method": "deterministic"
       },
       {
-        "fact": "ergonomic furniture",
+        "fact": "does not carry forward",
         "stated": true,
         "method": "deterministic"
       }
@@ -229,35 +294,37 @@
     "category": "prompt_defect"
   },
   {
-    "id": "A05",
+    "id": "A06",
     "type": "answerable",
-    "question": "What is the daily allowance for international travel outside India?",
-    "answer": "The standard daily allowance for international travel (outside Indian borders) is USD 90 per day.",
+    "question": "What is the daily allowance for international travel and what class must be selected?",
+    "answer": "The daily allowance for international travel is USD 90 per day. For flights lasting six hours or longer, premium economy class must be selected.",
     "refused": false,
     "refusal_source": null,
     "citations": [
-      "travel_expense_policy.pdf#1"
+      "travel_expense_policy.pdf#1",
+      "travel_expense_policy.pdf#0"
     ],
     "retrieved": [
       {
         "id": "travel_expense_policy.pdf#1",
-        "score": 0.8369
+        "score": 0.8097
       },
       {
         "id": "travel_expense_policy.pdf#0",
-        "score": 0.6983
+        "score": 0.7373
       },
       {
         "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.6626
+        "score": 0.657
       },
       {
-        "id": "travel_expense_policy.pdf#3",
-        "score": 0.6295
+        "id": "remote_work_conduct_policy.pdf#0",
+        "score": 0.6204
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -274,7 +341,7 @@
         "method": "deterministic"
       },
       {
-        "fact": "per day",
+        "fact": "premium economy",
         "stated": true,
         "method": "deterministic"
       }
@@ -283,14 +350,14 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 6.9,
+    "agent_seconds": 7.1,
     "category": null
   },
   {
-    "id": "A06",
+    "id": "A07",
     "type": "answerable",
-    "question": "If I return to duty after emergency leave today, how many working days do I have to apply retrospectively?",
-    "answer": "You must apply for retrospective emergency leave within three working days of returning to duty.",
+    "question": "Can I apply for emergency leave after returning to duty, and what is the deadline?",
+    "answer": "Yes, you can apply retrospectively within three working days of returning to duty.",
     "refused": false,
     "refusal_source": null,
     "citations": [
@@ -300,23 +367,24 @@
     "retrieved": [
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.7941
+        "score": 0.7861
       },
       {
         "id": "leave_policy.pdf#1",
-        "score": 0.7236
+        "score": 0.712
       },
       {
         "id": "leave_policy.pdf#0",
-        "score": 0.685
+        "score": 0.6656
       },
       {
         "id": "remote_work_conduct_policy.pdf#0",
-        "score": 0.6759
+        "score": 0.6528
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -328,7 +396,7 @@
     "fact_recall": 1.0,
     "facts": [
       {
-        "fact": "three",
+        "fact": "three working days",
         "stated": true,
         "method": "deterministic"
       }
@@ -341,10 +409,10 @@
     "category": null
   },
   {
-    "id": "A07",
+    "id": "A08",
     "type": "answerable",
-    "question": "How many days do I have to declare a conflict of interest after becoming aware of it, and where should harassment complaints be filed?",
-    "answer": "You must declare conflicts within 7 days. Harassment complaints go to the Internal Committee.",
+    "question": "Within what timeframe must an employee declare a conflict of interest, and which committee handles harassment complaints filed after the incident?",
+    "answer": "Employees must declare conflicts within 7 days. Harassment complaints are handled by the Internal Committee.",
     "refused": false,
     "refusal_source": null,
     "citations": [
@@ -353,32 +421,33 @@
     "retrieved": [
       {
         "id": "remote_work_conduct_policy.pdf#2",
-        "score": 0.82
+        "score": 0.8189
       },
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.6743
+        "score": 0.679
+      },
+      {
+        "id": "remote_work_conduct_policy.pdf#3",
+        "score": 0.661
       },
       {
         "id": "travel_expense_policy.pdf#3",
-        "score": 0.6741
-      },
-      {
-        "id": "leave_policy.pdf#1",
-        "score": 0.6559
+        "score": 0.6531
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
-    "passed": true,
+    "passed": false,
     "checks": {
       "refusal": true,
-      "facts": true,
+      "facts": false,
       "grounded": true,
       "no_unsupported_claims": true
     },
-    "fact_recall": 1.0,
+    "fact_recall": 0.667,
     "facts": [
       {
         "fact": "within 7 days",
@@ -389,46 +458,54 @@
         "fact": "Internal Committee",
         "stated": true,
         "method": "deterministic"
+      },
+      {
+        "fact": "within 3 months",
+        "stated": false,
+        "method": "llm",
+        "span": null
       }
     ],
     "unsupported_claims": [],
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
+    "failure": "missing_facts",
     "agent_llm_calls": 1,
-    "agent_seconds": 7.0,
-    "category": null
+    "agent_seconds": 7.1,
+    "category": "prompt_defect"
   },
   {
-    "id": "A08",
+    "id": "A09",
     "type": "answerable",
-    "question": "What is the reimbursement rate for fuel and wear-and-tear when using a personal vehicle on an approved business route, and what happens if I miss the standard submission deadline?",
-    "answer": "The reimbursement rate for fuel and wear-and-tear is INR 12 per kilometer. If you miss the thirty-day submission deadline, your claim requires direct approval from the Finance Director before processing.",
+    "question": "If I missed the deadline to submit my fuel expense claim, what approval do I need and how much is reimbursed per kilometer?",
+    "answer": "For late claims (after 30 days), you need direct approval from the Finance Director. Fuel reimbursement for personal vehicles on approved routes is INR 12 per km.",
     "refused": false,
     "refusal_source": null,
     "citations": [
-      "travel_expense_policy.pdf#1",
-      "travel_expense_policy.pdf#0"
+      "travel_expense_policy.pdf#2",
+      "travel_expense_policy.pdf#1"
     ],
     "retrieved": [
       {
         "id": "travel_expense_policy.pdf#2",
-        "score": 0.8074
+        "score": 0.7778
       },
       {
         "id": "travel_expense_policy.pdf#3",
-        "score": 0.734
+        "score": 0.7152
       },
       {
         "id": "travel_expense_policy.pdf#1",
-        "score": 0.6642
+        "score": 0.6205
       },
       {
         "id": "travel_expense_policy.pdf#0",
-        "score": 0.651
+        "score": 0.6062
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -441,11 +518,6 @@
     "facts": [
       {
         "fact": "INR 12",
-        "stated": true,
-        "method": "deterministic"
-      },
-      {
-        "fact": "thirty days",
         "stated": true,
         "method": "deterministic"
       },
@@ -459,67 +531,14 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 7.3,
-    "category": null
-  },
-  {
-    "id": "A09",
-    "type": "answerable",
-    "question": "Who is responsible for enforcing the ethics hotline guidelines across Mumbai and Singapore offices?",
-    "answer": "Managers are responsible for enforcing these guidelines consistently across both offices.",
-    "refused": false,
-    "refusal_source": null,
-    "citations": [
-      "remote_work_conduct_policy.pdf#3"
-    ],
-    "retrieved": [
-      {
-        "id": "remote_work_conduct_policy.pdf#3",
-        "score": 0.7746
-      },
-      {
-        "id": "travel_expense_policy.pdf#0",
-        "score": 0.664
-      },
-      {
-        "id": "remote_work_conduct_policy.pdf#0",
-        "score": 0.6418
-      },
-      {
-        "id": "remote_work_conduct_policy.pdf#2",
-        "score": 0.641
-      }
-    ],
-    "tools_used": [],
-    "violations": [],
-    "retrieval_hit": true,
-    "passed": true,
-    "checks": {
-      "refusal": true,
-      "facts": true,
-      "grounded": true,
-      "no_unsupported_claims": true
-    },
-    "fact_recall": 1.0,
-    "facts": [
-      {
-        "fact": "managers",
-        "stated": true,
-        "method": "deterministic"
-      }
-    ],
-    "unsupported_claims": [],
-    "judge_claims_rejected": [],
-    "tool_used_as_expected": null,
-    "agent_llm_calls": 1,
-    "agent_seconds": 12.0,
+    "agent_seconds": 7.8,
     "category": null
   },
   {
     "id": "A10",
     "type": "answerable",
-    "question": "At what rate is the use of a personal car reimbursed?",
-    "answer": "The reimbursement rate for using a personal vehicle is fixed at INR 12 per kilometer traveled.",
+    "question": "What is the reimbursement rate for using a personal car and what actions are considered serious violations regarding expense claims?",
+    "answer": "The reimbursement rate for fuel and wear-and-tear on personal vehicles used within India is INR 12 per kilometer, strictly for approved business routes.\n\nSerious violations include:\n- Inflating mileage logs.\n- Submitting duplicate receipts without original proof (for expenses above INR 500).\n- Booking accommodation exceeding stated limits.",
     "refused": false,
     "refusal_source": null,
     "citations": [
@@ -528,23 +547,26 @@
     "retrieved": [
       {
         "id": "travel_expense_policy.pdf#2",
-        "score": 0.739
+        "score": 0.7477
       },
       {
         "id": "travel_expense_policy.pdf#3",
-        "score": 0.7119
+        "score": 0.6996
+      },
+      {
+        "id": "remote_work_conduct_policy.pdf#2",
+        "score": 0.6033
       },
       {
         "id": "travel_expense_policy.pdf#1",
-        "score": 0.646
-      },
-      {
-        "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.6233
+        "score": 0.5949
       }
     ],
     "tools_used": [],
-    "violations": [],
+    "violations": [
+      "invalid_citation"
+    ],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -556,12 +578,7 @@
     "fact_recall": 1.0,
     "facts": [
       {
-        "fact": "INR 12",
-        "stated": true,
-        "method": "deterministic"
-      },
-      {
-        "fact": "per km",
+        "fact": "INR 12 per km",
         "stated": true,
         "method": "deterministic"
       }
@@ -570,40 +587,41 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 7.9,
+    "agent_seconds": 7.6,
     "category": null
   },
   {
     "id": "M01",
     "type": "multi_doc",
-    "question": "What are the annual leave entitlement days for a G2 Senior Associate and what travel class is required for international operations between Mumbai and Singapore?",
-    "answer": "A G2 Senior Associate gets 21 annual leave days per year. For international flights (6+ hours), Premium Economy class is required.",
+    "question": "What is the maximum number of annual leave days a G3 Manager can carry over to the next year, and how often do they receive their home office equipment allowance?",
+    "answer": "A G3 Manager can carry over up to ten unused annual leave days per calendar year. They receive their home office equipment allowance once every three years.",
     "refused": false,
     "refusal_source": null,
     "citations": [
       "leave_policy.pdf#0",
-      "travel_expense_policy.pdf#0"
+      "remote_work_conduct_policy.pdf#1"
     ],
     "retrieved": [
       {
+        "id": "remote_work_conduct_policy.pdf#1",
+        "score": 0.7435
+      },
+      {
         "id": "leave_policy.pdf#0",
-        "score": 0.7714
-      },
-      {
-        "id": "travel_expense_policy.pdf#0",
-        "score": 0.7572
-      },
-      {
-        "id": "travel_expense_policy.pdf#1",
-        "score": 0.7273
+        "score": 0.7335
       },
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.6718
+        "score": 0.6833
+      },
+      {
+        "id": "travel_expense_policy.pdf#3",
+        "score": 0.6403
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": false,
     "checks": {
@@ -612,18 +630,23 @@
       "grounded": true,
       "no_unsupported_claims": true
     },
-    "fact_recall": 0.5,
+    "fact_recall": 0.667,
     "facts": [
       {
-        "fact": "G2 Senior Associate: 21 days",
+        "fact": "ten days",
         "stated": true,
         "method": "deterministic"
       },
       {
-        "fact": "must select premium economy class.",
+        "fact": "INR 15,000",
         "stated": false,
         "method": "llm",
         "span": null
+      },
+      {
+        "fact": "once every 3 years",
+        "stated": true,
+        "method": "deterministic"
       }
     ],
     "unsupported_claims": [],
@@ -637,34 +660,35 @@
   {
     "id": "M02",
     "type": "multi_doc",
-    "question": "A G3 Manager in Mumbai needs to carry over unused annual leave and later claim a car trip expense; what are their specific daily entitlement, the maximum days they can defer without losing them, and the per-kilometer reimbursement rate?",
-    "answer": "A G3 Manager has 24 days of annual leave. They can carry over up to ten unused days before lapsing on December 31st. The car trip reimbursement is INR 12 per kilometer.",
+    "question": "I am a G3 Manager in the Mumbai office planning to take leave and considering attending an industry event where I might receive gifts; what are my annual leave entitlement, maximum carry-over limit, sick leave requirement for extended absence, conflict of interest reporting deadline, harassment complaint timeline, and available confidential reporting channel?",
+    "answer": "As a G3 Manager in Mumbai: Annual leave is 24 days/year; max carry-over is 10 days. Sick leave requires medical cert after 2 consecutive working days. Conflict of interest must be declared within 7 days. Harassment complaints go to the Internal Committee within 3 months, reportable via the confidential ethics hotline open 24/7.",
     "refused": false,
     "refusal_source": null,
     "citations": [
-      "travel_expense_policy.pdf#1",
-      "leave_policy.pdf#0"
+      "leave_policy.pdf#0",
+      "remote_work_conduct_policy.pdf#2"
     ],
     "retrieved": [
       {
-        "id": "travel_expense_policy.pdf#1",
-        "score": 0.7326
-      },
-      {
-        "id": "travel_expense_policy.pdf#3",
-        "score": 0.7147
-      },
-      {
-        "id": "travel_expense_policy.pdf#0",
-        "score": 0.703
-      },
-      {
         "id": "leave_policy.pdf#0",
-        "score": 0.6907
+        "score": 0.7312
+      },
+      {
+        "id": "remote_work_conduct_policy.pdf#2",
+        "score": 0.7303
+      },
+      {
+        "id": "remote_work_conduct_policy.pdf#1",
+        "score": 0.7001
+      },
+      {
+        "id": "leave_policy.pdf#2",
+        "score": 0.6911
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -681,108 +705,60 @@
         "method": "deterministic"
       },
       {
-        "fact": "reimbursed at INR 12 per km",
+        "fact": "ten days",
         "stated": true,
-        "method": "llm",
-        "span": "The car trip reimbursement is INR 12 per kilometer."
+        "method": "deterministic"
+      },
+      {
+        "fact": "declared within 7 days",
+        "stated": true,
+        "method": "deterministic"
+      },
+      {
+        "fact": "within 3 months",
+        "stated": true,
+        "method": "deterministic"
       }
     ],
     "unsupported_claims": [],
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 8.2,
+    "agent_seconds": 8.4,
     "category": null
   },
   {
     "id": "M03",
     "type": "multi_doc",
-    "question": "If an employee is approved to work remotely in Mumbai and then travels internationally for a meeting, what are the core working hours during their remote days and which travel class must they select?",
-    "answer": "Core working hours are 10:00 to 16:00 IST. For international flights (over six hours), employees must select Premium Economy.",
+    "question": "If I am a G3 Manager in Mumbai who needs to carry over unused annual leave and later claim travel expenses using my personal car, what is the maximum days of carried-over leave allowed per year and what is the reimbursement rate for mileage?",
+    "answer": "As a G3 Manager, you can carry over up to 10 days of unused annual leave. The personal vehicle reimbursement rate is INR 12 per kilometer.",
     "refused": false,
     "refusal_source": null,
     "citations": [
-      "travel_expense_policy.pdf#0",
-      "remote_work_conduct_policy.pdf#1"
+      "leave_policy.pdf#0",
+      "travel_expense_policy.pdf#1"
     ],
     "retrieved": [
-      {
-        "id": "remote_work_conduct_policy.pdf#0",
-        "score": 0.7815
-      },
-      {
-        "id": "travel_expense_policy.pdf#0",
-        "score": 0.7532
-      },
       {
         "id": "travel_expense_policy.pdf#1",
-        "score": 0.731
+        "score": 0.7136
       },
       {
-        "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.6711
-      }
-    ],
-    "tools_used": [],
-    "violations": [],
-    "retrieval_hit": true,
-    "passed": true,
-    "checks": {
-      "refusal": true,
-      "facts": true,
-      "grounded": true,
-      "no_unsupported_claims": true
-    },
-    "fact_recall": 1.0,
-    "facts": [
-      {
-        "fact": "core hours are 10:00 to 16:00 IST",
-        "stated": true,
-        "method": "deterministic"
-      },
-      {
-        "fact": "must select premium economy class",
-        "stated": true,
-        "method": "deterministic"
-      }
-    ],
-    "unsupported_claims": [],
-    "judge_claims_rejected": [],
-    "tool_used_as_expected": null,
-    "agent_llm_calls": 1,
-    "agent_seconds": 8.1,
-    "category": null
-  },
-  {
-    "id": "B01",
-    "type": "ambiguous",
-    "question": "like, how many vacation days can a g1 associate take into next year?",
-    "answer": "A G1 Associate cannot carry over more than 10 unused annual leave days to the next calendar year.",
-    "refused": false,
-    "refusal_source": null,
-    "citations": [
-      "leave_policy.pdf#0"
-    ],
-    "retrieved": [
-      {
-        "id": "leave_policy.pdf#0",
-        "score": 0.7323
-      },
-      {
-        "id": "leave_policy.pdf#2",
-        "score": 0.6584
+        "id": "travel_expense_policy.pdf#3",
+        "score": 0.7035
       },
       {
         "id": "travel_expense_policy.pdf#0",
-        "score": 0.6526
+        "score": 0.6853
       },
       {
-        "id": "remote_work_conduct_policy.pdf#0",
-        "score": 0.629
+        "id": "leave_policy.pdf#0",
+        "score": 0.677
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -797,59 +773,9 @@
         "fact": "ten days",
         "stated": true,
         "method": "deterministic"
-      }
-    ],
-    "unsupported_claims": [],
-    "judge_claims_rejected": [],
-    "tool_used_as_expected": null,
-    "agent_llm_calls": 1,
-    "agent_seconds": 6.9,
-    "category": null
-  },
-  {
-    "id": "B02",
-    "type": "ambiguous",
-    "question": "Like, how often do I get that money for my work stuff at home and what can i actually spend it on?",
-    "answer": "You receive a Home Office Equipment Allowance of INR 15,000 once every 3 years based on your tenure. You can use this lump sum to buy ergonomic furniture, upgrade internet connectivity, or purchase necessary hardware like laptops and monitors.",
-    "refused": false,
-    "refusal_source": null,
-    "citations": [
-      "remote_work_conduct_policy.pdf#1"
-    ],
-    "retrieved": [
-      {
-        "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.672
       },
       {
-        "id": "travel_expense_policy.pdf#1",
-        "score": 0.5997
-      }
-    ],
-    "tools_used": [],
-    "violations": [],
-    "retrieval_hit": true,
-    "passed": true,
-    "checks": {
-      "refusal": true,
-      "facts": true,
-      "grounded": true,
-      "no_unsupported_claims": true
-    },
-    "fact_recall": 1.0,
-    "facts": [
-      {
-        "fact": "INR 15,000",
-        "stated": true,
-        "method": "deterministic"
-      },
-      {
-        "fact": "once every 3 years",
-        "stated": true,
-        "method": "deterministic"
-      },
-      {
-        "fact": "ergonomic furniture",
+        "fact": "INR 12 per km",
         "stated": true,
         "method": "deterministic"
       }
@@ -858,35 +784,40 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 7.4,
+    "agent_seconds": 7.9,
     "category": null
   },
   {
-    "id": "B03",
+    "id": "B01",
     "type": "ambiguous",
-    "question": "Hey, how much money do I get per day if i go abroad?",
-    "answer": "You receive USD 90 per day for international travel.",
+    "question": "what do i need to book for flights less than 6 hrs?",
+    "answer": "For flights under six hours, you must book Economy Class tickets.",
     "refused": false,
     "refusal_source": null,
     "citations": [
-      "travel_expense_policy.pdf#1"
+      "travel_expense_policy.pdf#0"
     ],
     "retrieved": [
-      {
-        "id": "travel_expense_policy.pdf#1",
-        "score": 0.7047
-      },
       {
         "id": "travel_expense_policy.pdf#0",
-        "score": 0.6094
+        "score": 0.6877
+      },
+      {
+        "id": "travel_expense_policy.pdf#1",
+        "score": 0.632
+      },
+      {
+        "id": "remote_work_conduct_policy.pdf#0",
+        "score": 0.6189
       },
       {
         "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.6051
+        "score": 0.6113
       }
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -898,12 +829,7 @@
     "fact_recall": 1.0,
     "facts": [
       {
-        "fact": "USD 90",
-        "stated": true,
-        "method": "deterministic"
-      },
-      {
-        "fact": "per day",
+        "fact": "Economy Class",
         "stated": true,
         "method": "deterministic"
       }
@@ -912,7 +838,7 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": null,
     "agent_llm_calls": 1,
-    "agent_seconds": 6.7,
+    "agent_seconds": 6.8,
     "category": null
   },
   {
@@ -943,12 +869,13 @@
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "passed": true,
     "checks": {
       "refusal": true
     },
     "agent_llm_calls": 1,
-    "agent_seconds": 7.0,
+    "agent_seconds": 11.7,
     "category": null
   },
   {
@@ -979,6 +906,7 @@
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "passed": true,
     "checks": {
       "refusal": true
@@ -1015,6 +943,7 @@
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "passed": true,
     "checks": {
       "refusal": true
@@ -1051,6 +980,7 @@
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "passed": true,
     "checks": {
       "refusal": true
@@ -1087,102 +1017,48 @@
     ],
     "tools_used": [],
     "violations": [],
+    "refused_paraphrased": false,
     "passed": true,
     "checks": {
       "refusal": true
     },
     "agent_llm_calls": 1,
-    "agent_seconds": 1.3,
+    "agent_seconds": 1.2,
     "category": null
   },
   {
     "id": "C01",
     "type": "calculator",
-    "question": "If an employee works remotely for 2 approved days in a week, what is the total maximum number of hours they must be available during core working time?",
-    "answer": "The policy states that remote work is permitted up to **2 days per week** and requires availability from **10:00 to 16:00 IST**. However, it does not specify the total number of hours across those two days. I cannot calculate this without knowing how many core working hours are counted as 'available' versus just present.",
+    "question": "How many total days of annual leave does a G3 Manager accrue in two months?",
+    "answer": "A G3 Manager accrues 4 days of annual leave in two months, based on the policy that leaves are accrued monthly at one-twelfth of the yearly entitlement (24 days annually).",
     "refused": false,
     "refusal_source": null,
     "citations": [
-      "remote_work_conduct_policy.pdf#0",
-      "remote_work_conduct_policy.pdf#1"
+      "leave_policy.pdf#0"
     ],
     "retrieved": [
       {
-        "id": "remote_work_conduct_policy.pdf#0",
-        "score": 0.7902
+        "id": "leave_policy.pdf#0",
+        "score": 0.747
       },
       {
         "id": "leave_policy.pdf#2",
-        "score": 0.7011
-      },
-      {
-        "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.6625
-      },
-      {
-        "id": "leave_policy.pdf#0",
-        "score": 0.6505
-      }
-    ],
-    "tools_used": [],
-    "violations": [],
-    "retrieval_hit": true,
-    "passed": false,
-    "checks": {
-      "refusal": true,
-      "facts": false,
-      "grounded": true,
-      "no_unsupported_claims": true
-    },
-    "fact_recall": 0.0,
-    "facts": [
-      {
-        "fact": "12",
-        "stated": false,
-        "method": "llm",
-        "span": null
-      }
-    ],
-    "unsupported_claims": [],
-    "judge_claims_rejected": [],
-    "tool_used_as_expected": false,
-    "failure": "missing_facts",
-    "agent_llm_calls": 1,
-    "agent_seconds": 2.0,
-    "category": "prompt_defect"
-  },
-  {
-    "id": "C02",
-    "type": "calculator",
-    "question": "How much total daily allowance in INR is provided to a team of three employees traveling domestically within India?",
-    "answer": "The total daily allowance for a team of three employees traveling domestically within India is INR 7,500.",
-    "refused": false,
-    "refusal_source": null,
-    "citations": [
-      "travel_expense_policy.pdf#1"
-    ],
-    "retrieved": [
-      {
-        "id": "travel_expense_policy.pdf#1",
-        "score": 0.798
-      },
-      {
-        "id": "remote_work_conduct_policy.pdf#1",
-        "score": 0.7182
+        "score": 0.6745
       },
       {
         "id": "travel_expense_policy.pdf#3",
-        "score": 0.6832
+        "score": 0.6338
       },
       {
-        "id": "travel_expense_policy.pdf#2",
-        "score": 0.6676
+        "id": "leave_policy.pdf#1",
+        "score": 0.6318
       }
     ],
     "tools_used": [
       "calculator"
     ],
     "violations": [],
+    "refused_paraphrased": false,
     "retrieval_hit": true,
     "passed": true,
     "checks": {
@@ -1194,7 +1070,7 @@
     "fact_recall": 1.0,
     "facts": [
       {
-        "fact": "7500",
+        "fact": "4",
         "stated": true,
         "method": "deterministic"
       }
@@ -1203,7 +1079,63 @@
     "judge_claims_rejected": [],
     "tool_used_as_expected": true,
     "agent_llm_calls": 4,
-    "agent_seconds": 10.9,
+    "agent_seconds": 5.6,
+    "category": null
+  },
+  {
+    "id": "C02",
+    "type": "calculator",
+    "question": "How much total reimbursement is an employee entitled to for driving their personal vehicle on approved business routes covering a distance of 50 kilometers within India?",
+    "answer": "The total reimbursement for driving a personal vehicle on approved business routes covering 50 kilometers within India is INR 600.",
+    "refused": false,
+    "refusal_source": null,
+    "citations": [
+      "travel_expense_policy.pdf#1"
+    ],
+    "retrieved": [
+      {
+        "id": "travel_expense_policy.pdf#2",
+        "score": 0.7639
+      },
+      {
+        "id": "travel_expense_policy.pdf#3",
+        "score": 0.763
+      },
+      {
+        "id": "travel_expense_policy.pdf#1",
+        "score": 0.7402
+      },
+      {
+        "id": "travel_expense_policy.pdf#0",
+        "score": 0.7179
+      }
+    ],
+    "tools_used": [
+      "calculator"
+    ],
+    "violations": [],
+    "refused_paraphrased": false,
+    "retrieval_hit": true,
+    "passed": true,
+    "checks": {
+      "refusal": true,
+      "facts": true,
+      "grounded": true,
+      "no_unsupported_claims": true
+    },
+    "fact_recall": 1.0,
+    "facts": [
+      {
+        "fact": "600",
+        "stated": true,
+        "method": "deterministic"
+      }
+    ],
+    "unsupported_claims": [],
+    "judge_claims_rejected": [],
+    "tool_used_as_expected": true,
+    "agent_llm_calls": 4,
+    "agent_seconds": 11.8,
     "category": null
   }
 ]

@@ -39,8 +39,8 @@ the judge self-test, and up to three optimise-and-re-evaluate iterations. Suppor
 | Brief | `demos/hr/brief.txt` | `demos/spares/brief.txt` |
 | Documents | 3 policy PDFs | 33-part catalogue CSV + 2 supplier-terms PDFs |
 | Requester | answered the 5 intake questions (`demos/hr/answers.json`) | none: `--auto`, every answer recorded as assumed |
-| Tools attached | calculator, current_date | SPARES_TOOLS |
-| Result | 20/23 (87%); judge self-test 10/10 | SPARES_RESULT |
+| Tools attached | calculator, current_date | csv_lookup, calculator, current_date |
+| Result | 19/21 (90%) after one kept fix (18 -> 19); judge self-test 10/10. Human audit: both failures are defective test cases (`runs/demo_hr/AUDIT.md`) | 17/21 (81%) after one kept fix (16 -> 17); judge self-test 12/12. Human audit: 1 genuine agent error, 3 defective test cases (`runs/demo_spares/AUDIT.md`) |
 
 The documents are synthesized by `demos/synthesize.py` with `prompts/synth_doc.md`: the facts are fixed in
 the script, the 9b model writes the prose, and every fact is checked to appear verbatim (missing ones are
@@ -48,8 +48,11 @@ appended), so the documents contain exactly the listed figures. The catalogue is
 
 In the HR run the requester said salary bands and the payroll calendar will be asked about but have no
 documents yet; they became must-refuse topics, and the requester's instruction to redirect seafarers
-was flagged as unsupported by the documents. The optimizer tried one prompt rule, saw no gain, and reverted
-it; the three remaining failures are in the report (two incomplete answers, one strict paraphrase verdict).
+was flagged as unsupported by the documents. In both runs the optimizer reverted one rule that lowered the
+score and kept one that raised it. Each run folder has an `AUDIT.md` with a human verdict on every remaining
+failure: in the spares run one is a genuine agent error (wrong percentage arithmetic) and three are defective
+test cases; in the HR run both are defective test cases (the test expects an amount the question does not
+ask for). The factory's own reports are left unedited.
 
 ## Setup
 
@@ -205,10 +208,12 @@ python tests/mutate_phase1.py   # break each runtime guard in turn; the suite mu
 python tests/mutate_phase2.py   # same for the factory
 python tests/test_phase3.py     # eval generator + judge, offline
 python tests/mutate_phase3.py
+python tests/test_phase4.py     # optimizer loop + report, offline
+python tests/mutate_phase4.py
 python tests/smoke_live.py      # live run against Ollama
 ```
 
-All three mutation suites pass: 18/18, 33/33 and 30/30 mutants caught, with the clean suite passing before
+All four mutation suites pass: 20/20, 33/33, 36/36 and 17/17 mutants caught, with the clean suite passing before
 and after. The harness runs with `PYTHONDONTWRITEBYTECODE=1`: a same-size mutation restored within the
 same second once left stale bytecode running, which made later "caught" results meaningless.
 
