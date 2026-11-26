@@ -139,9 +139,13 @@ def requirements(brief, inv, clarifications):
 
 def render_markdown(req):
     """Human-readable requirements document."""
-    lines = [f"# Requirements: {req['name']}", "", req["summary"], "",
+    covered = [t["topic"] for t in req["must_answer_topics"] if t["source_docs"]]
+    lines = [f"# Requirements: {req['name']}", "", "## Brief", "", f"> {req['brief']}", "",
+             "## Scope", "", req["summary"], "",
+             f"In scope: {', '.join(covered) or 'nothing the documents support'}. Out of scope: the must-refuse "
+             "topics below and anything unrelated to them.", "",
              f"- **Audience:** {req['audience']}", f"- **Tone:** {req['tone']}",
-             f"- **Answer length:** {req['answer_length']}", "", "## Brief", "", f"> {req['brief']}", "",
+             f"- **Answer length:** {req['answer_length']}", "",
              "## Must answer", "", "| Topic | Covers | Source documents |", "|---|---|---|"]
     for t in req["must_answer_topics"]:
         lines.append(f"| {t['topic']} | {t['details']} | {', '.join(t['source_docs']) or '**none**'} |")

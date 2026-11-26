@@ -58,7 +58,7 @@ ask for). The factory's own reports are left unedited.
 
 ```
 ollama pull qwen3.5:4b qwen3.5:9b nomic-embed-text   # or the -8k context variants used by default
-pip install numpy requests                            # the only Python deps
+pip install -r requirements.txt                       # numpy + requests, the only Python deps
 ```
 
 Models are configurable: `FORGE_GEN_MODEL`, `FORGE_JUDGE_MODEL`, `FORGE_EMBED_MODEL`, `OLLAMA_HOST`.

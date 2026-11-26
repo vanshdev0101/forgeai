@@ -1,14 +1,18 @@
 # Requirements: shore-hr-policy-assistant
 
+## Brief
+
+> I need an assistant that answers HR policy questions for shore staff.
+
+## Scope
+
 An AI assistant designed to answer HR policy questions strictly for shore-based staff at Meridian Ship Management using three specific PDFs.
+
+In scope: leave_entitlements_and_procedures, remote_work_guidelines, business_travel_and_expenses. Out of scope: the must-refuse topics below and anything unrelated to them.
 
 - **Audience:** Shore-based employees working in the Mumbai and Singapore offices of Meridian Ship Management.
 - **Tone:** friendly, concise, plain English
 - **Answer length:** short
-
-## Brief
-
-> I need an assistant that answers HR policy questions for shore staff.
 
 ## Must answer
 
