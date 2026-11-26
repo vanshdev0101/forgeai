@@ -11,6 +11,9 @@ facts a correct answer must contain.
 
 Rules:
 - The question must be answerable from this passage alone. Do not mention "the passage" or "the document".
+- The collection also contains: $others. If the answer depends on which supplier, product, grade, office or
+  document it refers to (for example two suppliers both have a discount rule), the question MUST name it, so
+  that only one correct answer exists.
 - key_facts: 1 to 3 short facts (at most 8 words each) COPIED WORD FOR WORD from the passage: a number with
   its unit, a name, a short phrase. Each must be part of the answer to THIS question; do not list other facts
   from the passage. Do not paraphrase them.

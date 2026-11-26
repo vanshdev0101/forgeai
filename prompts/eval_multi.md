@@ -20,6 +20,9 @@ Rules:
 - facts_a: 1 or 2 short facts (at most 8 words each) copied WORD FOR WORD from passage A that the answer must state.
 - facts_b: 1 or 2 short facts (at most 8 words each) copied WORD FOR WORD from passage B that the answer must state.
 - Do not mention "passage A/B" or "the document" in the question.
+- Passage A is from $doc_a and passage B from $doc_b. If they describe different suppliers, products or
+  groups, the question must name which one each part refers to, and must not combine figures that belong to
+  different ones into a single answer.
 - Your answer must state every fact you list.
 $avoid
 

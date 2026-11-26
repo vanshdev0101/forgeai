@@ -54,6 +54,18 @@ def test_retrieval_ranks_right_doc():
     assert idx.search("daily allowance", k=3, min_score=1.01) == [], "min_score not applied"
 
 
+def test_exact_code_match_beats_embeddings():
+    docs = {"cat.csv": "part_number: WRT-0778; description: fuel oil filter\n\npart_number: MBW-0145; description: nozzle",
+            "terms.md": " ".join(["supplier terms and discount rules"] * 30)}
+    idx = rag.Index(docs, 8, 2, embed_fn=fake_embed)
+    hits = idx.search("price of wrt-0778 please", k=2, min_score=0.99)  # no cosine hit clears 0.99
+    assert hits and hits[0]["exact"] == "wrt-0778" and "WRT-0778" in hits[0]["text"], hits
+    assert all("MBW-0145" not in h["text"] or "WRT-0778" in h["text"] for h in hits if h.get("exact"))
+    assert not [h for h in idx.search("price of WRT-07", k=2, min_score=0.99) if h.get("exact")], \
+        "a shorter code must not match inside WRT-0778"
+    assert idx.search("supplier discount rules", k=1)[0]["doc"] == "terms.md", "no code: plain cosine"
+
+
 def test_calculator_is_safe():
     assert tools.calculator("(12 * 450) * 1.18")["result"] == 6372.0
     assert tools.calculator("2 ** 10")["result"] == 1024

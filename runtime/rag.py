@@ -16,6 +16,8 @@ import numpy as np
 from runtime import llm
 
 TEXT_EXT = {".txt", ".md"}
+# Identifiers worth exact matching: letters-hyphen-digits (WRT-0778, ISO-9001) or letters+3 digits (AB1234).
+CODE = re.compile(r"\b[A-Za-z]{2,5}-\d{2,}[\w-]*\b|\b[A-Za-z]{2,5}\d{3,}\b")
 CACHE_DIR = Path(__file__).resolve().parent.parent / ".cache" / "embeddings"
 
 
@@ -129,14 +131,28 @@ class Index:
         return m
 
     def search(self, query, k=4, min_score=0.0):
-        """Top-k chunks with cosine >= min_score, best first. Each hit is a chunk dict plus `score`."""
+        """Top-k chunks, best first; each hit is a chunk dict plus `score` (and `exact` for code matches).
+
+        Hybrid: chunks that contain an identifier from the query verbatim (a part number like WRT-0778)
+        come first regardless of min_score, then cosine hits >= min_score fill the rest. Dense embeddings
+        blur codes; live, the agent said a catalogue part number "is not in the documents"."""
         if not self.chunks:
             return []
         q = _normalise(np.array(self.embed_fn([query], kind="query"), dtype=np.float32))[0]
         scores = self.matrix @ q
-        order = np.argsort(-scores)[:k]
-        return [{**self.chunks[i], "score": round(float(scores[i]), 4)}
-                for i in order if scores[i] >= min_score]
+        out, seen = [], set()
+        for code in dict.fromkeys(CODE.findall(query)):
+            rx = re.compile(rf"(?<![\w-]){re.escape(code)}(?![\w-])", re.I)
+            for i, c in enumerate(self.chunks):
+                if i not in seen and len(out) < k and rx.search(c["text"]):
+                    out.append({**c, "score": round(float(scores[i]), 4), "exact": code})
+                    seen.add(i)
+        for i in np.argsort(-scores):
+            if len(out) >= k or scores[i] < min_score:
+                break
+            if i not in seen:
+                out.append({**self.chunks[i], "score": round(float(scores[i]), 4)})
+        return out
 
     def get(self, chunk_id):
         return next((c for c in self.chunks if c["id"] == chunk_id), None)

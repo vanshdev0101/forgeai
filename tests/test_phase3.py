@@ -310,8 +310,8 @@ def test_selftest_detects_a_judge_that_says_yes_to_everything():
 
 def test_prompts_fill():
     for name, vals in {
-        "eval_answerable": dict(audience="a", summary="s", chunk_id="c", passage="p", avoid=""),
-        "eval_multi": dict(audience="a", summary="s", id_a="a", passage_a="p", id_b="b", passage_b="q", avoid=""),
+        "eval_answerable": dict(audience="a", summary="s", chunk_id="c", passage="p", avoid="", others="o"),
+        "eval_multi": dict(audience="a", summary="s", id_a="a", passage_a="p", id_b="b", passage_b="q", avoid="", doc_a="x", doc_b="y"),
         "eval_ambiguous": dict(question="q"),
         "eval_refuse": dict(audience="a", summary="s", refuse_topics="t", n_unrelated="2"),
         "eval_calc": dict(audience="a", chunk_id="c", passage="p"),

@@ -111,7 +111,7 @@ def answerable(req, pool, n, dropped):
                  "\n".join(f"- {q}" for q in asked[c["id"]]) + "\n") if asked[c["id"]] else ""
         o = ask_json("eval_answerable", check=lambda o: _q_ok(o, "key_facts"), temperature=TEMPERATURE,
                      audience=req["audience"], summary=req["summary"], chunk_id=c["id"], passage=c["text"],
-                     avoid=avoid)
+                     avoid=avoid, others=", ".join(sorted({p["doc"] for p in pool} - {c["doc"]})) or "nothing else")
         asked[c["id"]].append(o["question"])
         facts = _verified(o["key_facts"], c["text"], str(o.get("answer") or ""), o["question"])
         if not facts:
@@ -147,7 +147,7 @@ def multi_doc(req, pool, n, dropped):
                  if asked[key] else "")
         o = ask_json("eval_multi", check=lambda o: _q_ok(o, "facts_a", "facts_b"), temperature=TEMPERATURE,
                      audience=req["audience"], summary=req["summary"], id_a=a["id"], passage_a=a["text"],
-                     id_b=b["id"], passage_b=b["text"], avoid=avoid)
+                     id_b=b["id"], passage_b=b["text"], avoid=avoid, doc_a=a["doc"], doc_b=b["doc"])
         asked[key].append(o["question"])
         ref = str(o.get("answer") or "")
         fa = _verified(o["facts_a"], a["text"], ref, o["question"])

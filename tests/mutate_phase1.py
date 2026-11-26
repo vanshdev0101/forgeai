@@ -42,6 +42,11 @@ MUTANTS = [
      "except (llm.LLMError, ValueError, FileNotFoundError) as e:", "except ZeroDivisionError as e:"),
     ("empty answer shown", "runtime/runner.py",
      "        if empty:  # never show a blank reply", "        if False:  # never show a blank reply"),
+    ("exact code match removed", "runtime/rag.py", "for code in dict.fromkeys(CODE.findall(query)):",
+     "for code in []:"),
+    ("exact match allows partial codes", "runtime/rag.py",
+     'rx = re.compile(rf"(?<![\\w-]){re.escape(code)}(?![\\w-])", re.I)',
+     'rx = re.compile(re.escape(code), re.I)'),
     ("pow guard removed", "runtime/tools.py", "abs(right) > 100", "abs(right) > 10**9"),
 ]
 import os  # noqa: E402

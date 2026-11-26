@@ -25,6 +25,8 @@ CONTRACT = """
 - If the context does not contain the answer, or the question is outside your scope, refuse: set "refused" to true and "answer" to exactly: {refusal!r}
 - {cite_rule}
 - Keep the answer under {max_words} words.
+- Write only the final answer. Work things out silently: no reasoning steps and no self-corrections such as "No, wait".
+- When passages give different figures for different suppliers, products or groups, say which one each figure belongs to; if the question does not say which one it means, give each.
 - Reply with a single JSON object and nothing else:
   {{"answer": "<text>", "citations": ["S1", ...], "refused": true|false{need_tool_field}}}
 """.strip()
