@@ -4,18 +4,52 @@ A factory that turns a one-paragraph brief plus a folder of documents into a wor
 RAG agent: requirements, agent definition, generated evals, judged results, targeted fixes,
 and an honest report. Everything runs locally on small open models via Ollama.
 
-## Status
+## At the review: an unseen brief and document folder
 
-| Phase | Scope | State |
+```
+ollama pull qwen3.5:4b qwen3.5:9b nomic-embed-text      # once (or the -8k variants used by default)
+python forge.py --brief "<the brief>" --docs <folder> --out runs/review            # interviews you
+python forge.py --brief "<the brief>" --docs <folder> --out runs/review --auto     # fully unattended
+python -m runtime.runner runs/review/agent_def.json                                # chat with the result
+```
+
+Read `runs/review/report.md` first: it opens with what still fails and why. A run takes about
+25-35 minutes on a laptop RTX 3070 Ti (8 GB): intake and generation about a minute, then the eval set,
+the judge self-test, and up to three optimise-and-re-evaluate iterations. Supported documents: `.pdf`,
+`.md`, `.txt`, `.csv`. No network is needed except for the optional weather tool.
+
+## Where each requirement lives
+
+| # | Requirement | Code | Evidence in a run folder |
+|---|---|---|---|
+| 1 | Intake interviewer, at most 5 questions | `factory/intake.py` | `interview.json`, `requirements.md` |
+| 2 | Groundability guard | `factory/groundability.py` | `requirements.md` (Groundability section) |
+| 3 | Agent generator: prompt, retrieval, tools, output contract | `factory/generator.py` | `agent_def.json`, `generation_log.json` |
+| 4 | Eval generator, at least 20 cases, prompts committed | `factory/evalgen.py`, `prompts/eval_*.md` | `evals.json` (with `dropped`) |
+| 5 | Judge, defended against known biases | `factory/judge.py`, `factory/facts.py` | `results_iterN.json`, self-test in `scorecard_iterN.json` |
+| 6 | Critic-optimizer loop, max 3 iterations, every change logged | `factory/optimizer.py` | `iteration_log.json`, `agent_def_iterN.json` |
+| 7 | Honest reporting | `factory/report.py` | `report.md` |
+| 8 | Generic chat runner | `runtime/runner.py` | `python -m runtime.runner <agent_def.json>` |
+| 9 | Two full demonstrations | `demos/` (documents and synthesis), `runs/` | `runs/demo_hr`, `runs/demo_spares` |
+
+## The two demonstrations
+
+| | HR policy assistant | Ship-spares procurement assistant |
 |---|---|---|
-| 1 | Runtime spine: LLM wrapper, RAG, tool registry, agent-definition schema, generic runner (req 8) | done |
-| 2 | Intake interviewer (req 1), groundability guard (req 2), agent generator (req 3) | done |
-| 3 | Eval generator (req 4) + judge (req 5) | done |
-| 4 | Critic-optimizer loop (req 6) + honest report (req 7) | next |
-| 5 | Two full demo runs (req 9) | |
+| Brief | `demos/hr/brief.txt` | `demos/spares/brief.txt` |
+| Documents | 3 policy PDFs | 33-part catalogue CSV + 2 supplier-terms PDFs |
+| Requester | answered the 5 intake questions (`demos/hr/answers.json`) | none: `--auto`, every answer recorded as assumed |
+| Tools attached | calculator, current_date | SPARES_TOOLS |
+| Result | 20/23 (87%); judge self-test 10/10 | SPARES_RESULT |
 
-The groundability guard was planned for a later phase but moved into Phase 2: live runs showed the
-generator produces wrong agents without it (see below).
+The documents are synthesized by `demos/synthesize.py` with `prompts/synth_doc.md`: the facts are fixed in
+the script, the 9b model writes the prose, and every fact is checked to appear verbatim (missing ones are
+appended), so the documents contain exactly the listed figures. The catalogue is generated in code.
+
+In the HR run the requester said salary bands and the payroll calendar will be asked about but have no
+documents yet; they became must-refuse topics, and the requester's instruction to redirect seafarers
+was flagged as unsupported by the documents. The optimizer tried one prompt rule, saw no gain, and reverted
+it; the three remaining failures are in the report (two incomplete answers, one strict paraphrase verdict).
 
 ## Setup
 
@@ -114,7 +148,17 @@ entitlement, an invented carry-over rule, "may" turned into "must", "3-4 tools" 
 **Known limits of the evals.** An independent derivation can share the generator's misreading of a
 confused calculator question (seen once); a question-only "is this sensible?" check was tried and rejected
 because it threw out more good cases than bad. The 9b fact judge leans strict on paraphrases in prose-heavy
-documents, so recall on such corpora is a slight underestimate.
+documents, so recall on such corpora is a slight underestimate. The relevance check keeps any fact the
+generator's own reference answer mentions, so a verbose reference can attach a fact the question does not
+strictly ask for (seen in the HR demo: "how often is the equipment allowance paid?" also expecting the
+amount). Corpora with parallel documents (two suppliers with the same kinds of terms) produced ambiguous
+questions until the generator was required to name the supplier; some ambiguity can remain.
+
+**Fixes that came from auditing the demo runs** (every failure in every run was read by hand):
+part numbers are matched exactly before embedding search (dense embeddings blurred `WRT-0778`); agents give
+the final answer only, without "No, wait" working; with parallel documents they say which supplier each
+figure belongs to; a refusal in other words ("I am unable to provide... not in the documents") counts as a
+refusal; question premises are not expected facts; calculator cases need a positive result.
 
 ## Run an agent
 
