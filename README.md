@@ -13,6 +13,11 @@ python forge.py --brief "<the brief>" --docs <folder> --out runs/review --auto  
 python -m runtime.runner runs/review/agent_def.json                                # chat with the result
 ```
 
+Optional budget (stretch goal): `--max-tokens 400000` and/or `--max-minutes 25`. Before each optimiser
+iteration the factory checks that one more evaluation pass, at the measured cost of the last one, still fits,
+and never starts one that doesn't; independently it stops after two iterations in a row with no gain. The
+report's Budget section shows the limit, the spend and the cost of every iteration.
+
 Read `runs/review/report.md` first: it opens with what still fails and why. A run takes about
 25-35 minutes on a laptop RTX 3070 Ti (8 GB): intake and generation about a minute, then the eval set,
 the judge self-test, and up to three optimise-and-re-evaluate iterations. Supported documents: `.pdf`,
@@ -213,7 +218,7 @@ python tests/mutate_phase4.py
 python tests/smoke_live.py      # live run against Ollama
 ```
 
-All four mutation suites pass: 20/20, 33/33, 36/36 and 17/17 mutants caught, with the clean suite passing before
+All four mutation suites pass: 20/20, 33/33, 36/36 and 22/22 mutants caught, with the clean suite passing before
 and after. The harness runs with `PYTHONDONTWRITEBYTECODE=1`: a same-size mutation restored within the
 same second once left stale bytecode running, which made later "caught" results meaningless.
 

@@ -172,7 +172,7 @@ def test_equal_score_is_not_kept():
     best, final, history, changes, seen, _ = _run_loop(rounds, [" +swap", " +noop"])
     assert changes[0]["kept"] is False and changes[1]["kept"] is False, changes
     assert best["system_prompt"] == DEF["system_prompt"], "a swap or a no-op is not progress"
-    assert _run_loop.stop == "no applicable fix was left for the remaining failures"
+    assert "in a row brought no gain" in _run_loop.stop
 
 
 def test_loop_stops_when_all_pass_and_skips_exhausted_categories():
@@ -206,6 +206,68 @@ def test_duplicate_rule_is_not_reapplied():
     assert new is None and "already in the prompt" in info["note"]
 
 
+def test_budget_refuses_an_iteration_it_cannot_afford():
+    from runtime import llm
+    saved = dict(llm.USAGE)
+    try:
+        llm.USAGE.update(prompt_tokens=9000, completion_tokens=0)
+        b = optimizer.Budget(max_tokens=10000, started=0)
+        assert "token budget" in b.refuse_next({"tokens": 1500, "seconds": 1})
+        assert b.refuse_next({"tokens": 500, "seconds": 1}) is None
+        import time
+        t = optimizer.Budget(max_seconds=60, started=time.time() - 50)
+        assert "time budget" in t.refuse_next({"tokens": 0, "seconds": 20})
+        assert optimizer.Budget().refuse_next({"tokens": 10 ** 9, "seconds": 10 ** 9}) is None, "no limit by default"
+    finally:
+        llm.USAGE.clear()
+        llm.USAGE.update(saved)
+
+
+def test_loop_stops_on_budget_before_starting_unaffordable_work():
+    from runtime import llm
+    saved = dict(llm.USAGE)
+    evaluate, seen = _script(_rounds(("pd", "hal", "rm"), ("pd", "hal", "pass"), ("pd", "pass", "pass")))
+
+    def costly(*a):
+        llm.USAGE["prompt_tokens"] += 1000  # every evaluation pass costs 1000 tokens
+        return evaluate(*a)
+    optimizer.evaluate = costly
+    optimizer.fix_prompt = lambda d, *a: (dict(d, system_prompt=d["system_prompt"] + " +r"), {"change": "r"})
+    optimizer.fix_retrieval = optimizer.fix_prompt
+    try:
+        llm.USAGE.update(prompt_tokens=0, completion_tokens=0)
+        out = optimizer.loop(copy.deepcopy(DEF), ".", None, CASES, {"correct": 1, "probes": 1}, lambda n, o: None,
+                             optimizer.Budget(max_tokens=2500, started=0))
+        history, stop = out[2], out[4]
+        assert len(history) == 2, "iteration 2 would need tokens 2000 + 1000 > 2500: never started"
+        assert "token budget" in stop and history[0]["cost"]["tokens"] == 1000
+    finally:
+        llm.USAGE.clear()
+        llm.USAGE.update(saved)
+
+
+def test_loop_stops_when_iterations_stop_paying():
+    rounds = _rounds(("pd", "hal", "rm"), ("pd", "hal", "rm"), ("pd", "hal", "rm"), ("pass", "pass", "pass"))
+    best, final, history, changes, seen, _ = _run_loop(rounds, [" +a", " +b", " +c"])
+    assert len(seen) == 3 and [c["kept"] for c in changes] == [False, False], "a third attempt was not worth it"
+    assert "in a row brought no gain" in _run_loop.stop
+
+
+def test_a_gain_resets_the_no_gain_streak():
+    rounds = _rounds(("rm", "hal", "pd"),     # 0
+                     ("rm", "hal", "pd"),     # 1: retrieval fix, no gain (streak 1)
+                     ("pass", "hal", "pd"),   # 2: hallucination fix, gain (streak resets to 0)
+                     ("pass", "hal", "hal"),  # 3: hallucination again? exhausted -> prompt_defect, no gain (1)
+                     ("pass", "pass", "pass"))  # 4: still allowed: the streak is 1, not 2
+    saved = optimizer.MAX_ITERATIONS
+    optimizer.MAX_ITERATIONS = 4
+    try:
+        best, final, history, changes, seen, _ = _run_loop(rounds, [" +a", " +b", " +c", " +d"])
+    finally:
+        optimizer.MAX_ITERATIONS = saved
+    assert len(seen) == 5 and history[-1]["passed"] == 3, [h["passed"] for h in history]
+
+
 def test_report_leads_with_remaining_failures():
     final = [_r("A01", True, retrieval_hit=True, fact_recall=1.0, category=None),
              _r("A02", False, "hallucination", unsupported_claims=["you must book premium economy"],
@@ -223,6 +285,10 @@ def test_report_leads_with_remaining_failures():
     assert "**A02**" in md and "you must book premium economy" in md
     assert "1/2 test cases pass (50%)" in md and "11/12" in md and "missed: verbose_correct" in md
     assert "The loop stopped because every test case passes." in md
+    md = report.build(req, DEF, evals, [{**history[0], "cost": {"tokens": 1200, "seconds": 90}}], [], final, st,
+                      usage, "the token budget would be exceeded", {"max_tokens": 50000, "max_seconds": None,
+                                                                    "spent": {"tokens": 1200, "seconds": 95}})
+    assert "## Budget" in md and "Limit: 50000 tokens" in md and "| 0 | 1200 | 1.5 |" in md, md[md.find("## Budget"):][:400]
 
 
 if __name__ == "__main__":

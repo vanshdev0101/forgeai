@@ -13,13 +13,16 @@ run evals -> classify every failure (retrieval_miss / prompt_defect / hallucinat
 """
 import copy
 import re
+import time
 
 from factory import judge
 from factory.common import ask_json, log
 from factory.facts import fact_in_text
+from runtime import llm
 from runtime.runner import Agent
 
 MAX_ITERATIONS = 3
+NO_GAIN_STREAK = 2  # this many iterations in a row without a gain: further rules are not paying for themselves
 MIN_SCORE_FLOOR = 0.3
 MAX_K = 8
 CATEGORIES = {
@@ -145,12 +148,47 @@ def _summary(results, card):
     return {"passed": card["passed"], "cases": card["cases"], "pass_rate": card["pass_rate"], "categories": cats}
 
 
-def loop(definition, out_dir, index, cases, selftest, write):
+class Budget:
+    """Optional token / wall-clock budget for a run. The loop checks, before each iteration, whether one more
+    evaluation pass (measured from the last one) still fits; it never starts work it cannot finish."""
+
+    def __init__(self, max_tokens=None, max_seconds=None, started=None):
+        self.max_tokens, self.max_seconds = max_tokens, max_seconds
+        self.started = started if started is not None else time.time()
+
+    def spent(self):
+        return {"tokens": int(llm.USAGE["prompt_tokens"] + llm.USAGE["completion_tokens"]),
+                "seconds": round(time.time() - self.started, 1)}
+
+    def refuse_next(self, last_pass):
+        """Reason not to start another pass costing about `last_pass`, or None if it fits."""
+        s = self.spent()
+        if self.max_tokens is not None and s["tokens"] + last_pass["tokens"] > self.max_tokens:
+            return (f"the token budget would be exceeded: {s['tokens']} of {self.max_tokens} used and the next "
+                    f"iteration costs about {last_pass['tokens']}")
+        if self.max_seconds is not None and s["seconds"] + last_pass["seconds"] > self.max_seconds:
+            return (f"the time budget would be exceeded: {s['seconds'] / 60:.1f} of {self.max_seconds / 60:.0f} "
+                    f"minutes used and the next iteration takes about {last_pass['seconds'] / 60:.1f}")
+        return None
+
+    def summary(self):
+        return {"max_tokens": self.max_tokens, "max_seconds": self.max_seconds, "spent": self.spent()}
+
+
+def _measured(fn, *args):
+    t0, tok0 = time.time(), llm.USAGE["prompt_tokens"] + llm.USAGE["completion_tokens"]
+    out = fn(*args)
+    return out, {"tokens": int(llm.USAGE["prompt_tokens"] + llm.USAGE["completion_tokens"] - tok0),
+                 "seconds": round(time.time() - t0, 1)}
+
+
+def loop(definition, out_dir, index, cases, selftest, write, budget=None):
     """Returns (best definition, its results, history, changes, stop reason). `write(name, obj)` persists
     artifacts as they are produced."""
-    results = evaluate(definition, out_dir, index, cases)
+    budget = budget or Budget()
+    results, last_pass = _measured(evaluate, definition, out_dir, index, cases)
     card = judge.scorecard(results, selftest)
-    history = [{"iteration": 0, "change": None, **_summary(results, card)}]
+    history = [{"iteration": 0, "change": None, "cost": last_pass, **_summary(results, card)}]
     write("results_iter0.json", results)
     write("scorecard_iter0.json", card)
     write("agent_def_iter0.json", definition)
@@ -158,12 +196,22 @@ def loop(definition, out_dir, index, cases, selftest, write):
     changes = []
     exhausted = set()  # decoding is deterministic: a reverted fix would be regenerated identically
     stop_reason = f"reached the {MAX_ITERATIONS}-iteration limit"
+    no_gain = 0
 
     for it in range(1, MAX_ITERATIONS + 1):
         failing = [r for r in best_results if r["category"]]
         if not failing:
             stop_reason = "every test case passes"
             log("optimizer: everything passes; stopping")
+            break
+        if no_gain >= NO_GAIN_STREAK:
+            stop_reason = f"{no_gain} iterations in a row brought no gain, so another was not worth its cost"
+            log(f"optimizer: {stop_reason}; stopping")
+            break
+        over = budget.refuse_next(last_pass)
+        if over:
+            stop_reason = over
+            log(f"optimizer: stopping: {over}")
             break
         counts = {c: sum(r["category"] == c for r in failing) for c in PRIORITY}
         tried, candidate, info, category = set(), None, None, None
@@ -187,7 +235,7 @@ def loop(definition, out_dir, index, cases, selftest, write):
 
         log(f"optimizer: iteration {it}: {category}: {info['change']}")
         candidate["provenance"]["iteration"] = it
-        new_results = evaluate(candidate, out_dir, index, cases)
+        new_results, last_pass = _measured(evaluate, candidate, out_dir, index, cases)
         new_card = judge.scorecard(new_results, selftest)
         before = {r["id"]: r["passed"] for r in best_results}
         fixed = [r["id"] for r in new_results if r["passed"] and not before[r["id"]]]
@@ -197,12 +245,14 @@ def loop(definition, out_dir, index, cases, selftest, write):
                  "targeted_cases": [r["id"] for r in failing if r["category"] == category],
                  "score_before": f"{sum(before.values())}/{len(before)}",
                  "score_after": f"{new_card['passed']}/{new_card['cases']}",
-                 "newly_passing": fixed, "newly_failing": broke}
+                 "newly_passing": fixed, "newly_failing": broke, "cost": last_pass}
         changes.append(entry)
         write(f"results_iter{it}.json", new_results)
         write(f"scorecard_iter{it}.json", new_card)
         write(f"agent_def_iter{it}.json", candidate)
-        history.append({"iteration": it, "change": info["change"], "kept": kept, **_summary(new_results, new_card)})
+        history.append({"iteration": it, "change": info["change"], "kept": kept, "cost": last_pass,
+                        **_summary(new_results, new_card)})
+        no_gain = 0 if kept else no_gain + 1
         if kept:
             best, best_results = candidate, new_results
         else:

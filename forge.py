@@ -49,7 +49,11 @@ def main(argv=None):
     who.add_argument("--questions-only", action="store_true",
                      help="print the clarifying questions and stop (decoding is deterministic, so a later run "
                           "asks the same ones; answer them with --answers)")
+    ap.add_argument("--max-tokens", type=int, help="token budget for the run; the optimizer stops before an "
+                    "iteration that would exceed it")
+    ap.add_argument("--max-minutes", type=float, help="wall-clock budget for the run, same rule")
     a = ap.parse_args(argv)
+    started = time.time()
 
     brief_path = Path(a.brief)
     brief = brief_path.read_text().strip() if brief_path.is_file() else a.brief.strip()
@@ -110,17 +114,19 @@ def main(argv=None):
         write_json(out / "evals.json", evals)
         log(f"evalgen: {evals['total']} cases {evals['counts']}, {len(evals['dropped'])} dropped as unverifiable")
 
+        budget = optimizer.Budget(a.max_tokens, a.max_minutes * 60 if a.max_minutes else None, started)
         selftest = stage("judge_selftest", usage, judge.judge_selftest, evals["cases"], index)
         best, final_results, history, changes, stop_reason = stage(
             "eval_and_optimize", usage, optimizer.loop, definition, out, index, evals["cases"], selftest,
-            lambda name, obj: write_json(out / name, obj))
+            lambda name, obj: write_json(out / name, obj), budget)
         write_json(out / "agent_def.json", best)  # the definition the runner should use: best kept iteration
-        write_json(out / "iteration_log.json", {"history": history, "changes": changes, "stop_reason": stop_reason})
+        write_json(out / "iteration_log.json", {"history": history, "changes": changes, "stop_reason": stop_reason,
+                                                "budget": budget.summary()})
         write_json(out / "generation_log.json", {
             "tool_decisions": definition["provenance"]["tool_decisions"],
             "calibration": definition["provenance"]["calibration"], "usage": usage})
         (out / "report.md").write_text(report.build(req, best, evals, history, changes, final_results,
-                                                    selftest, usage, stop_reason))
+                                                    selftest, usage, stop_reason, budget.summary()))
     except (llm.LLMError, ValueError) as e:
         print(f"error: {e}", file=sys.stderr)
         return 2

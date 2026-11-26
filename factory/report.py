@@ -22,7 +22,7 @@ def _problem(r):
     return "did not cite an expected source document"
 
 
-def build(req, definition, evals, history, changes, final_results, selftest, usage, stop_reason=""):
+def build(req, definition, evals, history, changes, final_results, selftest, usage, stop_reason="", budget=None):
     final = history[-1]
     kept = [h for h in history if h["iteration"] == 0 or h.get("kept")]
     best = max(kept, key=lambda h: h["passed"])
@@ -119,6 +119,25 @@ def build(req, definition, evals, history, changes, final_results, selftest, usa
           f"chunk_words={r['chunk_words']}, overlap={r['overlap']}, k={r['k']}, min_score={r['min_score']}. "
           f"Calibration: off-topic probes up to {cal['off_topic_max']}, in-scope questions down to "
           f"{cal['in_scope_min']} ({cal['in_scope_source']}); gate role: {cal['gate_role']}.", ""]
+
+    if budget:
+        lim = []
+        if budget.get("max_tokens"):
+            lim.append(f"{budget['max_tokens']} tokens")
+        if budget.get("max_seconds"):
+            lim.append(f"{budget['max_seconds'] / 60:.0f} minutes")
+        sp = budget["spent"]
+        L += ["## Budget", "",
+              f"Limit: {', '.join(lim) or 'none set'}. Spent: {sp['tokens']} tokens, {sp['seconds'] / 60:.1f} minutes. "
+              "Before each iteration the loop checks that one more evaluation pass, at the cost of the last one, still "
+              "fits, and it stops after two iterations in a row without a gain.", "",
+              "| Iteration | Tokens | Minutes | Passed | Kept |", "|---|---|---|---|---|"]
+        for h in history:
+            c = h.get("cost") or {}
+            kept_s = "baseline" if h["iteration"] == 0 else ("yes" if h.get("kept") else "no")
+            L.append(f"| {h['iteration']} | {c.get('tokens', '-')} | {c.get('seconds', 0) / 60:.1f} | "
+                     f"{h['passed']}/{h['cases']} | {kept_s} |")
+        L.append("")
 
     total = Counter()
     for stage in usage.values():
